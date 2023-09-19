@@ -15,7 +15,7 @@
                 },
             },
         });
-    });
+    }, 2000);
 </script>
 <?php
     unset($_SESSION['status']);

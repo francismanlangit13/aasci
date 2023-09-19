@@ -10860,27 +10860,6 @@ a:focus {
   }
 }
 
-.bg-login-image {
-  background: url("../../img/system/system_logo.jpg");
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
-.bg-register-image {
-  background: url("../../img/system/system_logo.jpg");
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
-.bg-password-image {
-  background: url("../../img/system/system_logo.jpg");
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
 .password-container {
   position: relative;
 }
@@ -10888,7 +10867,7 @@ a:focus {
 .password-toggle {
   position: absolute;
   top: 50%;
-  right: 20px;
+  right: 33px;
   transform: translateY(-50%);
   cursor: pointer;
 }
