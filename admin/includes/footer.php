@@ -33,7 +33,7 @@
         <!-- Loader JS File -->
         <script src="<?php echo base_url ?>assets/js/loader.js"></script>
         <!-- Validations forms -->
-        <script src="<?php echo base_url ?>assets/js/jquery-3.2.1.min.js"></script>
+        <!-- <script src="<?php echo base_url ?>assets/js/jquery-3.2.1.min.js"></script> -->
         <script src="<?php echo base_url ?>assets/js/underscore-min.js"></script>
 
         <script>
