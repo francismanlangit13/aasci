@@ -1,4 +1,8 @@
-<?php include ('../includes/header.php'); ?>
+<head>
+    <?php include ('../includes/header.php'); ?>
+    <!-- Website Title -->
+    <title><?= $system['shortname'] ?> | Dashboard</title>
+</head>
 <main>
     <!-- Main page content-->
     <div class="container-xl px-4 mt-5">

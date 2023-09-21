@@ -10,6 +10,10 @@
         <meta name="author" content="<?= $system['author'] ?>">
         <!-- Title Page -->
         <title><?= $system['shortname'] ?> | Login</title>
+        <!-- Favicons -->
+        <link rel="shortcut icon" href="<?php echo base_url ?>assets/files/system/<?= $system['icon'] ?>" type="image/x-icon">
+        <link rel="apple-touch-icon" sizes="120x120" href="<?php echo base_url ?>assets/files/system/<?= $system['icon'] ?>">
+        <link rel="apple-touch-icon" sizes="152x152" href="<?php echo base_url ?>assets/files/system/<?= $system['icon'] ?>">
         <!-- Custom fonts for this template-->
         <link href="<?php echo base_url ?>assets/login/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">

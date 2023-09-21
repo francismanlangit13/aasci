@@ -9,12 +9,12 @@
         <meta name="description" content="<?= $system['description'] ?>">
         <meta name="keywords" content="<?= $system['keywords'] ?>">
         <meta name="author" content="<?= $system['author'] ?>">
-        <!-- Website Title -->
-        <title>AASCI System | Admin</title>
+        <!-- Favicons -->
+        <link rel="shortcut icon" href="<?php echo base_url ?>assets/files/system/<?= $system['icon'] ?>" type="image/x-icon">
+        <link rel="apple-touch-icon" sizes="120x120" href="<?php echo base_url ?>assets/files/system/<?= $system['icon'] ?>">
+        <link rel="apple-touch-icon" sizes="152x152" href="<?php echo base_url ?>assets/files/system/<?= $system['icon'] ?>">
         <!-- Bootstrap CSS -->
         <link href="<?php echo base_url ?>assets/css/styles.css" rel="stylesheet" />
-        <!-- Website Logo -->
-        <link rel="icon" type="image/x-icon" href="<?php echo base_url ?>assets/img/favicon.png" />
         <!-- DataTables CSS -->
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <!-- Icons -->
