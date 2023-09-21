@@ -87,16 +87,16 @@
             <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <img class="img-fluid" src="<?php
                         if(!empty($row['profile'])){
-                            echo base_url . 'assets/img/users/' . $row['profile'];
-                        } else { if($row['gender'] == 'Male'){echo base_url . 'assets/img/system/profile-male.png'; } else{ echo base_url . 'assets/img/system/profile-female.png'; } }
+                            echo base_url . 'assets/files/users/' . $row['profile'];
+                        } else { if($row['gender'] == 'Male'){echo base_url . 'assets/files/system/profile-male.png'; } else{ echo base_url . 'assets/files/system/profile-female.png'; } }
                     ?>" />
             </a>
             <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
                 <h6 class="dropdown-header d-flex align-items-center">
                     <img class="dropdown-user-img" src="<?php
                         if(!empty($row['profile'])){
-                            echo base_url . 'assets/img/users/' . $row['profile'];
-                        } else { if($row['gender'] == 'Male'){echo base_url . 'assets/img/system/profile-male.png'; } else{ echo base_url . 'assets/img/system/profile-female.png'; } }
+                            echo base_url . 'assets/files/users/' . $row['profile'];
+                        } else { if($row['gender'] == 'Male'){echo base_url . 'assets/files/system/profile-male.png'; } else{ echo base_url . 'assets/files/system/profile-female.png'; } }
                     ?>" />
                     <div class="dropdown-user-details">
                         <div class="dropdown-user-details-name"><?= $row['fname'] . ' ' . $row['mname'] . ' ' . $row['lname'] ?></div>

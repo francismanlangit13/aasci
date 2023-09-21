@@ -17,17 +17,24 @@
         <!-- Bootstrap JavaScript -->
         <script src="<?php echo base_url ?>assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="<?php echo base_url ?>assets/js/scripts.js"></script>
-        <!-- Charts JavaScript -->
-        <script src="<?php echo base_url ?>assets/js/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="<?php echo base_url ?>assets/demo/chart-area-demo.js"></script>
-        <script src="<?php echo base_url ?>assets/demo/chart-bar-demo.js"></script>
-        <script src="<?php echo base_url ?>assets/demo/chart-pie-demo.js"></script>
+        <?php if (strpos($_SERVER['PHP_SELF'], 'home/index.php') !== false){ ?>
+            <!-- Charts JavaScript -->
+            <script src="<?php echo base_url ?>assets/js/Chart.min.js" crossorigin="anonymous"></script>
+            <script src="<?php echo base_url ?>assets/demo/chart-area-demo.js"></script>
+            <script src="<?php echo base_url ?>assets/demo/chart-bar-demo.js"></script>
+            <script src="<?php echo base_url ?>assets/demo/chart-pie-demo.js"></script>
+        <?php } ?>
         <!-- Simple DataTables JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
         <script src="<?php echo base_url ?>assets/js/datatables/datatables-simple-demo.js"></script>
         <!-- Other JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/bundle.js" crossorigin="anonymous"></script>
         <script src="<?php echo base_url ?>assets/js/litepicker.js"></script>
+        <!-- Loader JS File -->
+        <script src="<?php echo base_url ?>assets/js/loader.js"></script>
+        <!-- Validations forms -->
+        <script src="<?php echo base_url ?>assets/js/jquery-3.2.1.min.js"></script>
+        <script src="<?php echo base_url ?>assets/js/underscore-min.js"></script>
 
         <script>
             window.onload = function() {
