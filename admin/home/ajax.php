@@ -37,7 +37,7 @@
             mname LIKE :mname OR 
             lname LIKE :lname OR
             gender LIKE :gender OR
-            birthday LIKE :birthday OR
+            DATE_FORMAT(birthday, '%m-%d-%Y') LIKE :newbirthday OR
             civil_status LIKE :civil_status OR
             email LIKE :email OR
             phone LIKE :phone OR
@@ -49,7 +49,7 @@
             'mname'=>"%$searchValue%",
             'lname'=>"%$searchValue%",
             'gender'=>"%$searchValue%",
-            'birthday'=>"%$searchValue%",
+            'newbirthday'=>"%$searchValue%",
             'civil_status'=>"%$searchValue%",
             'email'=>"%$searchValue%",
             'phone'=>"%$searchValue%",
