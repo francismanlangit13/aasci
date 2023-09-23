@@ -43,39 +43,7 @@
                             <a class="nav-link" href="client">Client</a>
                         </nav>
                     </div>
-                    <!-- Sidenav Heading (Business Tool)-->
-                    <div class="sidenav-menu-heading">Business Tool</div>
-                    <!-- Sidenav Accordion (Apartment)-->
-                    <a class="nav-link" href="apartment">
-                        <div class="nav-link-icon"><i class="fas fa-house-user"></i></div>
-                        Apartment
-                    </a>
-                    <!-- Sidenav Accordion (Boarding House)-->
-                    <a class="nav-link collapsed" href="boarding">
-                        <div class="nav-link-icon"><i class="fas fa-laptop-house"></i></div>
-                        Boarding House
-                    </a>
-                    <!-- Sidenav Accordion (Residential Space)-->
-                    <a class="nav-link collapsed" href="residential">
-                        <div class="nav-link-icon"><i class="fas fa-landmark"></i></div>
-                        Residential Space
-                    </a>
-                    <!-- Sidenav Heading (Payments)-->
-                    <div class="sidenav-menu-heading">Payments</div>
-                    <!-- Sidenav Accordion (Payments)-->
-                    <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
-                        <div class="nav-link-icon"><i class="far fa-address-card"></i></div>
-                        Transactions
-                        <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                    </a>
-                    <div class="collapse" id="collapsePayments" data-bs-parent="#accordionSidenav">
-                        <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPayment">
-                            <!-- Nested Sidenav Accordion (Payments -> Location)-->
-                            <a class="nav-link" href="payment_platform">Payment Platform</a>
-                            <!-- Nested Sidenav Accordion (Payments -> Property)-->
-                            <a class="nav-link" href="payments">Payments</a>
-                        </nav>
-                    </div>
+                    
                 </div>
             </div>
             <!-- Sidenav Footer-->

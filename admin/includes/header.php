@@ -16,7 +16,8 @@
         <!-- Bootstrap CSS -->
         <link href="<?php echo base_url ?>assets/css/styles.css" rel="stylesheet" />
         <!-- DataTables CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+        <link href="<?php echo base_url ?>assets/css/simple-datatables/style.css" rel="stylesheet" />
+        <script type="text/javascript" src="<?php echo base_url ?>assets/js/jquery-3.6.0.js"></script>
         <!-- Icons -->
         <script data-search-pseudo-elements defer src="<?php echo base_url ?>assets/vendor/font-awesome/js/all.min.js" crossorigin="anonymous"></script>
         <script src="<?php echo base_url ?>assets/vendor/feather-icons/feather.min.js" crossorigin="anonymous"></script>
