@@ -15,12 +15,12 @@
         <link rel="apple-touch-icon" sizes="120x120" href="<?php echo base_url ?>assets/files/system/<?= $system['icon'] ?>">
         <link rel="apple-touch-icon" sizes="152x152" href="<?php echo base_url ?>assets/files/system/<?= $system['icon'] ?>">
         <!-- Custom fonts for this template-->
-        <link href="<?php echo base_url ?>assets/login/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="<?php echo base_url ?>assets/vendor/font-awesome/css/all.min.css" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
         <!-- Loader CSS -->
         <link href="<?php echo base_url ?>assets/css/loader.css" rel="stylesheet">
         <!-- Custom styles for this template-->
-        <link href="<?php echo base_url ?>assets/login/css/sb-admin-2.css" rel="stylesheet">
+        <link href="<?php echo base_url ?>assets/css/sb-admin-2.css" rel="stylesheet">
         <!-- Styles for center login -->
         <style>
             body{
@@ -61,9 +61,9 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="password-container">
+                                                    <label for="password"><span class="password-toggle"><i class="fa fa-eye"></i> Show</span></label>
                                                     <input type="password" id="password" name="password" class="form-control form-control-user" minlength="8" placeholder="Password" required>
                                                     <div class="invalid-feedback ml-3" id="password-error"></div>
-                                                    <span class="password-toggle"><i class="fa fa-eye-slash"></i></span>
                                                 </div>
                                             </div>
                                             <button type="submit" name="login_btn" id="loginButton" class="btn btn-primary btn-user btn-block">Login</button>
@@ -86,12 +86,10 @@
         <!-- Show password login JavaScript -->
         <script src="<?php echo base_url ?>assets/js/show-password-login.js"></script>
         <!-- Bootstrap core JavaScript-->
-        <script src="<?php echo base_url ?>assets/login/vendor/jquery/jquery.min.js"></script>
-        <script src="<?php echo base_url ?>assets/login/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="<?php echo base_url ?>assets/vendor/jquery/jquery.min.js"></script>
+        <script src="<?php echo base_url ?>assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- Core plugin JavaScript-->
-        <script src="<?php echo base_url ?>assets/login/vendor/jquery-easing/jquery.easing.min.js"></script>
-        <!-- Custom scripts for all pages-->
-        <script src="<?php echo base_url ?>assets/login/js/sb-admin-2.min.js"></script>
+        <script src="<?php echo base_url ?>assets/vendor/jquery-easing/jquery.easing.min.js"></script>
         <!-- Loader JS File -->
         <script src="<?php echo base_url ?>assets/js/loader.js"></script>
         <!-- Validations forms -->
