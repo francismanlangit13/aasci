@@ -916,6 +916,7 @@
 
         function checkedit_Phone() {
             var edit_phone = $('#edit_phone').val().trim();
+            var initialPhone = $('#store_phone').val().trim();; // Store the initial phone
             // show error if edit_phone number is empty
             if (edit_phone === '') {
                 $('#edit_phone-error').text('Please input phone number').css('color', 'red');
@@ -934,30 +935,36 @@
             }
 
             // make AJAX call to check if phone number exists
-            $.ajax({
-                url: 'ajax.php', // replace with the actual URL to check phone
-                method: 'POST', // use the appropriate HTTP method
-                data: {
-                    phone: edit_phone,
-                    validation: "1" // Identifier
-                },
-                success: function(response) {
-                    if (response.exists) {
-                        $('#edit_phone-error').text('Phone number already taken').css('color', 'red');
-                        $('#edit_phone').addClass('is-invalid');
-                        // disable submit button if edit_phone is taken
-                        $('#edit_user').prop('disabled', true);
-                    } else {
-                        $('#edit_phone-error').empty();
-                        $('#edit_phone').removeClass('is-invalid');
-                        // enable submit button if edit_phone is valid
-                        checkIfAllFieldsValid();
+            if (edit_phone !== initialPhone) { // Check if email is different from the initial email
+                $.ajax({
+                    url: 'ajax.php', // replace with the actual URL to check phone
+                    method: 'POST', // use the appropriate HTTP method
+                    data: {
+                        phone: edit_phone,
+                        validation: "1" // Identifier
+                    },
+                    success: function(response) {
+                        if (response.exists) {
+                            $('#edit_phone-error').text('Phone number already taken').css('color', 'red');
+                            $('#edit_phone').addClass('is-invalid');
+                            // disable submit button if edit_phone is taken
+                            $('#edit_user').prop('disabled', true);
+                        } else {
+                            $('#edit_phone-error').empty();
+                            $('#edit_phone').removeClass('is-invalid');
+                            // enable submit button if edit_phone is valid
+                            checkIfAllFieldsValid();
+                        }
+                    },
+                    error: function() {
+                        $('#edit_phone-error').text('Error checking phone number');
                     }
-                },
-                error: function() {
-                    $('#edit_phone-error').text('Error checking phone number');
-                }
-            });
+                });
+            } else {
+                $('#edit_phone-error').empty();
+                $('#edit_phone').removeClass('is-invalid');
+                checkIfAllFieldsValid();
+            }
         }
         
         function checkedit_Fname() {
