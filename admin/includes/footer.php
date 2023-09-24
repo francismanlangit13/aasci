@@ -27,6 +27,8 @@
         <!-- Simple DataTables JavaScript -->
         <script src="<?php echo base_url ?>assets/js/simple-datatables.js" crossorigin="anonymous"></script>
         <script src="<?php echo base_url ?>assets/js/datatables/datatables-simple-demo.js"></script>
+        <!-- Core plugin JavaScript-->
+        <script src="<?php echo base_url ?>assets/vendor/jquery-easing/jquery.easing.min.js"></script>
         <!-- Other JavaScript -->
         <script src="<?php echo base_url ?>assets/js/litepicker-bundle.js" crossorigin="anonymous"></script>
         <script src="<?php echo base_url ?>assets/js/litepicker.js"></script>

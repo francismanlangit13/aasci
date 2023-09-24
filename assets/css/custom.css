@@ -1,0 +1,36 @@
+body{
+    color: black;
+}
+.required:after {
+    content:" *";
+    color: red;
+}
+.optional:after {
+    content:" *";
+    color: green;
+}
+.alert {
+    padding: 10px;
+    color: white;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    text-align: center;
+    z-index: 3;
+    margin-top: 55px;
+}
+  
+.closebtn {
+    margin-left: 5px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 18px;
+    line-height: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+  
+.closebtn:hover {
+    color: black;
+}

@@ -23,7 +23,7 @@
                 </button>
             </div>
             <div class="card-body">
-                <table id="datatablesSimple1" class="overflow-auto">
+                <table id="datatablesSimple1" class="display cell-border compact stripe">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -123,7 +123,8 @@
                             <h5 class="text-white"><i class="far fa-user"></i> User information</h5>
                         </div>
                         <div class="card-body">
-                            <div class="row"> 
+                            <div class="row">
+                                <h6 class="mb-3"><sup class="text-red p-1">Note!</sup>Fields marked with <code class="text-red">*</code> are mandatory and <code class="text-green">*</code> are optional.</h6>
                                 <div class="col-md-4 mb-3">
                                     <label for="add_fname" class="required">First Name</label>
                                     <input required placeholder="Enter First Name" type="text" id="add_fname" name="add_fname" class="form-control">
@@ -131,9 +132,8 @@
                                 </div> 
                             
                                 <div class="col-md-4 mb-3">
-                                    <label for="add_mname">Middle Name</label>
+                                    <label for="add_mname" class="optional">Middle Name</label>
                                     <input placeholder="Enter Middle Name" type="text" id="add_mname" name="add_mname" class="form-control">
-                                    <div id="add_mname-error"></div>
                                 </div>
 
                                 <div class="col-md-4 mb-3">
@@ -143,7 +143,7 @@
                                 </div>
 
                                 <div class="col-md-4 mb-3">
-                                    <label for="add_suffix">Suffix</label>
+                                    <label for="add_suffix" class="required">Suffix</label>
                                     <select required class="form-control" id="add_suffix" name="add_suffix">
                                         <option value="" selected>Select Suffix</option>
                                         <option value="">None</option>
@@ -171,7 +171,7 @@
 
                                 <div class="col-md-4 mb-3">
                                     <label for="add_birthday" class="required">Date of Birth</label>
-                                    <input required class="form-control" id="add_birthday" name="add_birthday" placeholder="MM/DD/YYY" type="date"/>
+                                    <input required class="form-control" id="add_birthday" name="add_birthday" pattern="\d{2} \d{2} \d{4}" placeholder="MM/DD/YYYY" type="date"/>
                                     <div id="add_birthday-error"></div>
                                 </div>
 
@@ -189,7 +189,7 @@
 
                                 <div class="col-md-4 mb-3">
                                     <label for="add_email" class="required">Email</label>
-                                    <input required placeholder="Enter Email" type="email" id="add_email" name="add_email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" class="form-control">
+                                    <input required placeholder="Enter Email" type="email" id="add_email" name="add_email" class="form-control">
                                     <div id="add_email-error"></div>
                                 </div>
                             
@@ -224,8 +224,6 @@
     function addModalclose(button) {
         $('#add_fname').removeClass('is-invalid');
         $('#add_fname-error').empty();
-        $('#add_mname').removeClass('is-invalid');
-        $('#add_mname-error').empty();
         $('#add_lname').removeClass('is-invalid');
         $('#add_lname-error').empty();
         $('#add_suffix').removeClass('is-invalid');
@@ -249,7 +247,6 @@
     $(document).ready(function() {
         // debounce functions for each input field
         var debouncedCheckadd_Fname = _.debounce(checkadd_Fname, 500);
-        var debouncedCheckadd_Mname = _.debounce(checkadd_Mname, 500);
         var debouncedCheckadd_Lname = _.debounce(checkadd_Lname, 500);
         var debouncedCheckadd_Suffix = _.debounce(checkadd_Suffix, 500);
         var debouncedCheckadd_Gender = _.debounce(checkadd_Gender, 500);
@@ -261,7 +258,6 @@
 
         // attach event listeners for each input field
         $('#add_fname').on('input', debouncedCheckadd_Fname);
-        $('#add_mname').on('input', debouncedCheckadd_Mname);
         $('#add_lname').on('input', debouncedCheckadd_Lname);
         $('#add_suffix').on('change', debouncedCheckadd_Suffix);
         $('#add_gender').on('input', debouncedCheckadd_Gender);
@@ -273,7 +269,6 @@
 
         // Trigger on input change
         $('#add_fname').on('blur', debouncedCheckadd_Fname);
-        $('#add_mname').on('blur', debouncedCheckadd_Mname);
         $('#add_lname').on('blur', debouncedCheckadd_Lname);
         $('#add_suffix').on('blur', debouncedCheckadd_Suffix);
         $('#add_gender').on('blur', debouncedCheckadd_Gender);
@@ -285,7 +280,7 @@
 
         function checkIfAllFieldsValid() {
             // check if all input fields are valid and enable submit button if so
-            if ($('#add_fname-error').is(':empty') && $('#add_mname-error').is(':empty') && $('#add_lname-error').is(':empty') && $('#add_suffix-error').is(':empty') && $('#add_gender-error').is(':empty') && $('#add_birthday-error').is(':empty') && $('#add_civil_status-error').is(':empty') && $('#add_email-error').is(':empty') && $('#add_phone-error').is(':empty') && $('#add_role-error').is(':empty')) {
+            if ($('#add_fname-error').is(':empty') && $('#add_lname-error').is(':empty') && $('#add_suffix-error').is(':empty') && $('#add_gender-error').is(':empty') && $('#add_birthday-error').is(':empty') && $('#add_civil_status-error').is(':empty') && $('#add_email-error').is(':empty') && $('#add_phone-error').is(':empty') && $('#add_role-error').is(':empty')) {
                 $('#add_user').prop('disabled', false);
             } else {
                 $('#add_user').prop('disabled', true);
@@ -397,22 +392,6 @@
             // Perform additional validation for first name if needed
             $('#add_fname-error').empty();
             $('#add_fname').removeClass('is-invalid');
-            checkIfAllFieldsValid();
-        }
-
-        function checkadd_Mname() {
-            var add_mname = $('#add_mname').val().trim();
-            // show error if middle name is empty
-            if (add_mname === '') {
-                $('#add_mname-error').text('Please input middle name').css('color', 'red');
-                $('#add_mname').addClass('is-invalid');
-                checkIfAllFieldsValid();
-                return;
-            }
-            
-            // Perform additional validation for middle name if needed
-            $('#add_mname-error').empty();
-            $('#add_mname').removeClass('is-invalid');
             checkIfAllFieldsValid();
         }
         
@@ -573,7 +552,7 @@
 
                             <div class="col-md-4 mb-3">
                                 <label for="view_birthday">Date of Birth</label>
-                                <input disabled class="form-control" id="view_birthday" name="view_birthday" placeholder="MM/DD/YYY" type="date"/>
+                                <input disabled class="form-control" id="view_birthday" name="view_birthday" pattern="\d{2} \d{2} \d{4}" placeholder="MM/DD/YYYY" type="date"/>
                             </div>
 
                             <div class="col-md-4 mb-3">
@@ -655,6 +634,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row"> 
+                                <h6 class="mb-3"><sup class="text-red p-1">Note!</sup>Fields marked with <code class="text-red">*</code> are mandatory and <code class="text-green">*</code> are optional.</h6>
                                 <div class="col-md-4 mb-3">
                                     <label for="edit_fname" class="required">First Name</label>
                                     <input required placeholder="Enter First Name" type="text" id="edit_fname" name="edit_fname" class="form-control">
@@ -662,9 +642,8 @@
                                 </div> 
                             
                                 <div class="col-md-4 mb-3">
-                                    <label for="edit_mname">Middle Name</label>
+                                    <label for="edit_mname" class="optional">Middle Name</label>
                                     <input placeholder="Enter Middle Name" type="text" id="edit_mname" name="edit_mname" class="form-control">
-                                    <div id="edit_mname-error"></div>
                                 </div>
 
                                 <div class="col-md-4 mb-3">
@@ -674,7 +653,7 @@
                                 </div>
 
                                 <div class="col-md-4 mb-3">
-                                    <label for="edit_suffix">Suffix</label>
+                                    <label for="edit_suffix" class="required">Suffix</label>
                                     <select class="form-control" id="edit_suffix" name="edit_suffix" required>
                                         <option value="" selected>Select Suffix</option>
                                         <option value="">None</option>
@@ -702,7 +681,7 @@
 
                                 <div class="col-md-4 mb-3">
                                     <label for="edit_birthday" class="required">Date of Birth</label>
-                                    <input required class="form-control" id="edit_birthday" name="edit_birthday" placeholder="MM/DD/YYY" type="date"/>
+                                    <input required class="form-control" id="edit_birthday" name="edit_birthday" pattern="\d{2} \d{2} \d{4}" placeholder="MM/DD/YYYY" type="date"/>
                                     <div id="edit_birthday-error"></div>
                                 </div>
 
@@ -720,7 +699,7 @@
 
                                 <div class="col-md-4 mb-3">
                                     <label for="edit_email" class="required">Email</label>
-                                    <input required placeholder="Enter Email" type="text" id="edit_email" name="edit_email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" class="form-control">
+                                    <input required placeholder="Enter Email" type="text" id="edit_email" name="edit_email" class="form-control">
                                     <div id="edit_email-error"></div>
                                 </div>
                             
@@ -768,8 +747,6 @@
     function editModalclose(button) {
         $('#edit_fname').removeClass('is-invalid');
         $('#edit_fname-error').empty();
-        $('#edit_mname').removeClass('is-invalid');
-        $('#edit_mname-error').empty();
         $('#edit_lname').removeClass('is-invalid');
         $('#edit_lname-error').empty();
         $('#edit_suffix').removeClass('is-invalid');
@@ -815,7 +792,6 @@
     $(document).ready(function() {
         // debounce functions for each input field
         var debouncedCheckedit_Fname = _.debounce(checkedit_Fname, 500);
-        var debouncedCheckedit_Mname = _.debounce(checkedit_Mname, 500);
         var debouncedCheckedit_Lname = _.debounce(checkedit_Lname, 500);
         var debouncedCheckedit_Suffix = _.debounce(checkedit_Suffix, 500);
         var debouncedCheckedit_Gender = _.debounce(checkedit_Gender, 500);
@@ -828,7 +804,6 @@
 
         // attach event listeners for each input field
         $('#edit_fname').on('input', debouncedCheckedit_Fname);
-        $('#edit_mname').on('input', debouncedCheckedit_Mname);
         $('#edit_lname').on('input', debouncedCheckedit_Lname);
         $('#edit_suffix').on('change', debouncedCheckedit_Suffix);
         $('#edit_gender').on('input', debouncedCheckedit_Gender);
@@ -841,7 +816,6 @@
 
         // Trigger on input change
         $('#edit_fname').on('blur', debouncedCheckedit_Fname);
-        $('#edit_mname').on('blur', debouncedCheckedit_Mname);
         $('#edit_lname').on('blur', debouncedCheckedit_Lname);
         $('#edit_suffix').on('blur', debouncedCheckedit_Suffix);
         $('#edit_gender').on('blur', debouncedCheckedit_Gender);
@@ -854,7 +828,7 @@
 
         function checkIfAllFieldsValid() {
             // check if all input fields are valid and enable submit button if so
-            if ($('#edit_fname-error').is(':empty') && $('#edit_mname-error').is(':empty') && $('#edit_lname-error').is(':empty') && $('#edit_suffix-error').is(':empty') && $('#edit_gender-error').is(':empty') && $('#edit_birthday-error').is(':empty') && $('#edit_civil_status-error').is(':empty') && $('#edit_email-error').is(':empty') && $('#edit_phone-error').is(':empty') && $('#edit_role-error').is(':empty')) {
+            if ($('#edit_fname-error').is(':empty') && $('#edit_lname-error').is(':empty') && $('#edit_suffix-error').is(':empty') && $('#edit_gender-error').is(':empty') && $('#edit_birthday-error').is(':empty') && $('#edit_civil_status-error').is(':empty') && $('#edit_email-error').is(':empty') && $('#edit_phone-error').is(':empty') && $('#edit_role-error').is(':empty')) {
                 $('#edit_user').prop('disabled', false);
             } else {
                 $('#edit_user').prop('disabled', true);
@@ -980,22 +954,6 @@
             // Perform additional validation for first name if needed
             $('#edit_fname-error').empty();
             $('#edit_fname').removeClass('is-invalid');
-            checkIfAllFieldsValid();
-        }
-
-        function checkedit_Mname() {
-            var edit_mname = $('#edit_mname').val().trim();
-            // show error if middle name is empty
-            if (edit_mname === '') {
-                $('#edit_mname-error').text('Please input middle name').css('color', 'red');
-                $('#edit_mname').addClass('is-invalid');
-                checkIfAllFieldsValid();
-                return;
-            }
-            
-            // Perform additional validation for middle name if needed
-            $('#edit_mname-error').empty();
-            $('#edit_mname').removeClass('is-invalid');
             checkIfAllFieldsValid();
         }
         
