@@ -95,6 +95,8 @@
         <!-- Validations forms -->
         <script src="<?php echo base_url ?>assets/js/jquery-3.2.1.min.js"></script>
         <script src="<?php echo base_url ?>assets/js/underscore-min.js"></script>
+        <!-- Restrictions forms -->
+        <script src="<?php echo base_url ?>assets/js/disable-key.js"></script>
         <!-- Script for save last inputed Email or Password -->
         <script>
             // Restore input values from localStorage when the page loads

@@ -36,6 +36,8 @@
         <script src="<?php echo base_url ?>assets/js/loader.js"></script>
         <!-- Validations forms -->
         <script src="<?php echo base_url ?>assets/js/underscore-min.js"></script>
+        <!-- Restrictions forms -->
+        <!-- <script src="<?php echo base_url ?>assets/js/disable-key.js"></script> -->
 
         <script>
             window.onload = function() {

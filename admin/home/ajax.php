@@ -55,17 +55,17 @@
          );
       }
       // Total number of records without filtering
-      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM user WHERE user_status_id != 3 AND user_id != '$user_id' ");
+      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM user WHERE user_status_id != 3 AND user_type_id != 3 user_id != '$user_id' ");
       $stmt->execute();
       $records = $stmt->fetch();
       $totalRecords = $records['allcount'];
       // Total number of records with filtering
-      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM user WHERE user_status_id != 3 AND user_id != '$user_id' ".$searchQuery);
+      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM user WHERE user_status_id != 3 AND user_type_id != 3 AND user_id != '$user_id' ".$searchQuery);
       $stmt->execute($searchArray);
       $records = $stmt->fetch();
       $totalRecordwithFilter = $records['allcount'];
       // Fetch records
-      $stmt = $conn->prepare("SELECT *, CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname, DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday FROM user WHERE user_status_id != 3 AND user_id != '$user_id' ".$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
+      $stmt = $conn->prepare("SELECT *, CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname, DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday FROM user WHERE user_status_id != 3 AND user_type_id != 3 AND user_id != '$user_id' ".$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
       // Bind values
       foreach ($searchArray as $key=>$search){
          $stmt->bindValue(':'.$key, $search,PDO::PARAM_STR);
