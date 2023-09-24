@@ -1,8 +1,8 @@
 <?php
    // PHP Mailer
-   require("../../assets/vendor/PHPMailer/PHPMailerAutoload.php");
-   require ("../../assets/vendor/PHPMailer/class.phpmailer.php");
-   require ("../../assets/vendor/PHPMailer/class.smtp.php");
+   include ("../../assets/vendor/PHPMailer/PHPMailerAutoload.php");
+   include ("../../assets/vendor/PHPMailer/class.phpmailer.php");
+   include ("../../assets/vendor/PHPMailer/class.smtp.php");
    // -------------------------------- Authentication -------------------------------- //
    if (!defined('DB_SERVER')){
       include ('../includes/authentication.php');
