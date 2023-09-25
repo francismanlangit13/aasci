@@ -2,7 +2,7 @@
 <head>
     <!-- Website Title -->
     <title><?= $system['shortname'] ?> | Users</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css"> -->
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 </head>
 <main>
@@ -23,7 +23,7 @@
                 </button>
             </div>
             <div class="card-body">
-                <table id="datatablesSimple1" class="display cell-border compact stripe">
+                <table id="dataTable" class="display cell-border stripe table table-bordered dataTable no-footer">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -42,7 +42,7 @@
                     <!-- Ajax Tables -->
                     <script type="text/javascript">
                         $(document).ready(function() {
-                            var dataTable = $('#datatablesSimple1').DataTable({
+                            var dataTable = $('#dataTable').DataTable({
                                 'processing': true,
                                 'serverSide': true,
                                 'serverMethod': 'post',
@@ -52,7 +52,7 @@
                                         data.user_list = "1"; // Include the parameter in the AJAX request
                                     }
                                 },
-                                'scrollX': window.innerWidth < 1568,
+                                'scrollX': true,
                                 'scrollCollapse': true, // Allow vertical scrollbar when necessary
                                 'columns': [
                                     { data: 'user_id', className: 'text-center' },

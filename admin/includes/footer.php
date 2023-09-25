@@ -24,9 +24,9 @@
             <script src="<?php echo base_url ?>assets/demo/chart-bar-demo.js"></script>
             <script src="<?php echo base_url ?>assets/demo/chart-pie-demo.js"></script>
         <?php } ?>
-        <!-- Simple DataTables JavaScript -->
-        <script src="<?php echo base_url ?>assets/js/simple-datatables.js" crossorigin="anonymous"></script>
-        <script src="<?php echo base_url ?>assets/js/datatables/datatables-simple-demo.js"></script>
+        <!-- DataTables JavaScript -->
+        <script src="<?php echo base_url ?>assets/vendor/datatables/jquery.dataTables.min.js"></script>
+        <script src="<?php echo base_url ?>assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
         <!-- Core plugin JavaScript-->
         <script src="<?php echo base_url ?>assets/vendor/jquery-easing/jquery.easing.min.js"></script>
         <!-- Other JavaScript -->
