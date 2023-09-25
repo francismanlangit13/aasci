@@ -55,7 +55,7 @@
          );
       }
       // Total number of records without filtering
-      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM user WHERE user_status_id != 3 AND user_type_id != 3 user_id != '$user_id' ");
+      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM user WHERE user_status_id != 3 AND user_type_id != 3 AND user_id != '$user_id' ");
       $stmt->execute();
       $records = $stmt->fetch();
       $totalRecords = $records['allcount'];
