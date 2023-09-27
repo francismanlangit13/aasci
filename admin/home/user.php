@@ -111,7 +111,7 @@
 <!-- Modal for Add user -->
 <div class="modal fade" id="btn_add_user" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="add_userLabel" aria-hidden="true">
     <div class="modal-dialog d-grid" role="document" style="justify-items: center;">
-        <div class="modal-content" style="width:175%">
+        <div class="modal-content">
             <div class="modal-header card-header">
                 <h5 class="modal-title" id="add_userLabel">Add user</h5>
                 <button class="btn-close" type="button" id="add_user_close" data-bs-dismiss="modal" aria-label="Close" onclick="addModalclose(this)"></button>
@@ -498,7 +498,7 @@
 <!-- Modal for View user -->
 <div class="modal fade" id="btn_view_user" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="view_userLabel" aria-hidden="true">
     <div class="modal-dialog d-grid" role="document" style="justify-items: center;">
-        <div class="modal-content" style="width:175%">
+        <div class="modal-content">
             <div class="modal-header card-header">
                 <h5 class="modal-title" id="view_userLabel">View user</h5>
                 <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -621,7 +621,7 @@
 <!-- Modal for Edit user -->
 <div class="modal fade" id="btn_edit_user" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="edit_userLabel" aria-hidden="true">
     <div class="modal-dialog d-grid" role="document" style="justify-items: center;">
-        <div class="modal-content" style="width:175%">
+        <div class="modal-content">
             <div class="modal-header card-header">
                 <h5 class="modal-title" id="edit_userLabel">Edit user</h5>
                 <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" onclick="editModalclose(this)"></button>
