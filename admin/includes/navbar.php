@@ -105,7 +105,7 @@
                     </div>
                 </h6>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#!">
+                <a class="dropdown-item <?php if (strpos($_SERVER['PHP_SELF'], 'home/myaccount.php') !== false)  { echo'active'; } ?>" href="myaccount">
                     <div class="dropdown-item-icon"><i data-feather="user"></i></div>
                     My Account
                 </a>
