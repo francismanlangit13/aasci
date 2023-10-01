@@ -59,12 +59,9 @@
                     <div class="card-header">Profile Picture</div>
                     <div class="card-body text-center">
                         <!-- Profile picture image-->
-                        <img class="img-account-profile rounded-circle mb-2" src="<?php if(!empty($user['profile'])){
-                            echo base_url . 'assets/files/users/' . $user['profile'];
-                            } else { if($user['gender'] == 'Male'){echo base_url . 'assets/files/system/profile-male.png'; } else{ echo base_url . 'assets/files/system/profile-female.png'; } }
-                        ?>" alt="" />
+                        <img class="img-account-profile rounded-circle mb-2" id="profile-image" alt="profile" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative;" />
                         <!-- Profile picture help block-->
-                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 2 MB</div>
+                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                         <!-- Profile picture upload button-->
                         <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#Upload_Profile">Upload new image</button>
                     </div>
@@ -156,12 +153,13 @@
 </main>
 
 <!-- Modal for Upload profile-->
-<div class="modal fade" id="Upload_Profile" tabindex="-1" role="dialog" aria-labelledby="exampleUpload_Profile" aria-hidden="true">
+<div class="modal fade" id="Upload_Profile"  data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleUpload_Profile" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form id="uploadForm" action="upload.php" method="post">
                 <div class="modal-header">
                     Upload an Image
+                    <button class="btn-close" type="button" id="btn_cancel_update_profile" data-bs-dismiss="modal" aria-label="Close" onclick="addModalclose(this)"></button>
                 </div>
                 <div class="modal-body">
                     <div class="card-body text-center">
@@ -178,10 +176,10 @@
                             } ?>" alt="upload_profile" style="object-fit:cover; width:180px; height:180px; overflow:hidden; position:relative;" />
                         </div>
                         <!-- Profile picture help block-->
-                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 2 MB</div>
+                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                         <!-- Profile picture upload button-->
-                        <input type="file" name="image1" id="image1" class="form-control-file btn btn-primary" accept=".jpg, .jpeg, .png" onchange="previewImage('frame1', 'image1')">
-                        <input type="text" name="oldimage" value="<?= $user['profile']; ?>" hidden>
+                        <input type="file" name="image1" id="image1" class="form-control-file btn btn-primary mb-1" accept=".jpg, .jpeg, .png" onchange="previewImage('frame1', 'image1')">
+                        <input type="hidden" name="oldimage" id="old-profile-image">
                         <div class="row">
                             <div id="progress-bar"></div>
                         </div>
@@ -189,8 +187,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" id="btn_cancel_update_profile" type="button" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" id="btn_update_profile" name="upload_profile" class="btn btn-danger"><div class="dropdown-item-icon"><i data-feather="upload"></i></div> Upload</button>
+                    <button type="submit" id="btn_update_profile" name="upload_profile" class="btn btn-danger"><div class="dropdown-item-icon"><i style="margin-right:2px" data-feather="upload"></i></div> Upload</button>
                 </div>
             </form>
         </div>
@@ -204,7 +201,9 @@
             e.preventDefault(); // Prevent the default form submission
             var formData = new FormData($(this)[0]);
             formData.append('update_profile', '1'); // Use the correct identifier for profile image update
-
+            // Reset the progress bar to 0% before making the AJAX request
+            $('#progress-bar').width('0%');
+            $('#progress-bar').html('<div id="progress-status" class="text-center">0%</div>');
             $.ajax({
                 url: "ajax.php",
                 type: "POST",
@@ -238,16 +237,25 @@
                     }).then(function() {
                         $('#Upload_Profile').modal('hide');
                         $('#uploadForm')[0].reset();
-                        $('#btn_update_profile').removeAttr('disabled');
-                        $('#btn_cancel_update_profile').removeAttr('disabled');
+                        $('#progress-bar').html('<div id="progress-status" class="text-center">0%</div>');
+                        $('#progress-bar').empty();
+                        $('#progress-bar').width('0%');
+                        // Call updateUserData after successful image upload
+                        updateUserData();
                     });
                 },
                 error: function (xhr, textStatus, errorThrown) {
                     console.error(errorThrown);
+                },
+                complete: function() {
+                    // Re-enable the buttons and reset the progress bar after completion
+                    $('#btn_update_profile').removeAttr('disabled');
+                    $('#btn_cancel_update_profile').removeAttr('disabled');
                 }
             });
         });
     });
 </script>
+
 
 <?php include ('../includes/footer.php'); ?>

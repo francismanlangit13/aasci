@@ -85,19 +85,11 @@
                     while($row = mysqli_fetch_assoc($query_run)){
             ?>
             <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img class="img-fluid" src="<?php
-                        if(!empty($row['profile'])){
-                            echo base_url . 'assets/files/users/' . $row['profile'];
-                        } else { if($row['gender'] == 'Male'){echo base_url . 'assets/files/system/profile-male.png'; } else{ echo base_url . 'assets/files/system/profile-female.png'; } }
-                    ?>" />
+                <img class="img-fluid" id="profile-image1" style="width:45px; height:45px;"/>
             </a>
             <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
                 <h6 class="dropdown-header d-flex align-items-center">
-                    <img class="dropdown-user-img" src="<?php
-                        if(!empty($row['profile'])){
-                            echo base_url . 'assets/files/users/' . $row['profile'];
-                        } else { if($row['gender'] == 'Male'){echo base_url . 'assets/files/system/profile-male.png'; } else{ echo base_url . 'assets/files/system/profile-female.png'; } }
-                    ?>" />
+                    <img class="dropdown-user-img" id="profile-image2" />
                     <div class="dropdown-user-details">
                         <div class="dropdown-user-details-name"><?= $row['fname'] . ' ' . $row['mname'] . ' ' . $row['lname'] ?></div>
                         <div class="dropdown-user-details-email"><?= $row['email']; ?></div>
@@ -137,3 +129,51 @@
         </div>
     </div>
 </div>
+
+<!-- Ajax Profile Display -->
+<script>
+    // Function to update the user's data
+    function updateUserData() {
+        // Create a FormData object
+        const formData = new FormData();
+        // Append the get_profile parameter
+        formData.append('get_profile', '1');
+        // Make an AJAX request to the server
+        $.ajax({
+            url: 'ajax.php',
+            type: 'POST',
+            data: formData,
+            processData: false,  // Prevent jQuery from processing the data
+            contentType: false,  // Prevent jQuery from setting content type
+            dataType: 'json',
+            success: function (data) {
+                // Check if the response data contains a profile property
+                if (data.profile !== undefined && data.profile !== null && data.profile !== '') {
+                    // Update the profile image source
+                    const profileImage = document.getElementById('profile-image');
+                    profileImage.src = '<?php echo base_url ?>assets/files/users/' + data.profile;
+                    const profileImage1 = document.getElementById('profile-image1');
+                    profileImage1.src = '<?php echo base_url ?>assets/files/users/' + data.profile;
+                    const profileImage2 = document.getElementById('profile-image2');
+                    profileImage2.src = '<?php echo base_url ?>assets/files/users/' + data.profile;
+                    var oldprofileImage = document.getElementById('old-profile-image');
+                    oldprofileImage.value = data.profile;
+                } else {
+                    // Set a default profile image source based on gender
+                    const profileImage = document.getElementById('profile-image');
+                    profileImage.src = data.gender === 'Male' ? '<?php echo base_url ?>assets/files/system/profile-male.png' : '<?php echo base_url ?>assets/files/system/profile-female.png';
+                    const profileImage1 = document.getElementById('profile-image1');
+                    profileImage1.src = data.gender === 'Male' ? '<?php echo base_url ?>assets/files/system/profile-male.png' : '<?php echo base_url ?>assets/files/system/profile-female.png';
+                    const profileImage2 = document.getElementById('profile-image2');
+                    profileImage2.src = data.gender === 'Male' ? '<?php echo base_url ?>assets/files/system/profile-male.png' : '<?php echo base_url ?>assets/files/system/profile-female.png';
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors here
+                console.error(xhr.responseText);
+            }
+        });
+    }
+    // Call the function to update user data initially
+    updateUserData();
+</script>

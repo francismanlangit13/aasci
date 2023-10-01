@@ -9,6 +9,7 @@
     // This is global hosting configuration.
     if(!defined('date')) define('date', date("Y-m-d h:i:s"));
     if(!defined('base_url')) define('base_url','http://localhost/aasci/');
+    if(!defined('base_app')) define('base_app', str_replace('\\','/',__DIR__).'/' ); // Directory
     if(!defined('emailuser')) define('emailuser', 'your_gmail@gmail.com'); // Email for GoogleAPI
     if(!defined('emailpass')) define('emailpass', 'your_gmailpassword'); // Password for GoogleAPI
     if(!defined('DB_SERVER')) define('DB_SERVER',"localhost");

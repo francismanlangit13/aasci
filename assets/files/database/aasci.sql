@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 20, 2023 at 11:33 AM
+-- Generation Time: Oct 01, 2023 at 05:11 PM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -149,6 +149,7 @@ CREATE TABLE `user` (
   `fname` text NOT NULL,
   `mname` text NOT NULL,
   `lname` text NOT NULL,
+  `suffix` text NOT NULL,
   `gender` text NOT NULL,
   `birthday` date NOT NULL,
   `civil_status` text NOT NULL,
@@ -164,10 +165,8 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `fname`, `mname`, `lname`, `gender`, `birthday`, `civil_status`, `email`, `phone`, `password`, `profile`, `user_type_id`, `user_status_id`) VALUES
-(1, 'user', '', 'admin', 'Male', '0000-00-00', '', 'admin@gmail.com', '09568452546', '0192023a7bbd73250516f069df18b500', '', 1, 1),
-(2, 'Mei', '', 'Trestiza', 'Female', '2001-04-14', 'Single', 'mei@gmail.com', '09426567646', '0192023a7bbd73250516f069df18b500', '', 2, 1),
-(3, 'Jaylord', '', 'Galindo', 'Male', '2000-03-23', 'Single', 'galindo@gmail.com', '09123456789', '0192023a7bbd73250516f069df18b500', '', 2, 1);
+INSERT INTO `user` (`user_id`, `fname`, `mname`, `lname`, `suffix`, `gender`, `birthday`, `civil_status`, `email`, `phone`, `password`, `profile`, `user_type_id`, `user_status_id`) VALUES
+(1, 'user', '', 'admin', '', 'Male', '0000-00-00', '', 'admin@gmail.com', '', '0192023a7bbd73250516f069df18b500', 'user_20231001_231057.jpg', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -333,7 +332,7 @@ ALTER TABLE `system_setting`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user_status`

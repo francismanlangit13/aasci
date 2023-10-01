@@ -40,6 +40,8 @@
         <!-- <script src="<?php echo base_url ?>assets/js/disable-key.js"></script> -->
 
         <script>
+            var base_url = "<?php echo base_url ?>"; // Global base_url in javascript
+            var base_app = "<?php echo base_app ?>"; // Global base_app in javascript
             window.onload = function() {
                 localStorage.setItem("savedPassword", ''); // Clear the value password if user click reload the page.
             }

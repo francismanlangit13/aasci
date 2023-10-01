@@ -201,8 +201,43 @@
       echo json_encode(array('exists' => ($result['count'] > 0)));
    }
    // -------------------------------- Update profile -------------------------------- //
-   if (isset($_POST["update_profile"])){
-      if(isset($_FILES['image1']) && is_uploaded_file($_FILES['image1']['tmp_name']) && $_FILES['image1']['error'] === UPLOAD_ERR_OK) {
+   if (isset($_POST["update_profile"])) {
+      function compressImage($source, $destination, $quality){
+         // Get image info
+         $imgInfo = getimagesize($source);
+         $mime = $imgInfo['mime'];
+         // Create a new image from file
+         switch ($mime) {
+            case 'image/jpeg':
+               $image = imagecreatefromjpeg($source);
+               break;
+            case 'image/png':
+               $image = imagecreatefrompng($source);
+               break;
+            case 'image/gif':
+               $image = imagecreatefromgif($source);
+               break;
+            default:
+               $image = imagecreatefromjpeg($source);
+         }
+         // Check and apply image orientation
+         $exif = @exif_read_data($source);
+         if ($exif && isset($exif['Orientation'])) {
+            $orientation = $exif['Orientation'];
+            if ($orientation == 3) {
+               $image = imagerotate($image, 180, 0);
+            } elseif ($orientation == 6) {
+               $image = imagerotate($image, -90, 0);
+            } elseif ($orientation == 8) {
+               $image = imagerotate($image, 90, 0);
+            }
+         }
+         // Save image with compression quality
+         imagejpeg($image, $destination, $quality);
+         // Return compressed image
+         return $destination;
+      }
+      if (isset($_FILES['image1']) && is_uploaded_file($_FILES['image1']['tmp_name']) && $_FILES['image1']['error'] === UPLOAD_ERR_OK) {
          $fileImage = $_FILES['image1'];
          $OLDfileImage = $_POST['oldimage'];
          $customFileName = 'user_' . date('Ymd_His'); // replace with your desired file name
@@ -211,40 +246,61 @@
          $fileTmpname = $fileImage['tmp_name'];
          $fileSize = $fileImage['size'];
          $fileError = $fileImage['error'];
-         $fileExt = explode('.',$fileName);
+         $fileExt = explode('.', $fileName);
          $fileActExt = strtolower(end($fileExt));
-         $allowed = array('jpg','jpeg','png');
-         if(in_array($fileActExt, $allowed)){
-            if($fileError === 0){
-               if($fileSize < 10485760){
+         $allowed = array('jpg', 'jpeg', 'png');
+         if (in_array($fileActExt, $allowed)) {
+            if ($fileError === 0) {
+               if ($fileSize < 5242880) { // 5MB Limit
                   $uploadDir = '../../assets/files/users/';
                   $targetFile = $uploadDir . $fileName;
-                  unlink($uploadDir . $OLDfileImage);
-      
-                  if (move_uploaded_file($fileTmpname, $targetFile)) {
+                  if ($OLDfileImage != null ){
+                     unlink($uploadDir . $OLDfileImage);
+                  }
+                  if ($fileSize > 1048576) { // more than 1 MB
+                     // Compress the uploaded image with a quality of 15
+                     $compressedImage = compressImage($fileTmpname, $targetFile, 15);
+                  } else {
+                     // Compress the uploaded image with a quality of 25
+                     $compressedImage = compressImage($fileTmpname, $targetFile, 25);
+                  }
+                  if ($compressedImage) {
                      $query = "UPDATE `user` SET `profile`='$fileName' WHERE `user_id`='$user_id'";
                      $query_run = mysqli_query($con, $query);
-            
-                     if($query_run){
+                     if ($query_run) {
                         $output = array('status' => 'Profile updated successfully', 'alert' => 'success');
-                     }
-                     else{
+                     } else {
                         $output = array('status' => 'Profile was not updated', 'alert' => 'error');
                      }
                   }
+               } else {
+                  $output = array('status' => 'File is too large, must be 5MB or below', 'alert' => 'warning');
                }
-               else{
-                  $output = array('status' => 'File is too large file must be 2mb below', 'alert' => 'warning');
-               }
-            }
-            else{
+            } else {
                $output = array('status' => 'File error', 'alert' => 'error');
             }
-         }
-         else{
+         } else {
             $output = array('status' => 'Invalid file type', 'alert' => 'error');
          }
          echo json_encode($output);
       }
    }
+   // -------------------------------- Get Profile -------------------------------- //
+   if (isset($_POST["get_profile"])) {
+      // Prepare and execute the SQL query
+      $query = $con->prepare("SELECT * FROM user WHERE user_id = ?");
+      $query->bind_param("i", $user_id);
+      $query->execute();
+      $result = $query->get_result();
+      if ($result->num_rows > 0) {
+          // Fetch user data from the result
+          $row = $result->fetch_assoc();
+          $output = array('profile' => $row['profile'], 'gender' => $row['gender']);
+      }
+  
+      // Return user data as JSON
+      header('Content-Type: application/json');
+      echo json_encode($output);
+   }
+  
 ?>
