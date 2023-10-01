@@ -43,6 +43,17 @@
             window.onload = function() {
                 localStorage.setItem("savedPassword", ''); // Clear the value password if user click reload the page.
             }
+            function previewImage(frameId, inputId) { // select multiple images viewer if user select desired image.
+                let image = document.getElementById(frameId);
+                let fileInput = document.getElementById(inputId);
+                
+                if (fileInput.files.length > 0) {
+                    let file = fileInput.files[0];
+                    image.src = URL.createObjectURL(file);
+                } else {
+                    image.src = base_url + "assets/files/system/no-image.png";
+                }
+            }
         </script>
     </body>
 </html>

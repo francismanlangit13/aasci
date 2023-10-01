@@ -200,4 +200,51 @@
       header('Content-Type: application/json');
       echo json_encode(array('exists' => ($result['count'] > 0)));
    }
+   // -------------------------------- Update profile -------------------------------- //
+   if (isset($_POST["update_profile"])){
+      if(isset($_FILES['image1']) && is_uploaded_file($_FILES['image1']['tmp_name']) && $_FILES['image1']['error'] === UPLOAD_ERR_OK) {
+         $fileImage = $_FILES['image1'];
+         $OLDfileImage = $_POST['oldimage'];
+         $customFileName = 'user_' . date('Ymd_His'); // replace with your desired file name
+         $ext = pathinfo($fileImage['name'], PATHINFO_EXTENSION); // get the file extension
+         $fileName = $customFileName . '.' . $ext; // append the extension to the custom file name
+         $fileTmpname = $fileImage['tmp_name'];
+         $fileSize = $fileImage['size'];
+         $fileError = $fileImage['error'];
+         $fileExt = explode('.',$fileName);
+         $fileActExt = strtolower(end($fileExt));
+         $allowed = array('jpg','jpeg','png');
+         if(in_array($fileActExt, $allowed)){
+            if($fileError === 0){
+               if($fileSize < 10485760){
+                  $uploadDir = '../../assets/files/users/';
+                  $targetFile = $uploadDir . $fileName;
+                  unlink($uploadDir . $OLDfileImage);
+      
+                  if (move_uploaded_file($fileTmpname, $targetFile)) {
+                     $query = "UPDATE `user` SET `profile`='$fileName' WHERE `user_id`='$user_id'";
+                     $query_run = mysqli_query($con, $query);
+            
+                     if($query_run){
+                        $output = array('status' => 'Profile updated successfully', 'alert' => 'success');
+                     }
+                     else{
+                        $output = array('status' => 'Profile was not updated', 'alert' => 'error');
+                     }
+                  }
+               }
+               else{
+                  $output = array('status' => 'File is too large file must be 2mb below', 'alert' => 'warning');
+               }
+            }
+            else{
+               $output = array('status' => 'File error', 'alert' => 'error');
+            }
+         }
+         else{
+            $output = array('status' => 'Invalid file type', 'alert' => 'error');
+         }
+         echo json_encode($output);
+      }
+   }
 ?>

@@ -5,6 +5,28 @@
 <head>
     <!-- Website Title -->
     <title><?= $system['shortname'] ?> | My Account</title>
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
+    <style>
+        #uploadForm label {
+            margin: 2px;
+            font-size: 1em;
+        }
+
+        #progress-bar {
+            background-color: #12CC1A;
+            color: #FFFFFF;
+            width: 0%;
+            -webkit-transition: width .3s;
+            -moz-transition: width .3s;
+            transition: width .3s;
+            border-radius: 5px;
+        }
+
+        #targetLayer {
+            width: 100%;
+            text-align: center;
+        }
+    </style>
 </head>
 <main>
     <header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
@@ -37,14 +59,14 @@
                     <div class="card-header">Profile Picture</div>
                     <div class="card-body text-center">
                         <!-- Profile picture image-->
-                        <img class="img-account-profile rounded-circle mb-2" src="<?php if(!empty($row['profile'])){
-                            echo base_url . 'assets/files/users/' . $row['profile'];
-                            } else { if($row['gender'] == 'Male'){echo base_url . 'assets/files/system/profile-male.png'; } else{ echo base_url . 'assets/files/system/profile-female.png'; } }
+                        <img class="img-account-profile rounded-circle mb-2" src="<?php if(!empty($user['profile'])){
+                            echo base_url . 'assets/files/users/' . $user['profile'];
+                            } else { if($user['gender'] == 'Male'){echo base_url . 'assets/files/system/profile-male.png'; } else{ echo base_url . 'assets/files/system/profile-female.png'; } }
                         ?>" alt="" />
                         <!-- Profile picture help block-->
-                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 2 MB</div>
                         <!-- Profile picture upload button-->
-                        <button class="btn btn-primary" type="button">Upload new image</button>
+                        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#Upload_Profile">Upload new image</button>
                     </div>
                 </div>
             </div>
@@ -106,7 +128,7 @@
                                 <!-- Form Group (Birthday)-->
                                 <div class="col-md-6">
                                     <label for="birthday" class="required">Birthday</label>
-                                    <input required class="form-control" id="birthday" name="birthday" placeholder="MM/DD/YYY" value="<?=$row['birthday'];?>" type="date"/>
+                                    <input required class="form-control" id="birthday" name="birthday" placeholder="MM/DD/YYY" value="<?=$user['birthday'];?>" type="date"/>
                                     <div id="birthday-error"></div>
                                 </div>
                             </div>
@@ -132,4 +154,100 @@
         </div>
     </div>
 </main>
+
+<!-- Modal for Upload profile-->
+<div class="modal fade" id="Upload_Profile" tabindex="-1" role="dialog" aria-labelledby="exampleUpload_Profile" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="uploadForm" action="upload.php" method="post">
+                <div class="modal-header">
+                    Upload an Image
+                </div>
+                <div class="modal-body">
+                    <div class="card-body text-center">
+                        <!-- Profile picture image-->
+                        <div class="circle-container">
+                            <img class="img-account-profile rounded-circle mb-2" id="frame1" src="<?php if(!empty($user['profile'])){
+                                echo base_url . 'assets/files/users/' . $user['profile'];
+                            } else { 
+                                if($user['gender'] == 'Male'){
+                                    echo base_url . 'assets/files/system/profile-male.png'; 
+                                } else { 
+                                    echo base_url . 'assets/files/system/profile-female.png'; 
+                                } 
+                            } ?>" alt="upload_profile" style="object-fit:cover; width:180px; height:180px; overflow:hidden; position:relative;" />
+                        </div>
+                        <!-- Profile picture help block-->
+                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 2 MB</div>
+                        <!-- Profile picture upload button-->
+                        <input type="file" name="image1" id="image1" class="form-control-file btn btn-primary" accept=".jpg, .jpeg, .png" onchange="previewImage('frame1', 'image1')">
+                        <input type="text" name="oldimage" value="<?= $user['profile']; ?>" hidden>
+                        <div class="row">
+                            <div id="progress-bar"></div>
+                        </div>
+                        <div id="targetLayer"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="btn_cancel_update_profile" type="button" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" id="btn_update_profile" name="upload_profile" class="btn btn-danger"><div class="dropdown-item-icon"><i data-feather="upload"></i></div> Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Ajax for Image Upload -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#uploadForm').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            var formData = new FormData($(this)[0]);
+            formData.append('update_profile', '1'); // Use the correct identifier for profile image update
+
+            $.ajax({
+                url: "ajax.php",
+                type: "POST",
+                dataType: "json",
+                data: formData,
+                contentType: false,
+                cache: false,
+                processData: false,
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    // Upload progress
+                    xhr.upload.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = (evt.loaded / evt.total) * 100;
+                            $('#progress-bar').width(percentComplete + '%');
+                            $('#progress-bar').html('<div id="progress-status" class="text-center">' + percentComplete + ' %</div>');
+                        }
+                    }, false);
+                    return xhr;
+                },
+                beforeSend: function() {
+                    $('#btn_update_profile').attr('disabled', 'disabled');
+                    $('#btn_cancel_update_profile').attr('disabled', 'disabled');
+                },
+                success: function(data) {
+                    swal({
+                        title: "Notice",
+                        text: data.status,
+                        icon: data.alert,
+                        button: true
+                    }).then(function() {
+                        $('#Upload_Profile').modal('hide');
+                        $('#uploadForm')[0].reset();
+                        $('#btn_update_profile').removeAttr('disabled');
+                        $('#btn_cancel_update_profile').removeAttr('disabled');
+                    });
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error(errorThrown);
+                }
+            });
+        });
+    });
+</script>
+
 <?php include ('../includes/footer.php'); ?>
