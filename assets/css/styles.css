@@ -7718,13 +7718,11 @@ textarea.form-control-lg {
 }
 @media (min-width: 762px) {
   .modal-dialog {
-    max-width: 600px;
     margin: 1.75rem auto;
   }
 }
 @media (min-width: 992px) {
   .modal-dialog {
-    max-width: 900px;
     margin: 1.75rem auto;
   }
   .modal-lg, .modal-xl {

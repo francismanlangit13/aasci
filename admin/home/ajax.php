@@ -302,5 +302,98 @@
       header('Content-Type: application/json');
       echo json_encode($output);
    }
-  
+   // -------------------------------- Update Info -------------------------------- //
+   if (isset($_POST["update_info"])) {
+      $fname = $_POST['fname'];
+      $mname = $_POST['mname'];
+      $lname = $_POST['lname'];
+      $suffix = $_POST['suffix'];
+      $civil_status = $_POST['civil_status'];
+      $birthday = $_POST['birthday'];
+      $email = $_POST['email'];
+      $phone = $_POST['phone'];
+
+      $query = "UPDATE `user` SET `fname`='$fname', `mname`='$mname', `lname`='$lname', `suffix`='$suffix', `civil_status`='$civil_status', `birthday`='$birthday', `email`='$email', `phone`='$phone' WHERE `user_id`='$user_id'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run) {
+         $output = array('status' => 'Accounts details updated successfully', 'alert' => 'success');
+      } else {
+         $output = array('status' => 'Accounts details was not updated', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Change Password -------------------------------- //
+   if (isset($_POST["change_password"])) {
+      $currentPassword = md5($_POST['currentPassword']);
+      $password = md5($_POST['confirmPassword']);
+
+      // Prepare and execute the SQL query
+      $stmt = $con->prepare("SELECT * FROM user WHERE user_id = ?");
+      $stmt->bind_param("i", $user_id);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      if ($result->num_rows > 0) {
+         // Fetch user data from the result
+         $row = $result->fetch_assoc();
+         
+         if($row['password'] == $currentPassword){
+            $query = "UPDATE `user` SET `password`='$password' WHERE `user_id`='$user_id'";
+            $query_run = mysqli_query($con, $query);
+            if ($query_run) {
+               $output = array('status' => 'Password updated successfully', 'alert' => 'success');
+            } else {
+               $output = array('status' => 'Password was not updated', 'alert' => 'error');
+            }
+         } else{
+            $output = array('status' => 'Incorrect current password', 'alert' => 'warning');
+         }
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Two Step Authenticaiton -------------------------------- //
+   if (isset($_POST["authentication"])) {
+      if ($_POST['twoFactor'] == 'ON'){
+         $store = '1';
+         $query = "UPDATE `user` SET `second_auth`='$store' WHERE `user_id`='$user_id'";
+         $query_run = mysqli_query($con, $query);
+         if ($query_run) {
+            $output = array('status' => 'Two-Factor Authentication is turn on', 'alert' => 'success');
+         } else {
+            $output = array('status' => 'Two-Factor Authentication was not updated', 'alert' => 'error');
+         }
+      } elseif ($_POST['twoFactor'] == 'OFF'){
+         $store = '0';
+         $query = "UPDATE `user` SET `second_auth`='$store' WHERE `user_id`='$user_id'";
+         $query_run = mysqli_query($con, $query);
+         if ($query_run) {
+            $output = array('status' => 'Two-Factor Authentication is turn off', 'alert' => 'success');
+         } else {
+            $output = array('status' => 'Two-Factor Authentication was not updated', 'alert' => 'error');
+         }
+      } else{
+         $output = array('status' => 'Two-Factor Authentication is block', 'alert' => 'warning');
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Security Preferences -------------------------------- //
+   if (isset($_POST["security"])) {
+      if ($_POST['radioPrivacy'] == 'ON'){
+         $privacy = '1';
+      } else{
+         $privacy = '0';
+      }
+      if ($_POST['radioUsage'] == 'ON'){
+         $data_sharing = '1';
+      } else{
+         $data_sharing = '0';
+      }
+      $query = "UPDATE `user` SET `account_privacy`='$privacy', `data_sharing`='$data_sharing' WHERE `user_id`='$user_id'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run) {
+         $output = array('status' => 'Security preferences updated successfully', 'alert' => 'success');
+      } else {
+         $output = array('status' => 'Security preferences was not updated', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
 ?>

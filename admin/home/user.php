@@ -2,7 +2,6 @@
 <head>
     <!-- Website Title -->
     <title><?= $system['shortname'] ?> | Users</title>
-    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css"> -->
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 </head>
 <main>
@@ -110,7 +109,7 @@
 
 <!-- Modal for Add user -->
 <div class="modal fade" id="btn_add_user" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="add_userLabel" aria-hidden="true">
-    <div class="modal-dialog d-grid" role="document" style="justify-items: center;">
+    <div class="modal-dialog modal-lg d-grid" role="document" style="justify-items: center;">
         <div class="modal-content">
             <div class="modal-header card-header">
                 <h5 class="modal-title" id="add_userLabel">Add user</h5>
@@ -497,7 +496,7 @@
 
 <!-- Modal for View user -->
 <div class="modal fade" id="btn_view_user" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="view_userLabel" aria-hidden="true">
-    <div class="modal-dialog d-grid" role="document" style="justify-items: center;">
+    <div class="modal-dialog modal-lg d-grid" role="document" style="justify-items: center;">
         <div class="modal-content">
             <div class="modal-header card-header">
                 <h5 class="modal-title" id="view_userLabel">View user</h5>
@@ -620,7 +619,7 @@
 
 <!-- Modal for Edit user -->
 <div class="modal fade" id="btn_edit_user" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="edit_userLabel" aria-hidden="true">
-    <div class="modal-dialog d-grid" role="document" style="justify-items: center;">
+    <div class="modal-dialog modal-lg d-grid" role="document" style="justify-items: center;">
         <div class="modal-content">
             <div class="modal-header card-header">
                 <h5 class="modal-title" id="edit_userLabel">Edit user</h5>
@@ -1129,7 +1128,7 @@
                         $('#add_user').removeAttr('disabled');
                         $('#add_user_close').removeAttr('disabled');
                         // Update the DataTable
-                        var dataTable = $('#datatablesSimple1').DataTable();
+                        var dataTable = $('#dataTable').DataTable();
                         dataTable.draw(); // Redraw the DataTable
                     });
                 },
@@ -1164,7 +1163,7 @@
                         $('#edit_user_form')[0].reset();
                         $('#edit_user').removeAttr('disabled');
                         // Update the DataTable
-                        var dataTable = $('#datatablesSimple1').DataTable();
+                        var dataTable = $('#dataTable').DataTable();
                         dataTable.draw(); // Redraw the DataTable
                     });
                 },
@@ -1199,7 +1198,7 @@
                         $('#delete_user_form')[0].reset();
                         $('#delete_user').removeAttr('disabled');
                         // Update the DataTable
-                        var dataTable = $('#datatablesSimple1').DataTable();
+                        var dataTable = $('#dataTable').DataTable();
                         dataTable.draw(); // Redraw the DataTable
                     });
                 },

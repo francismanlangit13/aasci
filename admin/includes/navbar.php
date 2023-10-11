@@ -150,18 +150,12 @@
                 // Check if the response data contains a profile property
                 if (data.profile !== undefined && data.profile !== null && data.profile !== '') {
                     // Update the profile image source
-                    const profileImage = document.getElementById('profile-image');
-                    profileImage.src = '<?php echo base_url ?>assets/files/users/' + data.profile;
                     const profileImage1 = document.getElementById('profile-image1');
                     profileImage1.src = '<?php echo base_url ?>assets/files/users/' + data.profile;
                     const profileImage2 = document.getElementById('profile-image2');
                     profileImage2.src = '<?php echo base_url ?>assets/files/users/' + data.profile;
-                    var oldprofileImage = document.getElementById('old-profile-image');
-                    oldprofileImage.value = data.profile;
                 } else {
                     // Set a default profile image source based on gender
-                    const profileImage = document.getElementById('profile-image');
-                    profileImage.src = data.gender === 'Male' ? '<?php echo base_url ?>assets/files/system/profile-male.png' : '<?php echo base_url ?>assets/files/system/profile-female.png';
                     const profileImage1 = document.getElementById('profile-image1');
                     profileImage1.src = data.gender === 'Male' ? '<?php echo base_url ?>assets/files/system/profile-male.png' : '<?php echo base_url ?>assets/files/system/profile-female.png';
                     const profileImage2 = document.getElementById('profile-image2');
