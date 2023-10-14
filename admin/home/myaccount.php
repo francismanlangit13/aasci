@@ -164,17 +164,17 @@
                         <form id="password-information">
                             <!-- Form Group (current password)-->
                             <div class="mb-3">
-                                <label class="small mb-1" for="currentPassword">Current Password</label>
+                                <label class="small mb-1 required" for="currentPassword">Current Password</label>
                                 <input class="form-control" id="currentPassword" name="currentPassword" type="password" placeholder="Enter current password" required/>
                             </div>
                             <!-- Form Group (new password)-->
                             <div class="mb-3">
-                                <label class="small mb-1" for="newPassword">New Password</label>
+                                <label class="small mb-1 required" for="newPassword">New Password</label>
                                 <input class="form-control" id="newPassword" name="newPassword" type="password" placeholder="Enter new password" required/>
                             </div>
                             <!-- Form Group (confirm password)-->
                             <div class="mb-3">
-                                <label class="small mb-1" for="confirmPassword">Confirm Password</label>
+                                <label class="small mb-1 required" for="confirmPassword">Confirm Password</label>
                                 <input class="form-control" id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm new password" required/>
                             </div>
                             <button class="btn btn-primary float-end" type="submit" id="btn_change_password">Save</button>
@@ -292,12 +292,26 @@
 <div class="modal fade" id="Delete_Account" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleDelete_Account" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">Delete your account</h5>
-                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">...</div>
-            <div class="modal-footer"><button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" type="button">Save changes</button></div>
+            <form id="delete-information">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Delete your account</h5>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 class="mb-3" style="text-align:justify;" id="delete-password-text"><small>To verify that it's you, you need to input a password to continue.</small></h6>
+                    <h5 class="mb-3 d-none" style="text-align:justify;" id="delete-password-text1"><small>If you delete your account, you won't have access to this system again or be able to retrieve your account once you click 'Delete My Account.'</small></h5>
+                        <!-- Form Group (current password)-->
+                        <div id="form-password" class="mb-3">
+                            <label class="small mb-1 required" for="yourPassword">Current Password</label>
+                            <input class="form-control" id="yourPassword" name="yourPassword" type="password" placeholder="Enter current password" required/>
+                        </div>
+                        <input id="isDelete" name="isDelete" type="hidden"/>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit" id="btn_delete_account">Proceed</button>
+                    <button class="btn btn-danger d-none" type="submit" id="btn_delete_account1" disabled>Delete my account</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -406,6 +420,64 @@
                         // Call updateUserData after successful image upload
                         updateUserData();
                     });
+                },
+                error: function (xhr, status, error) {
+                // Handle any errors that occur during the AJAX request
+                console.error('Error:', error);
+                }
+            });
+        });
+    });
+</script>
+
+<!-- Ajax for Delete account verify -->
+<script>
+    $(document).ready(function () {
+        // Submit form via AJAX
+        $('#delete-information').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            var formData = new FormData(this);
+            formData.append('delete_account', '1');
+            $.ajax({
+                type: 'POST',
+                url: 'ajax.php', 
+                data: formData,
+                processData: false,
+                cache: false,
+                contentType: false,
+                beforeSend: function() {
+                    $('#btn_delete_account').attr('disabled', 'disabled');
+                },
+                success: function(data) {
+                    data = JSON.parse(data); // Parse the JSON response
+                    if(data.alert == 'info'){
+                        $('#yourPassword').val('').hide().removeAttr('required');
+                        $('#delete-password-text').addClass('d-none');
+                        $('#form-password').hide();
+                        $('#isDelete').val('1').hide();
+                        $('#btn_delete_account').hide();
+                        $('#delete-password-text1').removeClass('d-none');
+                        $('#btn_delete_account1').removeClass('d-none').removeAttr('disabled');
+                    } else {
+                        if(data.alert == 'success'){
+                            setTimeout(function () {
+                                window.location.href = base_url + 'login';
+                            }, 5000);
+                        }
+                        swal({
+                            title: "Notice",
+                            text: data.status,
+                            icon: data.alert,
+                            button: true,
+                        }).then(function() {
+                            if(data.alert == 'warning'){
+                                $('#yourPassword').val(''); // Set the value to an empty string
+                            }
+                            $('#btn_delete_account').removeAttr('disabled');
+                            // Call updateUserData after successful image upload
+                            updateUserData();
+                        });
+                    }
                 },
                 error: function (xhr, status, error) {
                 // Handle any errors that occur during the AJAX request

@@ -396,4 +396,33 @@
       }
       echo json_encode($output);
    }
+   // -------------------------------- Delete Account -------------------------------- //
+   if (isset($_POST["delete_account"])) {
+      $req_Delete = $_POST['isDelete'];
+      $currentPassword = $_POST['yourPassword'];
+      if ($req_Delete == '1') {
+         $stmt = "UPDATE `user` SET `user_status_id`= '3' WHERE `user_id`='$user_id'";
+         $stmt_run = mysqli_query($con, $stmt);
+         if ($stmt_run) {
+            $output = array('status' => 'Your account will be successfully deleted, and you will be redirected in 5 seconds.', 'alert' => 'success');
+            unset( $_SESSION['auth']);
+            unset( $_SESSION['auth_role']);
+            unset( $_SESSION['auth_user']);
+            $_SESSION['status'] = "Delete account successfully.";
+            $_SESSION['status_code'] = "success";
+         } else {
+            $output = array('status' => 'Cannot proceed with your request.', 'alert' => 'error');
+         }
+      } else {
+         $password = md5($currentPassword);
+         $query = "SELECT * FROM `user` WHERE `user_id`='$user_id' AND `password`='$password'";
+         $query_run = mysqli_query($con, $query);
+         if(mysqli_num_rows($query_run) > 0){
+            $output = array('status' => '', 'alert' => 'info');
+         } else {
+            $output = array('status' => 'Incorrect current password', 'alert' => 'warning');
+         }
+      }
+      echo json_encode($output);
+   }
 ?>
