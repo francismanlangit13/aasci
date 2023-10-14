@@ -52,6 +52,7 @@
                                     }
                                 },
                                 'scrollX': true,
+                                'searchDelay': 86400000, // Disable Search or deley search 24hours
                                 'scrollCollapse': true, // Allow vertical scrollbar when necessary
                                 'columns': [
                                     { data: 'user_id', className: 'text-center' },
@@ -98,6 +99,16 @@
                                         orderable: false   // Exclude from sorting
                                     }
                                 ]
+                            });
+                            // After typing on search will do searching data.
+                            var searchTimer;
+                            var searchInput = $('#dataTable_filter input');
+                            searchInput.on('keyup', function () {
+                                clearTimeout(searchTimer);
+                                searchTimer = setTimeout(function () {
+                                    var searchTerm = searchInput.val();
+                                    dataTable.search(searchTerm).draw();
+                                }, 1500); // Set the delay to 1.5 seconds (1500 milliseconds)
                             });
                         });
                     </script>
@@ -212,7 +223,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" id="add_user" type="button"><i class="fa fa-plus mr-1" style="margin-right:0.3rem"></i>Add</button>
+                    <button class="btn btn-primary" id="add_user" type="submit"><i class="fa fa-plus mr-1" style="margin-right:0.3rem"></i>Add</button>
                 </div>
             </form>
         </div>
@@ -735,7 +746,7 @@
                     <input type="hidden" id="edit_user_id" name="edit_user_id">
                     <input type="hidden" id="store_email">
                     <input type="hidden" id="store_phone">
-                    <button class="btn btn-primary" id="edit_user" type="button"><i class="fa fa-save mr-1" style="margin-right:0.3rem"></i>Update</button>
+                    <button class="btn btn-primary" id="edit_user" type="submit"><i class="fa fa-save mr-1" style="margin-right:0.3rem"></i>Update</button>
                 </div>
             </form>
         </div>
@@ -1101,8 +1112,9 @@
 <script type="text/javascript">
     $(document).ready(function() {
         // Add user
-        $('#add_user').click(function() {
-            var formData = new FormData($('#add_user_form')[0]);
+        $('#add_user_form').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            var formData = new FormData(this);
             formData.append('add_user', '1'); // Identifier
             $.ajax({
                 url: "ajax.php",
@@ -1138,8 +1150,9 @@
             });
         });
         // Edit user
-        $('#edit_user').click(function() {
-            var formData = new FormData($('#edit_user_form')[0]);
+        $('#edit_user_form').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            var formData = new FormData(this);
             formData.append('edit_user', '1'); // Identifier
             $.ajax({
                 url: "ajax.php",

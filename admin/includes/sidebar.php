@@ -30,17 +30,17 @@
                     <!-- Sidenav Heading (Users)-->
                     <div class="sidenav-menu-heading">Users</div>
                     <!-- Sidenav Accordion (Pages)-->
-                    <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/user.php') !== false)  {  } else{ echo'collapsed'; } ?>" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                    <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/user.php') !== false || strpos($_SERVER['PHP_SELF'], 'home/client.php') !== false)  {  } else{ echo'collapsed'; } ?>" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                         <div class="nav-link-icon"><i data-feather="users"></i></div>
                         Accounts
                         <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                     </a>
-                    <div class="collapse <?php if (strpos($_SERVER['PHP_SELF'], 'home/user.php') !== false)  { echo'show'; }?>" id="collapsePages" data-bs-parent="#accordionSidenav">
+                    <div class="collapse <?php if (strpos($_SERVER['PHP_SELF'], 'home/user.php') !== false  || strpos($_SERVER['PHP_SELF'], 'home/client.php') !== false)  { echo'show'; }?>" id="collapsePages" data-bs-parent="#accordionSidenav">
                         <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPagesMenu">
                             <!-- Nested Sidenav Accordion (Accounts -> Users)-->
                             <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/user.php') !== false)  { echo 'active'; } ?>" href="user">Users</a>
                             <!-- Nested Sidenav Accordion (Accounts -> Client)-->
-                            <a class="nav-link" href="client">Client</a>
+                            <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/client.php') !== false)  { echo 'active'; } ?>" href="client">Senior Citizen</a>
                         </nav>
                     </div>
                     

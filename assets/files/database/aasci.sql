@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 01, 2023 at 05:11 PM
+-- Generation Time: Oct 14, 2023 at 06:03 PM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -21,91 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `aasci`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `location`
---
-
-CREATE TABLE `location` (
-  `location_id` int(11) NOT NULL,
-  `location_name` text NOT NULL,
-  `location_status_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `payment`
---
-
-CREATE TABLE `payment` (
-  `payment_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `location_id` int(11) NOT NULL,
-  `property_id` int(11) NOT NULL,
-  `payment_type_id` int(11) NOT NULL,
-  `payment_amount` double NOT NULL,
-  `payment_photo` text NOT NULL,
-  `payment_datestart` datetime NOT NULL,
-  `payment_dateupdate` datetime NOT NULL,
-  `payment_status_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `payment_platform`
---
-
-CREATE TABLE `payment_platform` (
-  `payment_platform_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `payment_platform_name` text NOT NULL,
-  `payment_platform_account` text NOT NULL,
-  `payment_platform_photo` text NOT NULL,
-  `payment_platform_status_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `payment_type`
---
-
-CREATE TABLE `payment_type` (
-  `payment_type_id` int(11) NOT NULL,
-  `payment_type_name` text NOT NULL,
-  `payment_status_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `property`
---
-
-CREATE TABLE `property` (
-  `property_id` int(11) NOT NULL,
-  `property_name` text NOT NULL,
-  `property_rent` double NOT NULL,
-  `location_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `managed_by` text NOT NULL,
-  `property_status_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `property_status`
---
-
-CREATE TABLE `property_status` (
-  `property_status_id` int(11) NOT NULL,
-  `property_status_name` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -157,6 +72,20 @@ CREATE TABLE `user` (
   `phone` text NOT NULL,
   `password` text NOT NULL,
   `profile` text NOT NULL,
+  `date_issued` date NOT NULL,
+  `soc_pen` set('No','Yes') NOT NULL,
+  `gsis` set('No','Yes') NOT NULL,
+  `sss` set('No','Yes') NOT NULL,
+  `pvao` set('No','Yes') NOT NULL,
+  `sup_with` set('No','Yes') NOT NULL,
+  `4ps` set('No','Yes') NOT NULL,
+  `nhts` set('No','Yes') NOT NULL,
+  `id_file` set('No','Yes') NOT NULL,
+  `barangay` text NOT NULL,
+  `rrn` text NOT NULL,
+  `account_privacy` set('0','1') NOT NULL,
+  `data_sharing` set('0','1') NOT NULL,
+  `second_auth` set('0','1') NOT NULL,
   `user_type_id` int(11) NOT NULL,
   `user_status_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -165,8 +94,30 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `fname`, `mname`, `lname`, `suffix`, `gender`, `birthday`, `civil_status`, `email`, `phone`, `password`, `profile`, `user_type_id`, `user_status_id`) VALUES
-(1, 'user', '', 'admin', '', 'Male', '0000-00-00', '', 'admin@gmail.com', '', '0192023a7bbd73250516f069df18b500', 'user_20231001_231057.jpg', 1, 1);
+INSERT INTO `user` (`user_id`, `fname`, `mname`, `lname`, `suffix`, `gender`, `birthday`, `civil_status`, `email`, `phone`, `password`, `profile`, `date_issued`, `soc_pen`, `gsis`, `sss`, `pvao`, `sup_with`, `4ps`, `nhts`, `id_file`, `barangay`, `rrn`, `account_privacy`, `data_sharing`, `second_auth`, `user_type_id`, `user_status_id`) VALUES
+(1, 'user', '', 'admin', '', 'Male', '2023-10-11', 'Single', 'admin@gmail.com', '09457664949', 'c93ccd78b2076528346216b3b2f701e6', 'user_20231011_202137.jpeg', '0000-00-00', '', '', '', '', '', '', '', '', '', '', '0', '0', '1', 1, 1),
+(3, '', '', '', '', '', '0000-00-00', '', '', '', '6510023de7eb2d51d6d6fcdb39bb4162', '', '0000-00-00', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 3),
+(4, 'Francis Carlo', 'Abcede', 'Manlangit', '', 'Male', '2000-11-13', 'Single', 'franzcarl13@yahoo.com', '09457664940', 'e0ccc22d8f28274aaee6258dee5a2783', '', '0000-00-00', '', '', '', '', '', '', '', '', '', '', '', '', '', 3, 1),
+(18, '', '', '', '', '', '0000-00-00', '', '', '', '', '', '0000-00-00', '', '', '', '', '', '', '', '', '', '', '', '', '', 3, 3),
+(19, '', '', '', '', '', '0000-00-00', '', '', '', '', '', '0000-00-00', '', '', '', '', '', '', '', '', '', '', '', '', '', 3, 3),
+(20, '', '', '', '', '', '0000-00-00', '', '', '', '', '', '0000-00-00', '', '', '', '', '', '', '', '', '', '', '', '', '', 3, 3),
+(21, 'Juan', '', 'Dela Cruz', ' ', 'Male', '2000-11-20', '', '', '', '', '', '2023-10-14', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Mohon', '1255467', '', '', '', 3, 1),
+(22, 'sdsd', '', 'sdsd', '', 'Male', '2023-10-05', 'Widowed', 'franzcarl113@yahoo.com', '09457664942', 'b0b0cacbc210bfa3a8fe74202f1e7fb2', '', '0000-00-00', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1),
+(23, 'asdas', 'asdasd', 'asdasd', '', 'Male', '2023-12-31', '', '', '', '', '', '2023-12-31', 'No', 'Yes', 'No', 'Yes', 'No', 'Yes', 'Yes', 'No', 'Balintonga', '1', '', '', '', 3, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_log`
+--
+
+CREATE TABLE `user_log` (
+  `log_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `type` text NOT NULL,
+  `datetime` datetime NOT NULL,
+  `ip` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -213,50 +164,6 @@ INSERT INTO `user_type` (`user_type_id`, `user_type_name`) VALUES
 --
 
 --
--- Indexes for table `location`
---
-ALTER TABLE `location`
-  ADD PRIMARY KEY (`location_id`);
-
---
--- Indexes for table `payment`
---
-ALTER TABLE `payment`
-  ADD PRIMARY KEY (`payment_id`),
-  ADD KEY `user_id` (`user_id`,`location_id`,`property_id`,`payment_type_id`),
-  ADD KEY `payment_type_id` (`payment_type_id`),
-  ADD KEY `property_id` (`property_id`),
-  ADD KEY `location_id` (`location_id`);
-
---
--- Indexes for table `payment_platform`
---
-ALTER TABLE `payment_platform`
-  ADD PRIMARY KEY (`payment_platform_id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indexes for table `payment_type`
---
-ALTER TABLE `payment_type`
-  ADD PRIMARY KEY (`payment_type_id`);
-
---
--- Indexes for table `property`
---
-ALTER TABLE `property`
-  ADD PRIMARY KEY (`property_id`),
-  ADD KEY `location_id` (`location_id`,`user_id`,`property_status_id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `property_status_id` (`property_status_id`);
-
---
--- Indexes for table `property_status`
---
-ALTER TABLE `property_status`
-  ADD PRIMARY KEY (`property_status_id`);
-
---
 -- Indexes for table `system_setting`
 --
 ALTER TABLE `system_setting`
@@ -269,6 +176,13 @@ ALTER TABLE `user`
   ADD PRIMARY KEY (`user_id`),
   ADD KEY `user_status_id` (`user_status_id`) USING BTREE,
   ADD KEY `user_type_id` (`user_type_id`);
+
+--
+-- Indexes for table `user_log`
+--
+ALTER TABLE `user_log`
+  ADD PRIMARY KEY (`log_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `user_status`
@@ -287,42 +201,6 @@ ALTER TABLE `user_type`
 --
 
 --
--- AUTO_INCREMENT for table `location`
---
-ALTER TABLE `location`
-  MODIFY `location_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `payment`
---
-ALTER TABLE `payment`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `payment_platform`
---
-ALTER TABLE `payment_platform`
-  MODIFY `payment_platform_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `payment_type`
---
-ALTER TABLE `payment_type`
-  MODIFY `payment_type_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `property`
---
-ALTER TABLE `property`
-  MODIFY `property_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `property_status`
---
-ALTER TABLE `property_status`
-  MODIFY `property_status_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `system_setting`
 --
 ALTER TABLE `system_setting`
@@ -332,7 +210,13 @@ ALTER TABLE `system_setting`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+--
+-- AUTO_INCREMENT for table `user_log`
+--
+ALTER TABLE `user_log`
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user_status`
@@ -351,34 +235,17 @@ ALTER TABLE `user_type`
 --
 
 --
--- Constraints for table `payment`
---
-ALTER TABLE `payment`
-  ADD CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
-  ADD CONSTRAINT `payment_ibfk_2` FOREIGN KEY (`payment_type_id`) REFERENCES `payment_type` (`payment_type_id`),
-  ADD CONSTRAINT `payment_ibfk_3` FOREIGN KEY (`property_id`) REFERENCES `property` (`property_id`),
-  ADD CONSTRAINT `payment_ibfk_4` FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`);
-
---
--- Constraints for table `payment_platform`
---
-ALTER TABLE `payment_platform`
-  ADD CONSTRAINT `payment_platform_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
-
---
--- Constraints for table `property`
---
-ALTER TABLE `property`
-  ADD CONSTRAINT `property_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
-  ADD CONSTRAINT `property_ibfk_2` FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`),
-  ADD CONSTRAINT `property_ibfk_3` FOREIGN KEY (`property_status_id`) REFERENCES `property_status` (`property_status_id`);
-
---
 -- Constraints for table `user`
 --
 ALTER TABLE `user`
   ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`user_status_id`) REFERENCES `user_status` (`user_status_id`),
   ADD CONSTRAINT `user_ibfk_2` FOREIGN KEY (`user_type_id`) REFERENCES `user_type` (`user_type_id`);
+
+--
+-- Constraints for table `user_log`
+--
+ALTER TABLE `user_log`
+  ADD CONSTRAINT `user_log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

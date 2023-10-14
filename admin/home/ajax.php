@@ -425,4 +425,197 @@
       }
       echo json_encode($output);
    }
+   // -------------------------------- DataTable Client -------------------------------- //
+   if (isset($_POST["client_list"])) {
+      // Reading values
+      $draw = $_POST['draw'];
+      $row = $_POST['start'];
+      $rowperpage = $_POST['length'];
+      $columnIndex = $_POST['order'][0]['column'];
+      $columnName = $_POST['columns'][$columnIndex]['data'];
+      $columnSortOrder = $_POST['order'][0]['dir'];
+      $searchValue = $_POST['search']['value'];
+      $searchArray = array();
+      
+      // Search
+      $searchQuery = " ";
+      if ($searchValue != '') {
+         $searchQuery = " AND (user_id LIKE :user_id OR 
+            CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) LIKE :fullname OR
+            gender LIKE :gender OR
+            DATE_FORMAT(birthday, '%m-%d-%Y') LIKE :newbirthday OR
+            TIMESTAMPDIFF(YEAR, birthday, CURDATE()) = :age OR
+            barangay LIKE :barangay OR
+            DATE_FORMAT(date_issued, '%m-%d-%Y') LIKE :newdateissued OR
+            soc_pen LIKE :soc_pen OR
+            gsis LIKE :gsis OR
+            sss LIKE :sss OR
+            pvao LIKE :pvao OR
+            sup_with LIKE :sup_with OR
+            4ps LIKE :fourps OR
+            nhts LIKE :nhts OR
+            id_file LIKE :id_file OR
+            rrn LIKE :rrn OR
+            user_status_id LIKE :user_status_id) ";
+         $searchArray = array( 
+            'user_id' => "%$searchValue%",
+            'fullname' => "%$searchValue%",
+            'gender' => "%$searchValue%",
+            'newbirthday' => "%$searchValue%",
+            'age' => $searchValue, // Search for the exact age value
+            'barangay' => "%$searchValue%",
+            'newdateissued' => "%$searchValue%",
+            'soc_pen' => "%$searchValue%",
+            'gsis' => "%$searchValue%",
+            'sss' => "%$searchValue%",
+            'pvao' => "%$searchValue%",
+            'sup_with' => "%$searchValue%",
+            'fourps' => "%$searchValue%",
+            'nhts' => "%$searchValue%",
+            'id_file' => "%$searchValue%",
+            'rrn' => "%$searchValue%",
+            'user_status_id' => "%$searchValue%"
+         );
+     }     
+      
+      // Total number of records without filtering
+      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM user WHERE user_status_id != 3 AND user_type_id = 3");
+      $stmt->execute();
+      $records = $stmt->fetch();
+      $totalRecords = $records['allcount'];
+      
+      // Total number of records with filtering
+      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM user WHERE user_status_id != 3 AND user_type_id = 3" . $searchQuery);
+      $stmt->execute($searchArray);
+      $records = $stmt->fetch();
+      $totalRecordwithFilter = $records['allcount'];
+      
+      // Fetch records
+      $stmt = $conn->prepare("SELECT *, CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname, DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday, DATE_FORMAT(date_issued, '%m-%d-%Y') as newdateissued, TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age FROM user WHERE user_status_id != 3 AND user_type_id = 3" .$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
+      
+      // Bind values
+      foreach ($searchArray as $key => $search) {
+          $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
+      }
+      $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
+      $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
+      $stmt->execute();
+      $empRecords = $stmt->fetchAll();
+      
+      $data = array();
+      
+      foreach ($empRecords as $row) {
+          $data[] = array(
+              "user_id" => $row['user_id'],
+              "fullname" => $row['fullname'],
+              "fname" => $row['fname'],
+              "mname" => $row['mname'],
+              "lname" => $row['lname'],
+              "suffix" => $row['suffix'],
+              "gender" => $row['gender'],
+              "birthday" => $row['birthday'],
+              "newbirthday" => $row['newbirthday'],
+              "age" => $row['age'],
+              "barangay" => $row['barangay'],
+              "dateissued" => $row['date_issued'],
+              "newdateissued" => $row['newdateissued'],
+              "soc_pen" => $row['soc_pen'],
+              "gsis" => $row['gsis'],
+              "sss" => $row['sss'],
+              "pvao" => $row['pvao'],
+              "sup_with" => $row['sup_with'],
+              "fourps" => $row['4ps'],
+              "nhts" => $row['nhts'],
+              "id_file" => $row['id_file'],
+              "rrn" => $row['rrn'],
+              "user_status_id" => $row['user_status_id']
+          );
+      }
+      
+      // Response
+      $response = array(
+          "draw" => intval($draw),
+          "iTotalRecords" => $totalRecords,
+          "iTotalDisplayRecords" => $totalRecordwithFilter,
+          "aaData" => $data
+      );
+      
+      echo json_encode($response);
+   }
+   // -------------------------------- Add Client -------------------------------- //
+   if (isset($_POST["add_client"])){
+      // Validate and sanitize client inputs
+      $fname = mysqli_real_escape_string($con, $_POST['add_fname']);
+      $mname = mysqli_real_escape_string($con, $_POST['add_mname']);
+      $lname = mysqli_real_escape_string($con, $_POST['add_lname']);
+      $suffix = mysqli_real_escape_string($con, $_POST['add_suffix']);
+      $gender = mysqli_real_escape_string($con, $_POST['add_gender']);
+      $birthday = mysqli_real_escape_string($con, $_POST['add_birthday']);
+      $barangay = mysqli_real_escape_string($con, $_POST['add_barangay']);
+      $date_issued = mysqli_real_escape_string($con, $_POST['add_date_issued']);
+      $rrn = mysqli_real_escape_string($con, $_POST['add_rrn']);
+      $soc_pen = mysqli_real_escape_string($con, $_POST['add_soc_pen']);
+      $gsis = mysqli_real_escape_string($con, $_POST['add_gsis']);
+      $sss = mysqli_real_escape_string($con, $_POST['add_sss']);
+      $pvao = mysqli_real_escape_string($con, $_POST['add_pvao']);
+      $sup_with = mysqli_real_escape_string($con, $_POST['add_sup_with']);
+      $fourps = mysqli_real_escape_string($con, $_POST['add_4ps']);
+      $nhts = mysqli_real_escape_string($con, $_POST['add_nhts']);
+      $id_file = mysqli_real_escape_string($con, $_POST['add_id_file']);
+      $user_status = '1';
+      $user_type = '3';
+      $query = "INSERT INTO `user`(`fname`, `mname`, `lname`, `suffix`, `gender`, `birthday`, `date_issued`, `soc_pen`, `gsis`, `sss`, `pvao`, `sup_with`, `4ps`, `nhts`, `id_file`, `barangay`, `rrn`, `user_type_id`, `user_status_id`) VALUES ('$fname','$mname','$lname','$suffix','$gender','$birthday','$date_issued','$soc_pen','$gsis','$sss','$pvao','$sup_with','$fourps','$nhts','$id_file','$barangay','$rrn','$user_type','$user_status')";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run){
+         $output = array('status' => "Senior citizen added successfully", 'alert' => "success");
+      } else{
+         $output = array('status' => "Senior citizen was not added", 'alert' => "error");
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Edit Client -------------------------------- //
+   if (isset($_POST["edit_client"])){
+      // Validate and sanitize client inputs
+      $id = mysqli_real_escape_string($con, $_POST['edit_client_id']);
+      $fname = mysqli_real_escape_string($con, $_POST['edit_fname']);
+      $mname = mysqli_real_escape_string($con, $_POST['edit_mname']);
+      $lname = mysqli_real_escape_string($con, $_POST['edit_lname']);
+      $suffix = mysqli_real_escape_string($con, $_POST['edit_suffix']);
+      $gender = mysqli_real_escape_string($con, $_POST['edit_gender']);
+      $birthday = mysqli_real_escape_string($con, $_POST['edit_birthday']);
+      $barangay = mysqli_real_escape_string($con, $_POST['edit_barangay']);
+      $date_issued = mysqli_real_escape_string($con, $_POST['edit_date_issued']);
+      $rrn = mysqli_real_escape_string($con, $_POST['edit_rrn']);
+      $soc_pen = mysqli_real_escape_string($con, $_POST['edit_soc_pen']);
+      $gsis = mysqli_real_escape_string($con, $_POST['edit_gsis']);
+      $sss = mysqli_real_escape_string($con, $_POST['edit_sss']);
+      $pvao = mysqli_real_escape_string($con, $_POST['edit_pvao']);
+      $sup_with = mysqli_real_escape_string($con, $_POST['edit_sup_with']);
+      $fourps = mysqli_real_escape_string($con, $_POST['edit_4ps']);
+      $nhts = mysqli_real_escape_string($con, $_POST['edit_nhts']);
+      $id_file = mysqli_real_escape_string($con, $_POST['edit_id_file']);
+      $user_status = mysqli_real_escape_string($con, $_POST['edit_status']);
+      $query = "UPDATE `user` SET `fname` = '$fname', `mname` = '$mname', `lname` = '$lname', `suffix` = '$suffix', `gender` = '$gender', `birthday` = '$birthday', `date_issued` = '$date_issued', `soc_pen` = '$soc_pen', `gsis` = '$gsis', `sss` = '$sss', `pvao` = '$pvao', `sup_with` = '$sup_with', `4ps` = '$fourps', `nhts` = '$nhts', `id_file` = '$id_file', `barangay` = '$barangay', `rrn` = '$rrn', `user_status_id` = '$user_status' WHERE `user_id` = '$id'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run){
+         $output = array('status' => "Senior citizen updated successfully", 'alert' => "success");
+      } else{
+         $output = array('status' => "Senior citizen was not updated", 'alert' => "error");
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Delete Client -------------------------------- //
+   if (isset($_POST["delete_client"])){
+      // Validate and sanitize client inputs
+      $id = mysqli_real_escape_string($con, $_POST['delete_client_id']);
+      $user_status = '3';
+      $query = "UPDATE `user` SET `user_status_id` = '$user_status' WHERE `user_id` = '$id'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run){
+         $output = array('status' => "Senior citizen deleted successfully", 'alert' => "success");
+      } else{
+         $output = array('status' => "Senior citizen was not deleted", 'alert' => "error");
+      }
+      echo json_encode($output);
+   }
 ?>
