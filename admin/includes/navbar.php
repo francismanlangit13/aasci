@@ -74,7 +74,7 @@
             </div>
         </li>
         <!-- User Dropdown-->
-        <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
+        <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4 avatar-online">
             <?php
                 $userID = $_SESSION['auth_user'] ['user_id'];
                 $query = "SELECT * FROM user where user_id = $userID";
