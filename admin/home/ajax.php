@@ -618,4 +618,116 @@
       }
       echo json_encode($output);
    }
+   // -------------------------------- Update System Info -------------------------------- //
+   if (isset($_POST["update_system_info"])) {
+      // Assuming you have an associative array with keys and values
+      $updates = [
+         'name' => $_POST['system_name'],
+         'shortname' => $_POST['system_short_name'],
+         'description' => $_POST['system_description'],
+         'keywords' => $_POST['system_keywords'],
+         'author' => $_POST['system_author']
+      ];
+      $success = true;
+      // Assuming $this->conn is a valid MySQLi connection
+      foreach ($updates as $key => $value) {
+         $query = "UPDATE `system_setting` SET `meta_value`='$value' WHERE `meta`='$key'";
+         $query_run = mysqli_query($con, $query);
+         if (!$query_run) {
+            // If the update for any field fails, set $success to false
+            $success = false;
+            break; // Exit the loop
+         }
+      }
+      if ($success) {
+         $output = array('status' => 'System information updated successfully', 'alert' => 'success', 'inform' => 'Yes');
+      } else {
+         $output = array('status' => 'System information were not updated', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Facebook switch -------------------------------- //
+   if (isset($_POST['switch_facebook'])) {
+      $switchState = intval($_POST['switch_facebook']); // Convert to integer (1 or 0)
+      $query = "UPDATE `system_setting` SET `meta_switch`='$switchState' WHERE `meta`='facebook'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run && $switchState == '1') {
+         $output = array('status' => 'Facebook turn on', 'alert' => 'success', 'switch' => '1');
+      } elseif ($query_run && $switchState == '0') {
+         $output = array('status' => 'Facebook turn off', 'alert' => 'success', 'switch' => '0');
+      } else {
+         $output = array('status' => 'There is problem switching facebook', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Instagram switch -------------------------------- //
+   if (isset($_POST['switch_instagram'])) {
+      $switchState = intval($_POST['switch_instagram']); // Convert to integer (1 or 0)
+      $query = "UPDATE `system_setting` SET `meta_switch`='$switchState' WHERE `meta`='instagram'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run && $switchState == '1') {
+         $output = array('status' => 'Instagram turn on', 'alert' => 'success', 'switch' => '1');
+      } elseif ($query_run && $switchState == '0') {
+         $output = array('status' => 'Instagram turn off', 'alert' => 'success', 'switch' => '0');
+      } else {
+         $output = array('status' => 'There is problem switching instagram', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Twitter switch -------------------------------- //
+   if (isset($_POST['switch_twitter'])) {
+      $switchState = intval($_POST['switch_twitter']); // Convert to integer (1 or 0)
+      $query = "UPDATE `system_setting` SET `meta_switch`='$switchState' WHERE `meta`='twitter'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run && $switchState == '1') {
+         $output = array('status' => 'Twitter turn on', 'alert' => 'success', 'switch' => '1');
+      } elseif ($query_run && $switchState == '0') {
+         $output = array('status' => 'Twitter turn off', 'alert' => 'success', 'switch' => '0');
+      } else {
+         $output = array('status' => 'There is problem switching twitter', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Tumblr switch -------------------------------- //
+   if (isset($_POST['switch_tumblr'])) {
+      $switchState = intval($_POST['switch_tumblr']); // Convert to integer (1 or 0)
+      $query = "UPDATE `system_setting` SET `meta_switch`='$switchState' WHERE `meta`='tumblr'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run && $switchState == '1') {
+         $output = array('status' => 'Tumblr turn on', 'alert' => 'success', 'switch' => '1');
+      } elseif ($query_run && $switchState == '0') {
+         $output = array('status' => 'Tumblr turn off', 'alert' => 'success', 'switch' => '0');
+      } else {
+         $output = array('status' => 'There is problem switching tumblr', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Email switch -------------------------------- //
+   if (isset($_POST['switch_email'])) {
+      $switchState = intval($_POST['switch_email']); // Convert to integer (1 or 0)
+      $query = "UPDATE `system_setting` SET `meta_switch`='$switchState' WHERE `meta`='email'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run && $switchState == '1') {
+         $output = array('status' => 'Email turn on', 'alert' => 'success', 'switch' => '1');
+      } elseif ($query_run && $switchState == '0') {
+         $output = array('status' => 'Email turn off', 'alert' => 'success', 'switch' => '0');
+      } else {
+         $output = array('status' => 'There is problem switching email', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Phone switch -------------------------------- //
+   if (isset($_POST['switch_phone'])) {
+      $switchState = intval($_POST['switch_phone']); // Convert to integer (1 or 0)
+      $query = "UPDATE `system_setting` SET `meta_switch`='$switchState' WHERE `meta`='number'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run && $switchState == '1') {
+         $output = array('status' => 'Phone turn on', 'alert' => 'success', 'switch' => '1');
+      } elseif ($query_run && $switchState == '0') {
+         $output = array('status' => 'Phone turn off', 'alert' => 'success', 'switch' => '0');
+      } else {
+         $output = array('status' => 'There is problem switching number', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
 ?>

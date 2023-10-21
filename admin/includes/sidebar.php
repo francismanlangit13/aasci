@@ -43,7 +43,13 @@
                             <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/client.php') !== false)  { echo 'active'; } ?>" href="client">Senior Citizen</a>
                         </nav>
                     </div>
-                    
+                    <!-- Sidenav Menu Heading (System)-->
+                    <div class="sidenav-menu-heading">System</div>
+                    <!-- Sidenav Accordion (Dashboard)-->
+                    <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/systemsettings.php') !== false)  { echo 'active'; } ?>" href="systemsettings">
+                        <div class="nav-link-icon"><i data-feather="settings"></i></div>
+                        System Settings
+                    </a>
                 </div>
             </div>
             <!-- Sidenav Footer-->

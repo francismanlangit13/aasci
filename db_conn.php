@@ -22,6 +22,7 @@
         $c_qry = $con->query("SELECT * FROM system_setting");
         while($row = $c_qry->fetch_assoc()){
             $system[$row['meta']] = $row['meta_value'];
+            $system_switch[$row['meta']] = $row['meta_switch'];
         }
     }
 ?>

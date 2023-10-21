@@ -36,7 +36,7 @@
                     <div class="col-auto mb-3">
                         <h1 class="page-header-title">
                             <div class="page-header-icon"><i data-feather="user"></i></div>
-                            Account Settings - Profile
+                            Account Settings
                         </h1>
                     </div>
                 </div>
