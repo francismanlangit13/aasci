@@ -693,7 +693,7 @@
             var add_id_file = $('input[name="add_id_file"]:checked').val();
             // show error if id file is empty
             if (!add_id_file) {
-                $('#add_id_file-error').text('Please select nths').css('color', 'red');
+                $('#add_id_file-error').text('Please select Id File').css('color', 'red');
                 $('#add_id_file_yes').addClass('is-invalid');
                 $('#add_id_file_no').addClass('is-invalid');
                 checkIfAllFieldsValid();

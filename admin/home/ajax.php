@@ -452,7 +452,7 @@
             sss LIKE :sss OR
             pvao LIKE :pvao OR
             sup_with LIKE :sup_with OR
-            4ps LIKE :fourps OR
+            fourps LIKE :fourps OR
             nhts LIKE :nhts OR
             id_file LIKE :id_file OR
             rrn LIKE :rrn OR
@@ -524,7 +524,7 @@
               "sss" => $row['sss'],
               "pvao" => $row['pvao'],
               "sup_with" => $row['sup_with'],
-              "fourps" => $row['4ps'],
+              "fourps" => $row['fourps'],
               "nhts" => $row['nhts'],
               "id_file" => $row['id_file'],
               "rrn" => $row['rrn'],
@@ -564,7 +564,7 @@
       $id_file = mysqli_real_escape_string($con, $_POST['add_id_file']);
       $user_status = '1';
       $user_type = '3';
-      $query = "INSERT INTO `user`(`fname`, `mname`, `lname`, `suffix`, `gender`, `birthday`, `date_issued`, `soc_pen`, `gsis`, `sss`, `pvao`, `sup_with`, `4ps`, `nhts`, `id_file`, `barangay`, `rrn`, `user_type_id`, `user_status_id`) VALUES ('$fname','$mname','$lname','$suffix','$gender','$birthday','$date_issued','$soc_pen','$gsis','$sss','$pvao','$sup_with','$fourps','$nhts','$id_file','$barangay','$rrn','$user_type','$user_status')";
+      $query = "INSERT INTO `user`(`fname`, `mname`, `lname`, `suffix`, `gender`, `birthday`, `date_issued`, `soc_pen`, `gsis`, `sss`, `pvao`, `sup_with`, `fourps`, `nhts`, `id_file`, `barangay`, `rrn`, `user_type_id`, `user_status_id`) VALUES ('$fname','$mname','$lname','$suffix','$gender','$birthday','$date_issued','$soc_pen','$gsis','$sss','$pvao','$sup_with','$fourps','$nhts','$id_file','$barangay','$rrn','$user_type','$user_status')";
       $query_run = mysqli_query($con, $query);
       if ($query_run){
          $output = array('status' => "Senior citizen added successfully", 'alert' => "success");
@@ -595,7 +595,7 @@
       $nhts = mysqli_real_escape_string($con, $_POST['edit_nhts']);
       $id_file = mysqli_real_escape_string($con, $_POST['edit_id_file']);
       $user_status = mysqli_real_escape_string($con, $_POST['edit_status']);
-      $query = "UPDATE `user` SET `fname` = '$fname', `mname` = '$mname', `lname` = '$lname', `suffix` = '$suffix', `gender` = '$gender', `birthday` = '$birthday', `date_issued` = '$date_issued', `soc_pen` = '$soc_pen', `gsis` = '$gsis', `sss` = '$sss', `pvao` = '$pvao', `sup_with` = '$sup_with', `4ps` = '$fourps', `nhts` = '$nhts', `id_file` = '$id_file', `barangay` = '$barangay', `rrn` = '$rrn', `user_status_id` = '$user_status' WHERE `user_id` = '$id'";
+      $query = "UPDATE `user` SET `fname` = '$fname', `mname` = '$mname', `lname` = '$lname', `suffix` = '$suffix', `gender` = '$gender', `birthday` = '$birthday', `date_issued` = '$date_issued', `soc_pen` = '$soc_pen', `gsis` = '$gsis', `sss` = '$sss', `pvao` = '$pvao', `sup_with` = '$sup_with', `fourps` = '$fourps', `nhts` = '$nhts', `id_file` = '$id_file', `barangay` = '$barangay', `rrn` = '$rrn', `user_status_id` = '$user_status' WHERE `user_id` = '$id'";
       $query_run = mysqli_query($con, $query);
       if ($query_run){
          $output = array('status' => "Senior citizen updated successfully", 'alert' => "success");
