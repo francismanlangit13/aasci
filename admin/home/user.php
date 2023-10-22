@@ -1133,7 +1133,8 @@
                         title: "Notice",
                         text: data.status,
                         icon: data.alert,
-                        button: true
+                        button: false,
+                        timer: 2000
                     }).then(function() {
                         $('#btn_add_user').modal('hide');
                         $('#add_user_form')[0].reset();
@@ -1170,7 +1171,8 @@
                         title: "Notice",
                         text: data.status,
                         icon: data.alert,
-                        button: true
+                        button: false,
+                        timer: 2000
                     }).then(function() {
                         $('#btn_edit_user').modal('hide');
                         $('#edit_user_form')[0].reset();
@@ -1205,7 +1207,8 @@
                         title: "Notice",
                         text: data.status,
                         icon: data.alert,
-                        button: true
+                        button: false,
+                        timer: 2000
                     }).then(function() {
                         $('#btn_delete_user').modal('hide');
                         $('#delete_user_form')[0].reset();

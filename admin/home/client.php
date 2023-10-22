@@ -1572,7 +1572,8 @@
                         title: "Notice",
                         text: data.status,
                         icon: data.alert,
-                        button: true
+                        button: false,
+                        timer: 2000
                     }).then(function() {
                         $('#btn_add_client').modal('hide');
                         $('#add_client_form')[0].reset();
@@ -1610,7 +1611,8 @@
                         title: "Notice",
                         text: data.status,
                         icon: data.alert,
-                        button: true
+                        button: false,
+                        timer: 2000
                     }).then(function() {
                         $('#btn_edit_client').modal('hide');
                         $('#edit_client_form')[0].reset();
@@ -1645,7 +1647,8 @@
                         title: "Notice",
                         text: data.status,
                         icon: data.alert,
-                        button: true
+                        button: false,
+                        timer: 2000
                     }).then(function() {
                         $('#btn_delete_client').modal('hide');
                         $('#delete_client_form')[0].reset();

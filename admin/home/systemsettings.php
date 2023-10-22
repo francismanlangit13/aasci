@@ -6,12 +6,15 @@
     <title><?= $system['shortname'] ?> | System Settings</title>
     <script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
     <style>
-        #uploadForm label {
+        #IconuploadForm label {
             margin: 2px;
             font-size: 1em;
         }
-
-        #progress-bar {
+        #LogouploadForm label {
+            margin: 2px;
+            font-size: 1em;
+        }
+        #icon-progress-bar {
             background-color: #12CC1A;
             color: #FFFFFF;
             width: 0%;
@@ -20,7 +23,15 @@
             transition: width .3s;
             border-radius: 5px;
         }
-
+        #logo-progress-bar {
+            background-color: #12CC1A;
+            color: #FFFFFF;
+            width: 0%;
+            -webkit-transition: width .3s;
+            -moz-transition: width .3s;
+            transition: width .3s;
+            border-radius: 5px;
+        }
         #targetLayer {
             width: 100%;
             text-align: center;
@@ -59,13 +70,7 @@
                     <div class="card-header">System Icon</div>
                     <div class="card-body text-center">
                         <!-- Icon picture image-->
-                        <img class="img-account-profile rounded-circle mb-2" alt="system_icon" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative;"
-                            src="<?php
-                                if(isset($system['icon'])){
-                                    if(!empty($system['icon'])) {
-                                        echo base_url . 'assets/files/system/' . $system['icon'];
-                                } else { echo base_url . 'assets/files/system/no-image.png'; } }
-                            ?>" />
+                        <img class="img-account-profile rounded-circle mb-2" id="sysicon-image" alt="system_icon" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative;" />
                         <!-- Icon picture help block-->
                         <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                         <!-- Icon picture upload button-->
@@ -77,13 +82,7 @@
                     <div class="card-header">System Logo</div>
                     <div class="card-body text-center">
                         <!-- Logo picture image-->
-                        <img class="img-account-profile rounded-circle mb-2" alt="system_logo" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative;"
-                            src="<?php
-                                if(isset($system['logo'])){
-                                    if(!empty($system['logo'])) {
-                                        echo base_url . 'assets/files/system/' . $system['logo'];
-                                } else { echo base_url . 'assets/files/system/no-image.png'; } }
-                            ?>" />
+                        <img class="img-account-profile rounded-circle mb-2" id="syslogo-image" alt="system_logo" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative;" />
                         <!-- Logo picture help block-->
                         <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                         <!-- Logo picture upload button-->
@@ -285,10 +284,10 @@
 <div class="modal fade" id="Upload_System_Icon"  data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleUpload_System_Icon" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <form id="uploadForm" action="upload.php" method="post">
+            <form id="IconuploadForm" action="upload.php" method="post">
                 <div class="modal-header">
                     Upload an system icon Image
-                    <button class="btn-close" type="button" id="btn_cancel_update_profile" data-bs-dismiss="modal" aria-label="Close" onclick="addModalclose(this)"></button>
+                    <button class="btn-close" type="button" id="btn_cancel_update_sysicon" data-bs-dismiss="modal" aria-label="Close" onclick="addModalclose(this)"></button>
                 </div>
                 <div class="modal-body">
                     <div class="card-body text-center">
@@ -305,15 +304,15 @@
                         <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                         <!-- Profile picture upload button-->
                         <input type="file" name="image1" id="image1" class="form-control-file btn btn-primary mb-1" accept=".jpg, .jpeg, .png" onchange="previewImage('frame1', 'image1')">
-                        <input type="hidden" name="oldimage" id="old-profile-image">
+                        <input type="hidden" name="oldICONimage" id="old-sysicon-image">
                         <div class="row">
-                            <div id="progress-bar"></div>
+                            <div id="icon-progress-bar"></div>
                         </div>
                         <div id="targetLayer"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" id="btn_update_profile" name="upload_system_icon" class="btn btn-danger"><div class="dropdown-item-icon"><i style="margin-right:2px" data-feather="upload"></i></div> Upload</button>
+                    <button type="submit" id="btn_update_sysicon" class="btn btn-danger"><div class="dropdown-item-icon"><i style="margin-right:2px" data-feather="upload"></i></div> Upload</button>
                 </div>
             </form>
         </div>
@@ -324,16 +323,16 @@
 <div class="modal fade" id="Upload_System_Logo"  data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleUpload_System_Logo" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <form id="uploadForm" action="upload.php" method="post">
+            <form id="LogouploadForm" action="upload.php" method="post">
                 <div class="modal-header">
                     Upload an system logo Image
-                    <button class="btn-close" type="button" id="btn_cancel_update_profile" data-bs-dismiss="modal" aria-label="Close" onclick="addModalclose(this)"></button>
+                    <button class="btn-close" type="button" id="btn_cancel_update_syslogo" data-bs-dismiss="modal" aria-label="Close" onclick="addModalclose(this)"></button>
                 </div>
                 <div class="modal-body">
                     <div class="card-body text-center">
                         <!-- Profile picture image-->
                         <div class="circle-container">
-                            <img class="img-account-profile rounded-circle mb-2" id="frame1" src="<?php
+                            <img class="img-account-profile rounded-circle mb-2" id="frame2" src="<?php
                                 if(isset($system['logo'])){
                                     if(!empty($system['logo'])) {
                                         echo base_url . 'assets/files/system/' . $system['logo'];
@@ -343,16 +342,16 @@
                         <!-- Profile picture help block-->
                         <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                         <!-- Profile picture upload button-->
-                        <input type="file" name="image1" id="image1" class="form-control-file btn btn-primary mb-1" accept=".jpg, .jpeg, .png" onchange="previewImage('frame1', 'image1')">
-                        <input type="hidden" name="oldimage" id="old-profile-image">
+                        <input type="file" name="image2" id="image2" class="form-control-file btn btn-primary mb-1" accept=".jpg, .jpeg, .png" onchange="previewImage('frame2', 'image2')">
+                        <input type="hidden" name="oldLOGOimage" id="old-syslogo-image">
                         <div class="row">
-                            <div id="progress-bar"></div>
+                            <div id="logo-progress-bar"></div>
                         </div>
                         <div id="targetLayer"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" name="upload_system_logo" class="btn btn-danger"><div class="dropdown-item-icon"><i style="margin-right:2px" data-feather="upload"></i></div> Upload</button>
+                    <button type="submit" class="btn btn-danger"><div class="dropdown-item-icon"><i style="margin-right:2px" data-feather="upload"></i></div> Upload</button>
                 </div>
             </form>
         </div>
@@ -412,7 +411,8 @@
                             title: "Notice",
                             text: data.status,
                             icon: data.alert,
-                            button: true
+                            button: false,
+                            timer: 2000
                         }).then(function () {
                             // Display the confirmation SweetAlert
                             swal({
@@ -446,69 +446,6 @@
                 error: function (xhr, status, error) {
                     // Handle any errors that occur during the AJAX request
                     console.error('Error:', error);
-                }
-            });
-        });
-    });
-</script>
-
-<!-- Ajax for System Icon Image Upload -->
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#uploadForm').submit(function (e) {
-            e.preventDefault(); // Prevent the default form submission
-            var formData = new FormData($(this)[0]);
-            formData.append('update_profile', '1'); // Use the correct identifier for profile image update
-            // Reset the progress bar to 0% before making the AJAX request
-            $('#progress-bar').width('0%');
-            $('#progress-bar').html('<div id="progress-status" class="text-center">0%</div>');
-            $.ajax({
-                url: "ajax.php",
-                type: "POST",
-                dataType: "json",
-                data: formData,
-                contentType: false,
-                cache: false,
-                processData: false,
-                xhr: function () {
-                    var xhr = new window.XMLHttpRequest();
-                    // Upload progress
-                    xhr.upload.addEventListener("progress", function (evt) {
-                        if (evt.lengthComputable) {
-                            var percentComplete = (evt.loaded / evt.total) * 100;
-                            $('#progress-bar').width(percentComplete + '%');
-                            $('#progress-bar').html('<div id="progress-status" class="text-center">' + percentComplete + ' %</div>');
-                        }
-                    }, false);
-                    return xhr;
-                },
-                beforeSend: function() {
-                    $('#btn_update_profile').attr('disabled', 'disabled');
-                    $('#btn_cancel_update_profile').attr('disabled', 'disabled');
-                },
-                success: function(data) {
-                    swal({
-                        title: "Notice",
-                        text: data.status,
-                        icon: data.alert,
-                        button: true
-                    }).then(function() {
-                        $('#Upload_Profile').modal('hide');
-                        $('#uploadForm')[0].reset();
-                        $('#progress-bar').html('<div id="progress-status" class="text-center">0%</div>');
-                        $('#progress-bar').empty();
-                        $('#progress-bar').width('0%');
-                        // Call updateUserData after successful image upload
-                        updateUserData();
-                    });
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    console.error(errorThrown);
-                },
-                complete: function() {
-                    // Re-enable the buttons and reset the progress bar after completion
-                    $('#btn_update_profile').removeAttr('disabled');
-                    $('#btn_cancel_update_profile').removeAttr('disabled');
                 }
             });
         });
@@ -667,6 +604,169 @@
         };
         xhrAjax.send(`switch_phone=${switchPhone}`);
     }
+</script>
+
+<!-- Ajax for System Icon Image Upload -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#IconuploadForm').submit(function (e) { // Update System Icon Image Upload
+            e.preventDefault(); // Prevent the default form submission
+            var formData = new FormData($(this)[0]);
+            formData.append('update_sysicon', '1'); // Use the correct identifier for profile image update
+            // Reset the progress bar to 0% before making the AJAX request
+            $('#icon-progress-bar').width('0%');
+            $('#icon-progress-bar').html('<div id="progress-status" class="text-center">0%</div>');
+            $.ajax({
+                url: "ajax.php",
+                type: "POST",
+                dataType: "json",
+                data: formData,
+                contentType: false,
+                cache: false,
+                processData: false,
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    // Upload progress
+                    xhr.upload.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = (evt.loaded / evt.total) * 100;
+                            $('#icon-progress-bar').width(percentComplete + '%');
+                            $('#icon-progress-bar').html('<div id="progress-status" class="text-center">' + percentComplete + ' %</div>');
+                        }
+                    }, false);
+                    return xhr;
+                },
+                beforeSend: function() {
+                    $('#btn_update_sysicon').attr('disabled', 'disabled');
+                    $('#btn_cancel_update_sysicon').attr('disabled', 'disabled');
+                },
+                success: function(data) {
+                    swal({
+                        title: "Notice",
+                        text: data.status,
+                        icon: data.alert,
+                        button: true
+                    }).then(function() {
+                        $('#Upload_System_Icon').modal('hide');
+                        $('#IconuploadForm')[0].reset();
+                        $('#icon-progress-bar').html('<div id="progress-status" class="text-center">0%</div>');
+                        $('#icon-progress-bar').empty();
+                        $('#icon-progress-bar').width('0%');
+                        // Call updateUserData after successful image upload
+                        updateUserData();
+                    });
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error(errorThrown);
+                },
+                complete: function() {
+                    // Re-enable the buttons and reset the progress bar after completion
+                    $('#btn_update_sysicon').removeAttr('disabled');
+                    $('#btn_cancel_update_sysicon').removeAttr('disabled');
+                }
+            });
+        });
+        $('#LogouploadForm').submit(function (e) { // Update System Icon Image Upload
+            e.preventDefault(); // Prevent the default form submission
+            var formData = new FormData($(this)[0]);
+            formData.append('update_syslogo', '1'); // Use the correct identifier for profile image update
+            // Reset the progress bar to 0% before making the AJAX request
+            $('#logo-progress-bar').width('0%');
+            $('#logo-progress-bar').html('<div id="progress-status" class="text-center">0%</div>');
+            $.ajax({
+                url: "ajax.php",
+                type: "POST",
+                dataType: "json",
+                data: formData,
+                contentType: false,
+                cache: false,
+                processData: false,
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    // Upload progress
+                    xhr.upload.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = (evt.loaded / evt.total) * 100;
+                            $('#logo-progress-bar').width(percentComplete + '%');
+                            $('#logo-progress-bar').html('<div id="progress-status" class="text-center">' + percentComplete + ' %</div>');
+                        }
+                    }, false);
+                    return xhr;
+                },
+                beforeSend: function() {
+                    $('#btn_update_syslogo').attr('disabled', 'disabled');
+                    $('#btn_cancel_update_syslogo').attr('disabled', 'disabled');
+                },
+                success: function(data) {
+                    swal({
+                        title: "Notice",
+                        text: data.status,
+                        icon: data.alert,
+                        button: true
+                    }).then(function() {
+                        $('#Upload_System_Logo').modal('hide');
+                        $('#LogouploadForm')[0].reset();
+                        $('#logo-progress-bar').html('<div id="progress-status" class="text-center">0%</div>');
+                        $('#logo-progress-bar').empty();
+                        $('#logo-progress-bar').width('0%');
+                        // Call updateUserData after successful image upload
+                        updateUserData();
+                    });
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error(errorThrown);
+                },
+                complete: function() {
+                    // Re-enable the buttons and reset the progress bar after completion
+                    $('#btn_update_syslogo').removeAttr('disabled');
+                    $('#btn_cancel_update_syslogo').removeAttr('disabled');
+                }
+            });
+        });
+    });
+</script>
+
+<!-- Ajax System Images Display -->
+<script>
+    function updateUserData() {
+        // Make an AJAX request to the server
+        $.ajax({ // System Icon
+            url: 'ajax.php',
+            type: 'POST',
+            data: { get_sysicon: '1' }, // Use an object to send data
+            dataType: 'json',
+            success: function (data) {
+                // Update the profile image source
+                const iconImage = document.getElementById('sysicon-image');
+                iconImage.src = '<?= base_url ?>assets/files/system/' + data.icon;
+                var oldiconImage = document.getElementById('old-sysicon-image');
+                oldiconImage.value = data.icon;
+            },
+            error: function (xhr, status, error) {
+                // Handle errors here
+                console.error(xhr.responseText);
+            }
+        });
+        $.ajax({ // System Logo
+            url: 'ajax.php',
+            type: 'POST',
+            data: { get_syslogo: '1' }, // Use an object to send data
+            dataType: 'json',
+            success: function (data) {
+                // Update the profile image source
+                const logoImage = document.getElementById('syslogo-image');
+                logoImage.src = '<?= base_url ?>assets/files/system/' + data.logo;
+                var oldlogoImage = document.getElementById('old-syslogo-image');
+                oldlogoImage.value = data.logo;
+            },
+            error: function (xhr, status, error) {
+                // Handle errors here
+                console.error(xhr.responseText);
+            }
+        });
+    }
+    // Call the function to update user data initially
+    updateUserData();
 </script>
 
 <?php include ('../includes/footer.php'); ?>

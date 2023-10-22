@@ -730,4 +730,206 @@
       }
       echo json_encode($output);
    }
+   // -------------------------------- Update System Icon -------------------------------- //
+   if (isset($_POST["update_sysicon"])) {
+      function compressImage($source, $destination, $quality){
+         // Get image info
+         $imgInfo = getimagesize($source);
+         $mime = $imgInfo['mime'];
+         // Create a new image from file
+         switch ($mime) {
+            case 'image/jpeg':
+               $image = imagecreatefromjpeg($source);
+               break;
+            case 'image/png':
+               $image = imagecreatefrompng($source);
+               break;
+            case 'image/gif':
+               $image = imagecreatefromgif($source);
+               break;
+            default:
+               $image = imagecreatefromjpeg($source);
+         }
+         // Check and apply image orientation
+         $exif = @exif_read_data($source);
+         if ($exif && isset($exif['Orientation'])) {
+            $orientation = $exif['Orientation'];
+            if ($orientation == 3) {
+               $image = imagerotate($image, 180, 0);
+            } elseif ($orientation == 6) {
+               $image = imagerotate($image, -90, 0);
+            } elseif ($orientation == 8) {
+               $image = imagerotate($image, 90, 0);
+            }
+         }
+         // Save image with compression quality
+         imagejpeg($image, $destination, $quality);
+         // Return compressed image
+         return $destination;
+      }
+      if (isset($_FILES['image1']) && is_uploaded_file($_FILES['image1']['tmp_name']) && $_FILES['image1']['error'] === UPLOAD_ERR_OK) {
+         $fileImage = $_FILES['image1'];
+         $OLDfileImage = $_POST['oldICONimage'];
+         $customFileName = 'sysicon_' . date('Ymd_His'); // replace with your desired file name
+         $ext = pathinfo($fileImage['name'], PATHINFO_EXTENSION); // get the file extension
+         $fileName = $customFileName . '.' . $ext; // append the extension to the custom file name
+         $fileTmpname = $fileImage['tmp_name'];
+         $fileSize = $fileImage['size'];
+         $fileError = $fileImage['error'];
+         $fileExt = explode('.', $fileName);
+         $fileActExt = strtolower(end($fileExt));
+         $allowed = array('jpg', 'jpeg', 'png');
+         if (in_array($fileActExt, $allowed)) {
+            if ($fileError === 0) {
+               if ($fileSize < 5242880) { // 5MB Limit
+                  $uploadDir = '../../assets/files/system/';
+                  $targetFile = $uploadDir . $fileName;
+                  if ($OLDfileImage != null ){
+                     unlink($uploadDir . $OLDfileImage);
+                  }
+                  if ($fileSize > 1048576) { // more than 1 MB
+                     // Compress the uploaded image with a quality of 15
+                     $compressedImage = compressImage($fileTmpname, $targetFile, 15);
+                  } else {
+                     // Compress the uploaded image with a quality of 25
+                     $compressedImage = compressImage($fileTmpname, $targetFile, 25);
+                  }
+                  if ($compressedImage) {
+                     $query = "UPDATE `system_setting` SET `meta_value`='$fileName' WHERE `meta`='icon'";
+                     $query_run = mysqli_query($con, $query);
+                     if ($query_run) {
+                        $output = array('status' => 'System icon updated successfully', 'alert' => 'success');
+                     } else {
+                        $output = array('status' => 'System icon was not updated', 'alert' => 'error');
+                     }
+                  }
+               } else {
+                  $output = array('status' => 'File is too large, must be 5MB or below', 'alert' => 'warning');
+               }
+            } else {
+               $output = array('status' => 'File error', 'alert' => 'error');
+            }
+         } else {
+            $output = array('status' => 'Invalid file type', 'alert' => 'error');
+         }
+         echo json_encode($output);
+      }
+   }
+   // -------------------------------- Get Icon Picture -------------------------------- //
+   if (isset($_POST["get_sysicon"])) {
+      // Prepare and execute the SQL query
+      $query = $con->prepare("SELECT * FROM system_setting WHERE meta = ?");
+      $meta = 'icon'; // Set the value of the parameter
+      $query->bind_param("s", $meta); // Use "s" for a string parameter
+      $query->execute();
+      $result = $query->get_result();
+      if ($result->num_rows > 0) {
+          $row = $result->fetch_assoc();
+          $output = array('icon' => $row['meta_value']);
+      }
+      // Return user data as JSON
+      header('Content-Type: application/json');
+      echo json_encode($output);
+  }
+  // -------------------------------- Update System Logo -------------------------------- //
+   if (isset($_POST["update_syslogo"])) {
+      function compressImage($source, $destination, $quality){
+         // Get image info
+         $imgInfo = getimagesize($source);
+         $mime = $imgInfo['mime'];
+         // Create a new image from file
+         switch ($mime) {
+            case 'image/jpeg':
+               $image = imagecreatefromjpeg($source);
+               break;
+            case 'image/png':
+               $image = imagecreatefrompng($source);
+               break;
+            case 'image/gif':
+               $image = imagecreatefromgif($source);
+               break;
+            default:
+               $image = imagecreatefromjpeg($source);
+         }
+         // Check and apply image orientation
+         $exif = @exif_read_data($source);
+         if ($exif && isset($exif['Orientation'])) {
+            $orientation = $exif['Orientation'];
+            if ($orientation == 3) {
+               $image = imagerotate($image, 180, 0);
+            } elseif ($orientation == 6) {
+               $image = imagerotate($image, -90, 0);
+            } elseif ($orientation == 8) {
+               $image = imagerotate($image, 90, 0);
+            }
+         }
+         // Save image with compression quality
+         imagejpeg($image, $destination, $quality);
+         // Return compressed image
+         return $destination;
+      }
+      if (isset($_FILES['image2']) && is_uploaded_file($_FILES['image2']['tmp_name']) && $_FILES['image2']['error'] === UPLOAD_ERR_OK) {
+         $fileImage = $_FILES['image2'];
+         $OLDfileImage = $_POST['oldLOGOimage'];
+         $customFileName = 'syslogo_' . date('Ymd_His'); // replace with your desired file name
+         $ext = pathinfo($fileImage['name'], PATHINFO_EXTENSION); // get the file extension
+         $fileName = $customFileName . '.' . $ext; // append the extension to the custom file name
+         $fileTmpname = $fileImage['tmp_name'];
+         $fileSize = $fileImage['size'];
+         $fileError = $fileImage['error'];
+         $fileExt = explode('.', $fileName);
+         $fileActExt = strtolower(end($fileExt));
+         $allowed = array('jpg', 'jpeg', 'png');
+         if (in_array($fileActExt, $allowed)) {
+            if ($fileError === 0) {
+               if ($fileSize < 5242880) { // 5MB Limit
+                  $uploadDir = '../../assets/files/system/';
+                  $targetFile = $uploadDir . $fileName;
+                  if ($OLDfileImage != null ){
+                     unlink($uploadDir . $OLDfileImage);
+                  }
+                  if ($fileSize > 1048576) { // more than 1 MB
+                     // Compress the uploaded image with a quality of 15
+                     $compressedImage = compressImage($fileTmpname, $targetFile, 15);
+                  } else {
+                     // Compress the uploaded image with a quality of 25
+                     $compressedImage = compressImage($fileTmpname, $targetFile, 25);
+                  }
+                  if ($compressedImage) {
+                     $query = "UPDATE `system_setting` SET `meta_value`='$fileName' WHERE `meta`='logo'";
+                     $query_run = mysqli_query($con, $query);
+                     if ($query_run) {
+                        $output = array('status' => 'System logo updated successfully', 'alert' => 'success');
+                     } else {
+                        $output = array('status' => 'System logo was not updated', 'alert' => 'error');
+                     }
+                  }
+               } else {
+                  $output = array('status' => 'File is too large, must be 5MB or below', 'alert' => 'warning');
+               }
+            } else {
+               $output = array('status' => 'File error', 'alert' => 'error');
+            }
+         } else {
+            $output = array('status' => 'Invalid file type', 'alert' => 'error');
+         }
+         echo json_encode($output);
+      }
+   }
+  // -------------------------------- Get Logo Picture -------------------------------- //
+  if (isset($_POST["get_syslogo"])) {
+   // Prepare and execute the SQL query
+   $query = $con->prepare("SELECT * FROM system_setting WHERE meta = ?");
+   $meta = 'logo'; // Set the value of the parameter
+   $query->bind_param("s", $meta); // Use "s" for a string parameter
+   $query->execute();
+   $result = $query->get_result();
+   if ($result->num_rows > 0) {
+       $row = $result->fetch_assoc();
+       $output = array('logo' => $row['meta_value']);
+   }
+   // Return user data as JSON
+   header('Content-Type: application/json');
+   echo json_encode($output);
+}
 ?>

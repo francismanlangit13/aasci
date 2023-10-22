@@ -367,7 +367,8 @@
                         title: "Notice",
                         text: data.status,
                         icon: data.alert,
-                        button: true
+                        button: false,
+                        timer: 2000
                     }).then(function() {
                         $('#btn_change_info').removeAttr('disabled');
                         // Call updateUserData after successful image upload
@@ -407,7 +408,8 @@
                         title: "Notice",
                         text: data.status,
                         icon: data.alert,
-                        button: true
+                        button: false,
+                        timer: 2000
                     }).then(function() {
                         if(data.alert == 'warning'){
                             $('#currentPassword').val(''); // Set the value to an empty string
@@ -468,7 +470,8 @@
                             title: "Notice",
                             text: data.status,
                             icon: data.alert,
-                            button: true,
+                            button: false,
+                            timer: 2000
                         }).then(function() {
                             if(data.alert == 'warning'){
                                 $('#yourPassword').val(''); // Set the value to an empty string
@@ -512,7 +515,8 @@
                         title: "Notice",
                         text: data.status,
                         icon: data.alert,
-                        button: true
+                        button: false,
+                        timer: 2000
                     }).then(function() {
                         $('#btn_authentication').removeAttr('disabled');
                         // Call updateUserData after successful image upload
@@ -552,7 +556,8 @@
                         title: "Notice",
                         text: data.status,
                         icon: data.alert,
-                        button: true
+                        button: false,
+                        timer: 2000
                     }).then(function() {
                         $('#btn_security_preferences').removeAttr('disabled');
                         // Call updateUserData after successful image upload
@@ -647,7 +652,8 @@
                         title: "Notice",
                         text: data.status,
                         icon: data.alert,
-                        button: true
+                        button: false,
+                        timer: 2000
                     }).then(function() {
                         $('#Upload_Profile').modal('hide');
                         $('#uploadForm')[0].reset();
