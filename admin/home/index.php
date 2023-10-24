@@ -34,14 +34,21 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1">
-                                <div class="small fw-bold text-primary mb-1">Earnings (monthly)</div>
-                                <div class="h5">$4,390</div>
-                                <div class="text-xs fw-bold text-success d-inline-flex align-items-center">
-                                    <i class="me-1" data-feather="trending-up"></i>
-                                    12%
+                                <div class="small fw-bold text-primary mb-1">Total Admins</div>
+                                <div class="h5">
+                                    <?php
+                                        $sql1 = "SELECT * FROM user WHERE user_type_id = 1 AND user_status_id != 3";
+                                        $sql_run1 = mysqli_query($con, $sql1);
+                                        if($admin_count = mysqli_num_rows($sql_run1)){
+                                            echo $admin_count;
+                                        }
+                                        else{
+                                            echo '0';
+                                        }
+                                    ?>
                                 </div>
                             </div>
-                            <div class="ms-2"><i class="fas fa-dollar-sign fa-2x text-gray-200"></i></div>
+                            <div class="ms-2"><i class="fas fa-user-lock fa-2x text-gray-400"></i></div>
                         </div>
                     </div>
                 </div>
@@ -52,14 +59,21 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1">
-                                <div class="small fw-bold text-secondary mb-1">Average sale price</div>
-                                <div class="h5">$27.00</div>
-                                <div class="text-xs fw-bold text-danger d-inline-flex align-items-center">
-                                    <i class="me-1" data-feather="trending-down"></i>
-                                    3%
+                                <div class="small fw-bold text-secondary mb-1">Staff</div>
+                                <div class="h5">
+                                    <?php
+                                        $sql2 = "SELECT * FROM user WHERE user_type_id = 2 AND user_status_id != 3";
+                                        $sql_run2 = mysqli_query($con, $sql2);
+                                        if($staff_count = mysqli_num_rows($sql_run2)){
+                                            echo $staff_count;
+                                        }
+                                        else{
+                                            echo '0';
+                                        }
+                                    ?>
                                 </div>
                             </div>
-                            <div class="ms-2"><i class="fas fa-tag fa-2x text-gray-200"></i></div>
+                            <div class="ms-2"><i class="fas fa-user-friends fa-2x text-gray-400"></i></div>
                         </div>
                     </div>
                 </div>
@@ -70,14 +84,21 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1">
-                                <div class="small fw-bold text-success mb-1">Clicks</div>
-                                <div class="h5">11,291</div>
-                                <div class="text-xs fw-bold text-success d-inline-flex align-items-center">
-                                    <i class="me-1" data-feather="trending-up"></i>
-                                    12%
+                                <div class="small fw-bold text-success mb-1">Total Active Senior Citizen</div>
+                                <div class="h5">
+                                    <?php
+                                        $sql3 = "SELECT * FROM user WHERE user_type_id = 3 AND user_status_id = 1";
+                                        $sql_run3 = mysqli_query($con, $sql3);
+                                        if($senior_active_count = mysqli_num_rows($sql_run3)){
+                                            echo $senior_active_count;
+                                        }
+                                        else{
+                                            echo '0';
+                                        }
+                                    ?>
                                 </div>
                             </div>
-                            <div class="ms-2"><i class="fas fa-mouse-pointer fa-2x text-gray-200"></i></div>
+                            <div class="ms-2"><i class="fas fa-user-check fa-2x text-gray-400"></i></div>
                         </div>
                     </div>
                 </div>
@@ -88,14 +109,21 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1">
-                                <div class="small fw-bold text-info mb-1">Conversion rate</div>
-                                <div class="h5">1.23%</div>
-                                <div class="text-xs fw-bold text-danger d-inline-flex align-items-center">
-                                    <i class="me-1" data-feather="trending-down"></i>
-                                    1%
+                                <div class="small fw-bold text-info mb-1">Total Inactive Senior Citizen</div>
+                                <div class="h5">
+                                    <?php
+                                        $sql4 = "SELECT * FROM user WHERE user_type_id = 3 AND user_status_id = 2";
+                                        $sql_run4 = mysqli_query($con, $sql4);
+                                        if($senior_inactive_count = mysqli_num_rows($sql_run4)){
+                                            echo $senior_inactive_count;
+                                        }
+                                        else{
+                                            echo '0';
+                                        }
+                                    ?>
                                 </div>
                             </div>
-                            <div class="ms-2"><i class="fas fa-percentage fa-2x text-gray-200"></i></div>
+                            <div class="ms-2"><i class="fas fa-user-times fa-2x text-gray-400"></i></div>
                         </div>
                     </div>
                 </div>
