@@ -95,8 +95,8 @@
                                         data: null,
                                         render: function(data, type, row, meta) {
                                             return '<div class="row d-flex" style="justify-content:space-evenly;">'+
-                                            '<button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#btn_view_client" data-view_fname="' + data.fname + '" data-view_mname="' + data.mname + '" data-view_lname="' + data.lname + '" data-view_suffix="' + data.suffix + '" data-view_gender="' + data.gender + '" data-view_birthday="' + data.newbirthday + '" data-view_barangay="' + data.barangay + '" data-view_date_issued="' + data.newdateissued + '" data-view_rrn="' + data.rrn + '" data-view_soc_pen="' + data.soc_pen + '" data-view_gsis="' + data.gsis + '" data-view_sss="' + data.sss + '" data-view_pvao="' + data.pvao + '" data-view_sup_with="' + data.sup_with + '" data-view_4ps="' + data.fourps + '" data-view_nhts="' + data.nhts + '" data-view_id_file="' + data.id_file + '" data-view_status="' + data.user_status_id + '" onclick="viewModal(this)" title="View"><i class="fa fa-eye"></i></button>'+
-                                            '<button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#btn_edit_client" data-edit_client_id="' + data.user_id + '" data-edit_fname="' + data.fname + '" data-edit_mname="' + data.mname + '" data-edit_lname="' + data.lname + '" data-edit_suffix="' + data.suffix + '" data-edit_gender="' + data.gender + '" data-edit_birthday="' + data.birthday + '" data-edit_barangay="' + data.barangay + '" data-edit_date_issued="' + data.dateissued + '" data-edit_rrn="' + data.rrn + '" data-edit_soc_pen="' + data.soc_pen + '" data-edit_gsis="' + data.gsis + '" data-edit_sss="' + data.sss + '" data-edit_pvao="' + data.pvao + '" data-edit_sup_with="' + data.sup_with + '" data-edit_4ps="' + data.fourps + '" data-edit_nhts="' + data.nhts + '" data-edit_id_file="' + data.id_file + '" data-edit_status="' + data.user_status_id + '" onclick="editModal(this)" title="Edit"><i class="fa fa-edit"></i></button>'+
+                                            '<button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#btn_view_client" data-view_id="' + data.user_id + '" data-view_profile="' + data.profile + '" data-view_psa="' + data.psa + '" onclick="viewModal(this)" title="View"><i class="fa fa-eye"></i></button>'+
+                                            '<button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#btn_edit_client" data-edit_client_id="' + data.user_id + '" data-edit_fname="' + data.fname + '" data-edit_mname="' + data.mname + '" data-edit_lname="' + data.lname + '" data-edit_suffix="' + data.suffix + '" data-edit_gender="' + data.gender + '" data-edit_birthday="' + data.birthday + '" data-edit_barangay="' + data.barangay + '" data-edit_date_issued="' + data.dateissued + '" data-edit_rrn="' + data.rrn + '" data-edit_soc_pen="' + data.soc_pen + '" data-edit_gsis="' + data.gsis + '" data-edit_sss="' + data.sss + '" data-edit_pvao="' + data.pvao + '" data-edit_sup_with="' + data.sup_with + '" data-edit_4ps="' + data.fourps + '" data-edit_nhts="' + data.nhts + '" data-edit_id_file="' + data.id_file + '" data-edit_status="' + data.user_status_id + '" data-edit_deceased="' + data.deceased + '" data-edit_transfer="' + data.transfer + '" data-edit_profile="' + data.profile + '" data-edit_psa="' + data.psa + '" onclick="editModal(this)" title="Edit"><i class="fa fa-edit"></i></button>'+
                                             '<button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#btn_delete_client" data-delete_client_id="' + data.user_id + '" data-delete_fname="' + data.fname + '" data-delete_mname="' + data.mname + '" data-delete_lname="' + data.lname + '" data-delete_suffix="' + data.suffix + '" onclick="deleteModal(this)" title="Delete"><i class="fa fa-trash"></i></button>'+
                                             '</div>';
                                         },
@@ -161,7 +161,7 @@
                                     <label for="add_suffix" class="required">Suffix</label>
                                     <select required class="form-control" id="add_suffix" name="add_suffix">
                                         <option value="" selected>Select Suffix</option>
-                                        <option value="">None</option>
+                                        <option value=" ">None</option>
                                         <option value="Jr">Jr</option>
                                         <option value="Sr">Sr</option>
                                         <option value="I">I</option>
@@ -310,6 +310,26 @@
                                     <input required type="radio" id="add_id_file_yes" name="add_id_file" value="Yes"> Yes
                                     <input required style="margin-left:10px;" type="radio" id="add_id_file_no" name="add_id_file" value="No"> No
                                     <div id="add_id_file-error"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="image1" class="required">Senior Picture</label>
+                                    <input required type="file" name="image1" class="form-control btn btn-secondary" style="padding-bottom:2.2rem;" id="image1" accept=".jpg, .jpeg, .png" onchange="previewImage('frame1', 'image1')">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="image2" class="required">PSA Attachment</label>
+                                    <input required type="file" name="image2" class="form-control btn btn-secondary" style="padding-bottom:2.2rem;" id="image2" accept=".jpg, .jpeg, .png" onchange="previewImage('frame2', 'image2')">
+                                </div>
+
+                                <div class="col-md-6 text-center">
+                                    <br>
+                                    <img class="mt-2" id="frame1" src ="<?php echo base_url ?>assets/files/system/no-image.png" alt="Senior Picture" width="240px" height="180px"/>
+                                </div>
+
+                                <div class="col-md-6 text-center">
+                                    <br>
+                                    <img class="mt-2" id="frame2" src ="<?php echo base_url ?>assets/files/system/no-image.png" alt="PSA Attachment" width="240px" height="180px"/>
                                 </div>
                             </div>
                         </div>
@@ -715,7 +735,7 @@
         <div class="modal-content">
             <div class="modal-header card-header">
                 <h5 class="modal-title" id="view_clientLabel">View Senior Citizen</h5>
-                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button class="btn-close" type="button" id="btn_close_modal" data-bs-dismiss="modal" aria-label="Close"></button>
             </div> 
             <div class="modal-body"> 
                 <div class="card mb-4">
@@ -724,94 +744,30 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="view_fname">First Name</label>
-                                <input disabled type="text" class="form-control" id="view_fname">
-                            </div> 
-                        
-                            <div class="col-md-4 mb-3">
-                                <label for="view_mname">Middle Name</label>
-                                <input disabled type="text" class="form-control" id="view_mname">
+                            <div id="view-senior"></div>
+                            <div class="col-md-6 text-center">
+                                <br>
+                                <label for="frame3">Senior Picture</label>
+                                <!-- Add a class for the profile images -->
+                                <a id="a-profile_view" class="glightbox" data-lightbox="profile">
+                                    <img class="mt-2" id="frame3" alt="Senior Picture" width="240px" height="180px"/>
+                                </a>
                             </div>
-
-                            <div class="col-md-4 mb-3">
-                                <label for="view_lname">Last Name</label>
-                                <input disabled type="text" class="form-control" id="view_lname">
+                            <div class="col-md-6 text-center">
+                                <br>
+                                <label for="frame4">PSA Attachment</label>
+                                <!-- Add a class for the PSA images -->
+                                <a id="a-psa_view" class="glightbox" data-gallery="PSA">
+                                    <img class="mt-2" id="frame4" alt="PSA Attachment" width="240px" height="180px"/>
+                                </a>
                             </div>
-
-                            <div class="col-md-4 mb-3">
-                                <label for="view_suffix">Suffix</label>
-                                <input disabled type="text" class="form-control" id="view_suffix">
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                <label for="view_gender">Gender</label>
-                                <input disabled type="text" class="form-control" id="view_gender">
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                <label for="view_birthday">Birthday</label>
-                                <input disabled type="text" class="form-control" id="view_birthday">
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                <label for="view_barangay">Barangay</label>
-                                <input disabled type="text" class="form-control" id="view_barangay">
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                <label for="view_date_issued">Date Issued</label>
-                                <input disabled type="text" class="form-control" id="view_date_issued">
-                            </div>
-                        
-                            <div class="col-md-4 mb-3">
-                                <label for="view_rrn">RRN</label>
-                                <input disabled type="text" class="form-control" id="view_rrn">
-                            </div>
-
-                            <div class="col-md-3 mb-3">
-                                <label for="view_soc_pen">Soc Pen</label>
-                                <input disabled type="text" class="form-control" id="view_soc_pen">
-                            </div>
-
-                            <div class="col-md-3 mb-3">
-                                <label for="view_gsis">GSIS</label>
-                                <input disabled type="text" class="form-control" id="view_gsis">
-                            </div>
-
-                            <div class="col-md-3 mb-3">
-                                <label for="view_sss">SSS</label>
-                                <input disabled type="text" class="form-control" id="view_sss">
-                            </div>
-
-                            <div class="col-md-3 mb-3">
-                                <label for="view_pvao">PVAO</label>
-                                <input disabled type="text" class="form-control" id="view_pvao">
-                            </div>
-
-                            <div class="col-md-3 mb-3">
-                                <label for="view_sup_with">SUP WITH</label>
-                                <input disabled type="text" class="form-control" id="view_sup_with">
-                            </div>
-
-                            <div class="col-md-3 mb-3">
-                                <label for="view_4ps">4P's</label>
-                                <input disabled type="text" class="form-control" id="view_4ps">
-                            </div>
-
-                            <div class="col-md-3 mb-3">
-                                <label for="view_nhts">NHTS</label>
-                                <input disabled type="text" class="form-control" id="view_nhts">
-                            </div>
-
-                            <div class="col-md-3 mb-3">
-                                <label for="view_id_file">ID File</label>
-                                <input disabled type="text" class="form-control" id="view_id_file">
-                            </div>
-
-                            <div class="col-md-3 mb-3">
-                                <label for="view_status">Status</label>
-                                <input disabled type="text" class="form-control" id="view_status">
+                            <div class="col-md-12 text-center">
+                                <br>
+                                <label for="frame5">QR Code</label>
+                                <a href="<?php echo base_url . 'assets/files/system/qr-code.png'?>" class="glightbox d-block" data-gallery="QRCode">
+                                    <img class="zoom img-fluid img-bordered-sm" id="frame5" alt="image" style="max-width: 250px; object-fit: cover; margin-bottom:-2.5rem;">
+                                </a>
+                                <h3 class="text-center mt-4"><a href="<?php echo base_url . 'assets/files/system/qr-code.png'?>" download>Download QR Code</a></h3>
                             </div>
                         </div>
                     </div>
@@ -820,8 +776,9 @@
         </div>
     </div>
 </div>
+
 <!-- JavaScript for Modal View -->
-<script>
+<!-- <script>
     function viewModal(button) {
         // Redirect to the PHP file with the retrieved id as a query parameter
         document.getElementById("view_fname").value = button.getAttribute("data-view_fname");
@@ -830,6 +787,7 @@
         document.getElementById("view_suffix").value = button.getAttribute("data-view_suffix");
         document.getElementById("view_gender").value = button.getAttribute("data-view_gender");
         document.getElementById("view_birthday").value = button.getAttribute("data-view_birthday");
+        document.getElementById("view_age").value = button.getAttribute("data-view_age");
         document.getElementById("view_barangay").value = button.getAttribute("data-view_barangay");
         document.getElementById("view_date_issued").value = button.getAttribute("data-view_date_issued");
         document.getElementById("view_rrn").value = button.getAttribute("data-view_rrn");
@@ -846,7 +804,42 @@
         } else {
             document.getElementById("view_status").value = 'Inactive';
         }
+        document.getElementById("view_deceased").value = button.getAttribute("data-view_deceased");
+        document.getElementById("view_transfer").value = button.getAttribute("data-view_transfer");
+        document.getElementById("frame3").src = base_url + 'assets/files/clients/' + button.getAttribute("data-view_profile");
+        document.getElementById("frame4").src = base_url + 'assets/files/documents/' + button.getAttribute("data-view_psa");
     }
+</script> -->
+<!-- JavaScript for Modal View Senior -->
+<script>
+    function viewModal(button) {
+        var id = button.getAttribute("data-view_id");
+
+        const xhrAjax = new XMLHttpRequest();
+        xhrAjax.open("POST", "client_view.php", true);
+        xhrAjax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhrAjax.onreadystatechange = function () {
+            if (xhrAjax.readyState === 4 && xhrAjax.status === 200) {
+                var responseText = xhrAjax.responseText;
+                // Update the view-senior div with the response
+                document.getElementById("view-senior").innerHTML = responseText;
+                document.getElementById("a-profile_view").href = base_url + 'assets/files/clients/' + button.getAttribute("data-view_profile");
+                document.getElementById("frame3").src = base_url + 'assets/files/clients/' + button.getAttribute("data-view_profile");
+                document.getElementById("a-psa_view").href = base_url + 'assets/files/documents/' + button.getAttribute("data-view_psa");
+                document.getElementById("frame4").src = base_url + 'assets/files/documents/' + button.getAttribute("data-view_psa");
+                document.getElementById("frame5").src = base_url + 'assets/files/system/qr-code.png';
+            }
+        };
+        xhrAjax.send(`id=${id}`);
+    }
+    // Clear the QR code container when the modal is closed using the "btn_close_modal" button
+    document.getElementById("btn_close_modal").addEventListener("click", function () {
+        document.getElementById("a-profile_view").removeAttribute("href");
+        document.getElementById("frame3").removeAttribute("src");
+        document.getElementById("a-psa_view").removeAttribute("href");
+        document.getElementById("frame4").removeAttribute("src");
+        document.getElementById("frame5").removeAttribute("src");
+    });
 </script>
 
 <!-- Modal for Edit client -->
@@ -1046,12 +1039,54 @@
                                     </select>
                                     <div id="edit_status-error"></div>
                                 </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label for="edit_deceased" class="required">Deceased</label>
+                                    <select id="edit_deceased" name="edit_deceased" required class="form-control">
+                                        <option value="" selected>Select Deceased</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <div id="edit_deceased-error"></div>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label for="edit_transfer" class="required">Transfer</label>
+                                    <select id="edit_transfer" name="edit_transfer" required class="form-control">
+                                        <option value="" selected>Select Transfer</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <div id="edit_transfer-error"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="image5" class="optional">Senior Picture</label>
+                                    <input type="file" name="image5" class="form-control btn btn-secondary" style="padding-bottom:2.2rem;" id="image5" accept=".jpg, .jpeg, .png" onchange="previewImage('frame5', 'image5')">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="image6" class="optional">PSA Attachment</label>
+                                    <input type="file" name="image6" class="form-control btn btn-secondary" style="padding-bottom:2.2rem;" id="image6" accept=".jpg, .jpeg, .png" onchange="previewImage('frame6', 'image6')">
+                                </div>
+
+                                <div class="col-md-6 text-center">
+                                    <br>
+                                    <img class="mt-2" id="frame5" alt="Senior Picture" width="240px" height="180px"/>
+                                </div>
+
+                                <div class="col-md-6 text-center">
+                                    <br>
+                                    <img class="mt-2" id="frame6" alt="PSA Attachment" width="240px" height="180px"/>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" id="edit_client_id" name="edit_client_id">
+                    <input type="hidden" id="old_edit_profile" name="oldimage5">
+                    <input type="hidden" id="old_edit_psa" name="oldimage6">
                     <button class="btn btn-primary" id="edit_client" type="submit"><i class="fa fa-save mr-1" style="margin-right:0.3rem"></i>Update</button>
                 </div>
             </form>
@@ -1113,6 +1148,12 @@
             document.getElementById("edit_id_file_no").checked = true;
         }
         document.getElementById("edit_status").value = button.getAttribute("data-edit_status");
+        document.getElementById("edit_deceased").value = button.getAttribute("data-edit_deceased");
+        document.getElementById("edit_transfer").value = button.getAttribute("data-edit_transfer");
+        document.getElementById("old_edit_profile").value = button.getAttribute("data-edit_profile");
+        document.getElementById("old_edit_psa").value = button.getAttribute("data-edit_psa");
+        document.getElementById("frame5").src = base_url + 'assets/files/clients/' + button.getAttribute("data-edit_profile");
+        document.getElementById("frame6").src = base_url + 'assets/files/documents/' + button.getAttribute("data-edit_psa");
     }
 </script>
 <!-- Form Reset Close Model Edit -->
@@ -1579,6 +1620,9 @@
                         $('#add_client_form')[0].reset();
                         $('#add_client').removeAttr('disabled');
                         $('#add_client_close').removeAttr('disabled');
+                        // Clear images
+                        document.getElementById('frame1').src = '';
+                        document.getElementById('frame2').src = '';
                         // Update the DataTable
                         var dataTable = $('#dataTable').DataTable();
                         dataTable.draw(); // Redraw the DataTable

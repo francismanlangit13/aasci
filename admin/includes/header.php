@@ -25,6 +25,8 @@
         <link href="<?php echo base_url ?>assets/css/loader.css" rel="stylesheet">
         <!-- Custom CSS -->
         <link href="<?php echo base_url ?>assets/css/custom.css" rel="stylesheet">
+        <!-- GlightBox -->
+        <link href="<?php echo base_url ?>assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     </head>
     <body class="nav-fixed">
         <!-- Loading Screen -->

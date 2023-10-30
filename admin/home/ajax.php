@@ -258,11 +258,11 @@
                      unlink($uploadDir . $OLDfileImage);
                   }
                   if ($fileSize > 1048576) { // more than 1 MB
-                     // Compress the uploaded image with a quality of 15
-                     $compressedImage = compressImage($fileTmpname, $targetFile, 15);
-                  } else {
                      // Compress the uploaded image with a quality of 25
                      $compressedImage = compressImage($fileTmpname, $targetFile, 25);
+                  } else {
+                     // Compress the uploaded image with a quality of 35
+                     $compressedImage = compressImage($fileTmpname, $targetFile, 35);
                   }
                   if ($compressedImage) {
                      $query = "UPDATE `user` SET `profile`='$fileName' WHERE `user_id`='$user_id'";
@@ -528,7 +528,11 @@
               "nhts" => $row['nhts'],
               "id_file" => $row['id_file'],
               "rrn" => $row['rrn'],
-              "user_status_id" => $row['user_status_id']
+              "user_status_id" => $row['user_status_id'],
+              "deceased" => $row['is_deceased'],
+              "transfer" => $row['is_transfer'],
+              "profile" => $row['profile'],
+              "psa" => $row['psa']
           );
       }
       
@@ -543,7 +547,43 @@
       echo json_encode($response);
    }
    // -------------------------------- Add Client -------------------------------- //
-   if (isset($_POST["add_client"])){
+   if (isset($_POST["add_client"])) {
+      function compressImage($source, $destination, $quality) {
+         // Get image info
+         $imgInfo = getimagesize($source);
+         $mime = $imgInfo['mime'];
+         // Create a new image from the file
+         switch ($mime) {
+               case 'image/jpeg':
+                  $image = imagecreatefromjpeg($source);
+                  break;
+               case 'image/png':
+                  $image = imagecreatefrompng($source);
+                  break;
+               case 'image/gif':
+                  $image = imagecreatefromgif($source);
+                  break;
+               default:
+                  $image = imagecreatefromjpeg($source);
+         }
+         // Check and apply image orientation
+         $exif = @exif_read_data($source);
+         if ($exif && isset($exif['Orientation'])) {
+               $orientation = $exif['Orientation'];
+               if ($orientation == 3) {
+                  $image = imagerotate($image, 180, 0);
+               } elseif ($orientation == 6) {
+                  $image = imagerotate($image, -90, 0);
+               } elseif ($orientation == 8) {
+                  $image = imagerotate($image, 90, 0);
+               }
+         }
+         // Save the image with compression quality
+         imagejpeg($image, $destination, $quality);
+         // Return the compressed image's destination
+         return $destination;
+      }
+
       // Validate and sanitize client inputs
       $fname = mysqli_real_escape_string($con, $_POST['add_fname']);
       $mname = mysqli_real_escape_string($con, $_POST['add_mname']);
@@ -564,17 +604,102 @@
       $id_file = mysqli_real_escape_string($con, $_POST['add_id_file']);
       $user_status = '1';
       $user_type = '3';
-      $query = "INSERT INTO `user`(`fname`, `mname`, `lname`, `suffix`, `gender`, `birthday`, `date_issued`, `soc_pen`, `gsis`, `sss`, `pvao`, `sup_with`, `fourps`, `nhts`, `id_file`, `barangay`, `rrn`, `user_type_id`, `user_status_id`) VALUES ('$fname','$mname','$lname','$suffix','$gender','$birthday','$date_issued','$soc_pen','$gsis','$sss','$pvao','$sup_with','$fourps','$nhts','$id_file','$barangay','$rrn','$user_type','$user_status')";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run){
-         $output = array('status' => "Senior citizen added successfully", 'alert' => "success");
-      } else{
-         $output = array('status' => "Senior citizen was not added", 'alert' => "error");
+      $is_decease = 'No';
+      $is_transfer = 'No';
+      $fileImage = $_FILES['image1'];
+      $fileImage1 = $_FILES['image2'];
+      $customFileName = 'user_' . date('Ymd_His'); // replace with your desired file name
+      $customFileName1 = 'psa_' . date('Ymd_His');
+      $ext = pathinfo($fileImage['name'], PATHINFO_EXTENSION); // get the file extension
+      $ext1 = pathinfo($fileImage1['name'], PATHINFO_EXTENSION);
+      $fileName = $customFileName . '.' . $ext; // append the extension to the custom file name
+      $fileName1 = $customFileName1 . '.' . $ext1;
+      $fileTmpname = $fileImage['tmp_name'];
+      $fileTmpname1 = $fileImage1['tmp_name'];
+      $fileSize = $fileImage['size'];
+      $fileSize1 = $fileImage1['size'];
+      $fileError = $fileImage['error'];
+      $fileError1 = $fileImage1['error'];
+      $fileExt = explode('.', $fileName);
+      $fileExt1 = explode('.', $fileName1);
+      $fileActExt = strtolower(end($fileExt));
+      $fileActExt1 = strtolower(end($fileExt1));
+      $allowed = array('jpg', 'jpeg', 'png');
+      if (in_array($fileActExt, $allowed) && in_array($fileActExt1, $allowed)) {
+         if ($fileError === 0 && $fileError1 === 0) {
+               if ($fileSize < 5242880 && $fileSize1 < 5242880) { // 5MB Limit
+                  $uploadDir = '../../assets/files/clients/';
+                  $uploadDir1 = '../../assets/files/documents/';
+                  $targetFile = $uploadDir . $fileName;
+                  $targetFile1 = $uploadDir1 . $fileName1;
+                  if ($fileSize > 1048576 && $fileSize1 > 1048576) { // more than 1 MB
+                     // Compress the uploaded images with a quality of 25
+                     $compressedImage = compressImage($fileTmpname, $targetFile, 25);
+                     $compressedImage1 = compressImage($fileTmpname1, $targetFile1, 25);
+                  } else {
+                     // Compress the uploaded images with a quality of 35
+                     $compressedImage = compressImage($fileTmpname, $targetFile, 35);
+                     $compressedImage1 = compressImage($fileTmpname1, $targetFile1, 35);
+                  }
+                  if ($compressedImage && $compressedImage1) {
+                     $query = "INSERT INTO `user`(`fname`, `mname`, `lname`, `suffix`, `gender`, `birthday`, `profile`, `psa`, `date_issued`, `soc_pen`, `gsis`, `sss`, `pvao`, `sup_with`, `fourps`, `nhts`, `id_file`, `barangay`, `rrn`, `user_type_id`, `user_status_id`, `is_decease`, `is_transfer`) VALUES ('$fname','$mname','$lname','$suffix','$gender','$birthday','$fileName','$fileName1','$date_issued','$soc_pen','$gsis','$sss','$pvao','$sup_with','$fourps','$nhts','$id_file','$barangay','$rrn','$user_type','$user_status')";
+                     $query_run = mysqli_query($con, $query);
+                     if ($query_run) {
+                           $output = array('status' => "Senior citizen added successfully", 'alert' => "success");
+                     } else {
+                           $output = array('status' => "Senior citizen was not added", 'alert' => "error");
+                     }
+                  }
+               } else {
+                  $output = array('status' => 'File is too large, must be 5MB or below', 'alert' => 'warning');
+               }
+         } else {
+               $output = array('status' => 'File error', 'alert' => 'error');
+         }
+      } else {
+         $output = array('status' => 'Invalid file type', 'alert' => 'error');
       }
       echo json_encode($output);
    }
+
    // -------------------------------- Edit Client -------------------------------- //
    if (isset($_POST["edit_client"])){
+      function compressImage($source, $destination, $quality){
+         // Get image info
+         $imgInfo = getimagesize($source);
+         $mime = $imgInfo['mime'];
+         // Create a new image from file
+         switch ($mime) {
+            case 'image/jpeg':
+               $image = imagecreatefromjpeg($source);
+               break;
+            case 'image/png':
+               $image = imagecreatefrompng($source);
+               break;
+            case 'image/gif':
+               $image = imagecreatefromgif($source);
+               break;
+            default:
+               $image = imagecreatefromjpeg($source);
+         }
+         // Check and apply image orientation
+         $exif = @exif_read_data($source);
+         if ($exif && isset($exif['Orientation'])) {
+            $orientation = $exif['Orientation'];
+            if ($orientation == 3) {
+               $image = imagerotate($image, 180, 0);
+            } elseif ($orientation == 6) {
+               $image = imagerotate($image, -90, 0);
+            } elseif ($orientation == 8) {
+               $image = imagerotate($image, 90, 0);
+            }
+         }
+         // Save image with compression quality
+         imagejpeg($image, $destination, $quality);
+         // Return compressed image
+         return $destination;
+      }
+      
       // Validate and sanitize client inputs
       $id = mysqli_real_escape_string($con, $_POST['edit_client_id']);
       $fname = mysqli_real_escape_string($con, $_POST['edit_fname']);
@@ -595,7 +720,91 @@
       $nhts = mysqli_real_escape_string($con, $_POST['edit_nhts']);
       $id_file = mysqli_real_escape_string($con, $_POST['edit_id_file']);
       $user_status = mysqli_real_escape_string($con, $_POST['edit_status']);
-      $query = "UPDATE `user` SET `fname` = '$fname', `mname` = '$mname', `lname` = '$lname', `suffix` = '$suffix', `gender` = '$gender', `birthday` = '$birthday', `date_issued` = '$date_issued', `soc_pen` = '$soc_pen', `gsis` = '$gsis', `sss` = '$sss', `pvao` = '$pvao', `sup_with` = '$sup_with', `fourps` = '$fourps', `nhts` = '$nhts', `id_file` = '$id_file', `barangay` = '$barangay', `rrn` = '$rrn', `user_status_id` = '$user_status' WHERE `user_id` = '$id'";
+      $is_deceased = mysqli_real_escape_string($con, $_POST['edit_deceased']);
+      $is_transfer = mysqli_real_escape_string($con, $_POST['edit_transfer']);
+      if (isset($_FILES['image5']) && is_uploaded_file($_FILES['image5']['tmp_name']) && $_FILES['image5']['error'] === UPLOAD_ERR_OK) {
+         $fileImage5 = $_FILES['image5'];
+         $OLDfileImage5 = $_POST['oldimage5'];
+         $customFileName5 = 'user_' . date('Ymd_His'); // replace with your desired file name
+         $ext5 = pathinfo($fileImage5['name'], PATHINFO_EXTENSION); // get the file extension
+         $fileName5 = $customFileName5 . '.' . $ext5; // append the extension to the custom file name
+         $fileTmpname5 = $fileImage5['tmp_name'];
+         $fileSize5 = $fileImage5['size'];
+         $fileError5 = $fileImage5['error'];
+         $fileExt5 = explode('.', $fileName5);
+         $fileActExt5 = strtolower(end($fileExt5));
+         $allowed5 = array('jpg', 'jpeg', 'png');
+         if (in_array($fileActExt5, $allowed5)) {
+            if ($fileError5 === 0) {
+               if ($fileSize5 < 5242880) { // 5MB Limit
+                  $uploadDir5 = '../../assets/files/clients/';
+                  $targetFile5 = $uploadDir5 . $fileName5;
+                  if ($OLDfileImage5 != null ){
+                     unlink($uploadDir5 . $OLDfileImage5);
+                  }
+                  if ($fileSize5 > 1048576) { // more than 1 MB
+                     // Compress the uploaded image with a quality of 25
+                     $compressedImage5 = compressImage($fileTmpname5, $targetFile5, 25);
+                  } else {
+                     // Compress the uploaded image with a quality of 35
+                     $compressedImage5 = compressImage($fileTmpname5, $targetFile5, 35);
+                  }
+                  if ($compressedImage5) {
+                     $query = "UPDATE `user` SET `profile`='$fileName5' WHERE `user_id`='$id'";
+                     $query_run = mysqli_query($con, $query);
+                  }
+               } else {
+                  $output = array('status' => 'File is too large, must be 5MB or below', 'alert' => 'warning');
+               }
+            } else {
+               $output = array('status' => 'File error', 'alert' => 'error');
+            }
+         } else {
+            $output = array('status' => 'Invalid file type', 'alert' => 'error');
+         }
+      }
+      if (isset($_FILES['image6']) && is_uploaded_file($_FILES['image6']['tmp_name']) && $_FILES['image6']['error'] === UPLOAD_ERR_OK) {
+         $fileImage6 = $_FILES['image6'];
+         $OLDfileImage6 = $_POST['oldimage6'];
+         $customFileName6 = 'psa_' . date('Ymd_His'); // replace with your desired file name
+         $ext6 = pathinfo($fileImage6['name'], PATHINFO_EXTENSION); // get the file extension
+         $fileName6 = $customFileName6 . '.' . $ext6; // append the extension to the custom file name
+         $fileTmpname6 = $fileImage6['tmp_name'];
+         $fileSize6 = $fileImage6['size'];
+         $fileError6 = $fileImage6['error'];
+         $fileExt6 = explode('.', $fileName6);
+         $fileActExt6 = strtolower(end($fileExt6));
+         $allowed6 = array('jpg', 'jpeg', 'png');
+         if (in_array($fileActExt6, $allowed6)) {
+            if ($fileError6 === 0) {
+               if ($fileSize6 < 5242880) { // 5MB Limit
+                  $uploadDir6 = '../../assets/files/documents/';
+                  $targetFile6 = $uploadDir6 . $fileName6;
+                  if ($OLDfileImage6 != null ){
+                     unlink($uploadDir6 . $OLDfileImage6);
+                  }
+                  if ($fileSize6 > 1048576) { // more than 1 MB
+                     // Compress the uploaded image with a quality of 25
+                     $compressedImage6 = compressImage($fileTmpname6, $targetFile6, 25);
+                  } else {
+                     // Compress the uploaded image with a quality of 35
+                     $compressedImage6 = compressImage($fileTmpname6, $targetFile6, 35);
+                  }
+                  if ($compressedImage6) {
+                     $query = "UPDATE `user` SET `psa`='$fileName6' WHERE `user_id`='$id'";
+                     $query_run = mysqli_query($con, $query);
+                  }
+               } else {
+                  $output = array('status' => 'File is too large, must be 5MB or below', 'alert' => 'warning');
+               }
+            } else {
+               $output = array('status' => 'File error', 'alert' => 'error');
+            }
+         } else {
+            $output = array('status' => 'Invalid file type', 'alert' => 'error');
+         }
+      }
+      $query = "UPDATE `user` SET `fname` = '$fname', `mname` = '$mname', `lname` = '$lname', `suffix` = '$suffix', `gender` = '$gender', `birthday` = '$birthday', `date_issued` = '$date_issued', `soc_pen` = '$soc_pen', `gsis` = '$gsis', `sss` = '$sss', `pvao` = '$pvao', `sup_with` = '$sup_with', `fourps` = '$fourps', `nhts` = '$nhts', `id_file` = '$id_file', `barangay` = '$barangay', `rrn` = '$rrn', `user_status_id` = '$user_status', `is_deceased` = '$is_deceased', `is_transfer` = '$is_transfer' WHERE `user_id` = '$id'";
       $query_run = mysqli_query($con, $query);
       if ($query_run){
          $output = array('status' => "Senior citizen updated successfully", 'alert' => "success");
@@ -788,11 +997,11 @@
                      unlink($uploadDir . $OLDfileImage);
                   }
                   if ($fileSize > 1048576) { // more than 1 MB
-                     // Compress the uploaded image with a quality of 15
-                     $compressedImage = compressImage($fileTmpname, $targetFile, 15);
-                  } else {
                      // Compress the uploaded image with a quality of 25
                      $compressedImage = compressImage($fileTmpname, $targetFile, 25);
+                  } else {
+                     // Compress the uploaded image with a quality of 35
+                     $compressedImage = compressImage($fileTmpname, $targetFile, 35);
                   }
                   if ($compressedImage) {
                      $query = "UPDATE `system_setting` SET `meta_value`='$fileName' WHERE `meta`='icon'";
@@ -889,11 +1098,11 @@
                      unlink($uploadDir . $OLDfileImage);
                   }
                   if ($fileSize > 1048576) { // more than 1 MB
-                     // Compress the uploaded image with a quality of 15
-                     $compressedImage = compressImage($fileTmpname, $targetFile, 15);
-                  } else {
                      // Compress the uploaded image with a quality of 25
                      $compressedImage = compressImage($fileTmpname, $targetFile, 25);
+                  } else {
+                     // Compress the uploaded image with a quality of 35
+                     $compressedImage = compressImage($fileTmpname, $targetFile, 35);
                   }
                   if ($compressedImage) {
                      $query = "UPDATE `system_setting` SET `meta_value`='$fileName' WHERE `meta`='logo'";
