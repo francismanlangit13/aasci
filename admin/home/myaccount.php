@@ -166,6 +166,7 @@
                             <div class="mb-3">
                                 <label class="small mb-1 required" for="currentPassword">Current Password</label>
                                 <input class="form-control" id="currentPassword" name="currentPassword" type="password" placeholder="Enter current password" required/>
+                                <i style="font-size:0.85rem;">Leave this blank if you dont want to change password...</i>
                             </div>
                             <!-- Form Group (new password)-->
                             <div class="mb-3">
@@ -176,6 +177,7 @@
                             <div class="mb-3">
                                 <label class="small mb-1 required" for="confirmPassword">Confirm Password</label>
                                 <input class="form-control" id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm new password" required/>
+                                <div id="cpassword-error" style="margin-top:0.5rem;"></div>
                             </div>
                             <button class="btn btn-primary float-end" type="submit" id="btn_change_password">Save</button>
                         </form>
@@ -677,5 +679,32 @@
     });
 </script>
 
+<!-- Password validation -->
+<script>
+    // Get references to the password fields and label
+    const passwordInput = document.getElementById('newPassword');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    var cpasswordNameError = document.getElementById("cpassword-error");
+
+    // Function to check if passwords match and update required class
+    function checkPasswords() {
+
+        if (passwordInput.value !== confirmPasswordInput.value) {
+            confirmPasswordInput.setCustomValidity("Passwords do not match");
+            $('#cpassword-error').text('Passwords do not match').css('color', 'red');
+            $('#cpassword').addClass('is-invalid');
+            $('#btn_change_password').prop('disabled', true);
+        } else {
+            $('#cpassword-error').empty();
+            $('#cpassword-input').removeClass('is-invalid');
+            $('#btn_change_password').prop('disabled', false);
+            confirmPasswordInput.setCustomValidity("");
+        }
+    }
+
+    // Add event listeners to the password fields
+    passwordInput.addEventListener('input', checkPasswords);
+    confirmPasswordInput.addEventListener('input', checkPasswords);
+</script>
 
 <?php include ('../includes/footer.php'); ?>
