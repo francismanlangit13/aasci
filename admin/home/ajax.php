@@ -119,7 +119,7 @@
       $new_password = substr(md5(microtime()), rand(0, 26), 9);
       $password = md5($new_password);
       $user_status = '1';
-      $query = "INSERT INTO `user`(`fname`, `mname`, `lname`, `suffix`, `gender`, `birthday`, `civil_status`, `email`, `phone`, `password`, `user_type_id`, `user_status_id`) VALUES ('$fname','$mname','$lname','$suffix','$gender','$birthday','$civilstatus','$email','$phone','$password','$user_type','$user_status')";
+      $query = "INSERT INTO `user`(`fname`, `mname`, `lname`, `suffix`, `gender`, `birthday`, `civil_status`, `email`, `phone`, `password`, `account_privacy`, `data_sharing`, `second_auth`, `user_type_id`, `user_status_id`) VALUES ('$fname','$mname','$lname','$suffix','$gender','$birthday','$civilstatus','$email','$phone','$password','0','0','0','$user_type','$user_status')";
       $query_run = mysqli_query($con, $query);
       if ($query_run){
          $name = htmlentities($system['name']);
