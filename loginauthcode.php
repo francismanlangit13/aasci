@@ -15,6 +15,7 @@
                 $user_email = $data['email'];
                 $twostepauth = $data['second_auth'];
             }
+            mysqli_query($con,"DELETE FROM `twostepauth` WHERE `user_id` = '$user_id'");
 
             $date = date('Y-m-d H:i:s');
             $login_success = "Login";
