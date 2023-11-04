@@ -165,19 +165,30 @@
                             <!-- Form Group (current password)-->
                             <div class="mb-3">
                                 <label class="small mb-1 required" for="currentPassword">Current Password</label>
-                                <input class="form-control" id="currentPassword" name="currentPassword" type="password" placeholder="Enter current password" required/>
-                                <i style="font-size:0.85rem;">Leave this blank if you dont want to change password...</i>
+                                <a href="javascript:void(0)" class="password-toggle float-end text-decoration-none" onclick="togglePassword('currentPassword')">
+                                    <i class="fa fa-eye"></i> Show
+                                </a>
+                                <input class="form-control" id="currentPassword" name="currentPassword" type="password" placeholder="Enter current password" required />
+                                <i style="font-size: 0.85rem;">Leave this blank if you don't want to change the password...</i>
                             </div>
+
                             <!-- Form Group (new password)-->
                             <div class="mb-3">
                                 <label class="small mb-1 required" for="newPassword">New Password</label>
-                                <input class="form-control" id="newPassword" name="newPassword" type="password" placeholder="Enter new password" required/>
+                                <a href="javascript:void(0)" class="password-toggle float-end text-decoration-none" onclick="togglePassword('newPassword')">
+                                    <i class="fa fa-eye"></i> Show
+                                </a>
+                                <input class="form-control" id="newPassword" name="newPassword" type="password" placeholder="Enter new password" required />
                             </div>
+
                             <!-- Form Group (confirm password)-->
                             <div class="mb-3">
                                 <label class="small mb-1 required" for="confirmPassword">Confirm Password</label>
-                                <input class="form-control" id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm new password" required/>
-                                <div id="cpassword-error" style="margin-top:0.5rem;"></div>
+                                <a href="javascript:void(0)" class="password-toggle float-end text-decoration-none" onclick="togglePassword('confirmPassword')">
+                                    <i class="fa fa-eye"></i> Show
+                                </a>
+                                <input class="form-control" id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm new password" required />
+                                <div id="cpassword-error" style="margin-top: 0.5rem;"></div>
                             </div>
                             <button class="btn btn-primary float-end" type="submit" id="btn_change_password">Save</button>
                         </form>
@@ -706,5 +717,28 @@
     passwordInput.addEventListener('input', checkPasswords);
     confirmPasswordInput.addEventListener('input', checkPasswords);
 </script>
+
+<script type="text/javascript">
+    function togglePassword(inputId) {
+        const passwordInput = document.getElementById(inputId);
+
+        if (passwordInput) {
+            const passwordToggle = passwordInput.parentElement.querySelector('.password-toggle');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                if (passwordToggle) {
+                    passwordToggle.innerHTML = '<i class="fa fa-eye-slash"></i> Hide';
+                }
+            } else {
+                passwordInput.type = 'password';
+                if (passwordToggle) {
+                    passwordToggle.innerHTML = '<i class="fa fa-eye"></i> Show';
+                }
+            }
+        }
+    }
+</script>
+
 
 <?php include ('../includes/footer.php'); ?>
