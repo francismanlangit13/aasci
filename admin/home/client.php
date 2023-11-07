@@ -827,7 +827,7 @@
                 document.getElementById("frame3").src = base_url + 'assets/files/clients/' + button.getAttribute("data-view_profile");
                 document.getElementById("a-psa_view").href = base_url + 'assets/files/documents/' + button.getAttribute("data-view_psa");
                 document.getElementById("frame4").src = base_url + 'assets/files/documents/' + button.getAttribute("data-view_psa");
-                document.getElementById("frame5").src = base_url + 'assets/files/system/qr-code.png';
+                document.getElementById("frame5").src = base_url + 'assets/files/system/qr-code.png?' + new Date().getTime();
             }
         };
         xhrAjax.send(`id=${id}`);
