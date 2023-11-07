@@ -1,4 +1,9 @@
-<?php include ('db_conn.php'); ?>
+<?php
+    include ('db_conn.php');
+    if($_SESSION['auth_user'] == null){
+        header("Location: " . base_url . "login");
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -31,6 +36,9 @@
                 margin: 0;
                 background-color: #f8f9fc;
             }
+            .disabled {
+                cursor: not-allowed;
+            }
         </style>
     </head>
     <body class="bg-gradient-primary">
@@ -52,7 +60,7 @@
                                         <div class="text-center">
                                             <h1 class="h4 text-gray-900"><?= $system['name'] ?></h1>
                                             <hr style="margin-top:5px !important; margin-bottom:5px !important">
-                                            <h1 class="h4 text-gray-900 mb-4">Two Step Authentication</h1>
+                                            <h1 class="h4 text-gray-900 mb-4">Verify OTP</h1>
                                             <h5 class="text-gray-900">Open your email address and enter the code for <?= $system['shortname'] ?></h5>
                                         </div>
                                         <form class="user" action="loginauthcode.php" method="POST">
@@ -61,17 +69,23 @@
                                                 $username = $_SESSION['auth_user']['user_name'];
                                             ?>
                                             <div class="form-group">
-                                                <label for="user_email" class="">Your Email</label>
+                                                <label for="user_email" for="user_email">Your Email</label>
                                                 <input type="text" class="form-control form-control-user" id="user_email" value="<?=htmlspecialchars($user_email);?>" disabled>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" id="verify_code" name="verify_code" class="form-control form-control-user" placeholder="Enter 6 digit code" required>
+                                                <input type="text" id="verify_code" name="verify_code" class="form-control form-control-user" maxlength="6" placeholder="Enter OTP" required>
                                             </div>
                                             <button type="submit" name="verify_btn" id="verifyButton" class="btn btn-primary btn-user btn-block">Verify</button>
                                         </form>
+                                        <div class="row mt-2">
+                                            <div class="col-md-7 mt-1" id="countdown"></div>
+                                            <button type="submit" class="col-md-4 btn-xs btn-primary disabled" id="resentButton" disabled>Resent OTP</button>
+                                        </div>
                                         <hr>
                                         <div class="text-center">
-                                            <a class="small text-decoration-none" href="login">Not <?=htmlspecialchars($username);?>?</a>
+                                            <form action="login" method="POST">
+                                                <button type="submit" class="btn btn-link btn-sm text-decoration-none" name="notmyaccount">Not <?=htmlspecialchars($username);?>?</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -99,5 +113,85 @@
 
         <!-- Sweetalert message popup -->
         <?php include ('message.php'); ?> 
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                // Resend OTP
+                $('#resentButton').click(function() {
+                    var formData = new FormData();
+                    formData.append('send_otp', '1'); // Identifier
+                    $.ajax({
+                        url: "loginauthcode.php",
+                        method: "POST",
+                        data: formData,
+                        dataType: "json",
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        beforeSend: function() {
+                            $('#resentButton').text("Please wait...");
+                        },
+                        success: function(data) {
+                            swal({
+                                title: "Notice",
+                                text: data.status,
+                                icon: data.alert,
+                                button: false,
+                                timer: 2000
+                            }).then(function() {
+                                $('#resentButton').text("Resent OTP");
+                            });
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            console.error(errorThrown);
+                        }
+                    });
+                });
+            });
+        </script>
+
+        <script>
+            const countdownElement = document.getElementById("countdown");
+            const resentButton = document.getElementById("resentButton");
+
+            let countdown = parseFloat(localStorage.getItem("countdown")) || 60; // Default to 1 minute (60 seconds)
+            let timer;
+
+            function updateCountdown() {
+                countdownElement.innerText = `Time remaining: ${Math.floor(countdown % 60)
+                    .toString()
+                    .padStart(2, "0")}`;
+            }
+
+            function startCountdown() {
+                timer = setInterval(function () {
+                    countdown -= 1;
+                    localStorage.setItem("countdown", countdown); // Store the updated countdown value
+                    updateCountdown();
+                    if (countdown <= 0) {
+                        clearInterval(timer);
+                        resentButton.removeAttribute('disabled');
+                        $('#resentButton').removeClass('disabled');
+                    }
+                }, 1000);
+            }
+
+            resentButton.addEventListener("click", function () {
+                countdown = 60; // Reset the countdown to 1 minute (60 seconds)
+                localStorage.setItem("countdown", countdown); // Save the countdown value
+                updateCountdown();
+                resentButton.setAttribute('disabled', 'disabled');
+                $('#resentButton').addClass('disabled');
+                startCountdown();
+            });
+
+            updateCountdown();
+            if (countdown > 0) {
+                startCountdown();
+            } else {
+                resentButton.removeAttribute('disabled');
+                $('#resentButton').removeClass('disabled');
+            }
+        </script>
     </body>
 </html>

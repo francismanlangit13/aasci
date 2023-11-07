@@ -1,4 +1,12 @@
-<?php include ('db_conn.php'); ?>
+<?php
+    include ('db_conn.php');
+    if(isset($_POST['notmyaccount'])){
+        unset($_SESSION['auth_user']);
+    }
+    if(isset($_SESSION['auth_user']) && $_SESSION['auth_user'] != null) {
+        header("Location: " . base_url . "loginauth");
+    }    
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
