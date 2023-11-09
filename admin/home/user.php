@@ -156,7 +156,7 @@
                                     <label for="add_suffix" class="required">Suffix</label>
                                     <select required class="form-control" id="add_suffix" name="add_suffix">
                                         <option value="" selected>Select Suffix</option>
-                                        <option value="">None</option>
+                                        <option value=" ">None</option>
                                         <option value="Jr">Jr</option>
                                         <option value="Sr">Sr</option>
                                         <option value="I">I</option>
@@ -522,86 +522,57 @@
                         <div class="row"> 
                             <div class="col-md-4 mb-3">
                                 <label for="view_fname">First Name</label>
-                                <input disabled type="text" id="view_fname" name="view_fname" class="form-control">
+                                <input disabled type="text" id="view_fname" class="form-control">
                             </div> 
                         
                             <div class="col-md-4 mb-3">
                                 <label for="view_mname">Middle Name</label>
-                                <input disabled type="text" id="view_mname" name="view_mname" class="form-control">
+                                <input disabled type="text" id="view_mname" class="form-control">
                             </div>
 
                             <div class="col-md-4 mb-3">
                                 <label for="view_lname">Last Name</label>
-                                <input disabled type="text" id="view_lname" name="view_lname" class="form-control">
+                                <input disabled type="text" id="view_lname" class="form-control">
                             </div>
 
                             <div class="col-md-4 mb-3">
                                 <label for="view_suffix">Suffix</label>
-                                <select disabled class="form-control" id="view_suffix" name="view_suffix">
-                                    <option value="" selected>Select Suffix</option>
-                                    <option value="">None</option>
-                                    <option value="Jr">Jr</option>
-                                    <option value="Sr">Sr</option>
-                                    <option value="I">I</option>
-                                    <option value="II">II</option>
-                                    <option value="III">III</option>
-                                    <option value="IV">IV</option>
-                                    <option value="V">V</option>
-                                    <option value="VI">VI</option>
-                                </select>
+                                <input disabled type="text" id="view_suffix" class="form-control">
                             </div>
 
                             <div class="col-md-4 mb-3">
                                 <label for="view_gender">Gender</label>
-                                <select disabled id="view_gender" name="view_gender" required class="form-control">
-                                    <option value="" selected>Select Gender</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
+                                <input disabled type="text" id="view_gender" class="form-control">
                             </div>
 
                             <div class="col-md-4 mb-3">
                                 <label for="view_birthday">Date of Birth</label>
-                                <input disabled class="form-control" id="view_birthday" name="view_birthday" pattern="\d{2} \d{2} \d{4}" placeholder="MM/DD/YYYY" type="date"/>
+                                <input disabled class="form-control" id="view_birthday" pattern="\d{2} \d{2} \d{4}" placeholder="MM/DD/YYYY" type="date"/>
                             </div>
 
                             <div class="col-md-4 mb-3">
                                 <label for="view_civil_status">Civil Status</label>
-                                <select disabled id="view_civil_status" name="view_civil_status" required class="form-control">
-                                    <option value="" selected>Select Civil Status</option>
-                                    <option value="Single">Single</option>
-                                    <option value="Married">Married</option>
-                                    <option value="Widowed">Widowed</option>
-                                    <option value="Separated">Separated</option>
-                                </select>
+                                <input disabled type="text" id="view_civil_status" class="form-control">
                             </div>
 
                             <div class="col-md-4 mb-3">
                                 <label for="view_email">Email</label>
-                                <input disabled type="text" id="view_email" name="view_email" class="form-control">
+                                <input disabled type="text" id="view_email" class="form-control">
                             </div>
                         
                             <div class="col-md-4 mb-3">
                                 <label for="view_phone">Phone Number</label>
-                                <input disabled type="text" name="view_phone" pattern="09[0-9]{9}" maxlength="11" class="form-control" id="view_phone">
+                                <input disabled type="text" name="view_phone" class="form-control" id="view_phone">
                             </div>
 
                             <div class="col-md-4 mb-3">
                                 <label for="view_role">Role</label>
-                                <select disabled id="view_role" name="view_role" required class="form-control">
-                                    <option value="" selected>Select Role</option>
-                                    <option value="1">Admin</option>
-                                    <option value="2">Staff</option>
-                                </select>
+                                <input disabled type="text" class="form-control" id="view_role">
                             </div>
 
                             <div class="col-md-4 mb-3">
                                 <label for="view_status">Status</label>
-                                <select disabled id="view_status" name="view_status" required class="form-control">
-                                    <option value="" selected>Select Role</option>
-                                    <option value="1">Active</option>
-                                    <option value="2">Inactive</option>
-                                </select>
+                                <input disabled type="text" class="form-control" id="view_status">
                             </div>
                         </div>
                     </div>
@@ -666,7 +637,7 @@
                                     <label for="edit_suffix" class="required">Suffix</label>
                                     <select class="form-control" id="edit_suffix" name="edit_suffix" required>
                                         <option value="" selected>Select Suffix</option>
-                                        <option value="">None</option>
+                                        <option value=" ">None</option>
                                         <option value="Jr">Jr</option>
                                         <option value="Sr">Sr</option>
                                         <option value="I">I</option>

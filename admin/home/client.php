@@ -776,41 +776,6 @@
         </div>
     </div>
 </div>
-
-<!-- JavaScript for Modal View -->
-<!-- <script>
-    function viewModal(button) {
-        // Redirect to the PHP file with the retrieved id as a query parameter
-        document.getElementById("view_fname").value = button.getAttribute("data-view_fname");
-        document.getElementById("view_mname").value = button.getAttribute("data-view_mname");
-        document.getElementById("view_lname").value = button.getAttribute("data-view_lname");
-        document.getElementById("view_suffix").value = button.getAttribute("data-view_suffix");
-        document.getElementById("view_gender").value = button.getAttribute("data-view_gender");
-        document.getElementById("view_birthday").value = button.getAttribute("data-view_birthday");
-        document.getElementById("view_age").value = button.getAttribute("data-view_age");
-        document.getElementById("view_barangay").value = button.getAttribute("data-view_barangay");
-        document.getElementById("view_date_issued").value = button.getAttribute("data-view_date_issued");
-        document.getElementById("view_rrn").value = button.getAttribute("data-view_rrn");
-        document.getElementById("view_soc_pen").value = button.getAttribute("data-view_soc_pen");
-        document.getElementById("view_gsis").value = button.getAttribute("data-view_gsis");
-        document.getElementById("view_sss").value = button.getAttribute("data-view_sss");
-        document.getElementById("view_pvao").value = button.getAttribute("data-view_pvao");
-        document.getElementById("view_sup_with").value = button.getAttribute("data-view_sup_with");
-        document.getElementById("view_4ps").value = button.getAttribute("data-view_4ps");
-        document.getElementById("view_nhts").value = button.getAttribute("data-view_nhts");
-        document.getElementById("view_id_file").value = button.getAttribute("data-view_id_file");
-        if(button.getAttribute("data-view_status") == 1){
-            document.getElementById("view_status").value = 'Active';
-        } else {
-            document.getElementById("view_status").value = 'Inactive';
-        }
-        document.getElementById("view_deceased").value = button.getAttribute("data-view_deceased");
-        document.getElementById("view_transfer").value = button.getAttribute("data-view_transfer");
-        document.getElementById("frame3").src = base_url + 'assets/files/clients/' + button.getAttribute("data-view_profile");
-        document.getElementById("frame4").src = base_url + 'assets/files/documents/' + button.getAttribute("data-view_psa");
-    }
-</script> -->
-<!-- JavaScript for Modal View Senior -->
 <script>
     function viewModal(button) {
         var id = button.getAttribute("data-view_id");
