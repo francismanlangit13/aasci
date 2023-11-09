@@ -9,7 +9,7 @@
         $code = mysqli_real_escape_string($con, $_POST['verify_code']);
         $date = date;
 
-        $verify_query = "SELECT * FROM `twostepauth` INNER JOIN `user` ON `twostepauth`.`user_id` = `user`.`user_id` WHERE `code` = '$code' AND `validity` < '$date' AND `user_status_id` = '1' LIMIT 1";
+        $verify_query = "SELECT * FROM `twostepauth` INNER JOIN `user` ON `twostepauth`.`user_id` = `user`.`user_id` WHERE `code` = '$code' AND `validity` > NOW() AND `user_status_id` = '1' LIMIT 1;";
         $verify_query_run = mysqli_query($con, $verify_query);
 
         if(mysqli_num_rows($verify_query_run) > 0){
