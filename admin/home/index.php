@@ -17,15 +17,6 @@
             <div class="me-4 mb-3 mb-sm-0">
                 <h1 class="mb-0">Dashboard</h1>
             </div>
-            <!-- Date range picker example-->
-            <div class="input-group input-group-joined border-0 shadow" style="width: 16.5rem; margin-right:10px">
-                <span class="input-group-text"><i data-feather="calendar"></i>
-                <div class="small" style="margin-left: 5px; margin-top: 3px">
-                    <span class="fw-500 text-primary"><?php echo date("l") ?></span>
-                    &middot; <?php echo date("F d, Y") ?> &middot; <?php echo date("g:i A") ?>
-                </div>
-                </span>
-            </div>
         </div>
         <div class="row">
             <div class="col-xl-3 col-md-6 mb-4">

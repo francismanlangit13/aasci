@@ -15,9 +15,20 @@
         </div>
     </form> -->
     <!-- Navbar Items-->
+
+    <!-- Current datetime-->
+    <div class="input-group input-group-joined border-0 shadow" style="width: 0.5rem; margin-right:10px;">
+        <label class="input-group-text"><i data-feather="calendar"></i>
+        <div class="small d-flex" style="margin-left: 5px; margin-top: 3px; font-size:16px">
+            <span class="fw-500 text-primary mr-1" style="margin-right:3px"><?php echo date("l") ?></span>
+            &middot; <?php echo date("F d, Y") ?> &middot; <div id="timer" style="margin-left:0.3rem;"></div>
+        </div>
+        </label>
+    </div>
     <ul class="navbar-nav align-items-center ms-auto">
         <!-- Navbar Search Dropdown-->
         <!-- * * Note: * * Visible only below the lg breakpoint-->
+        
         <li class="nav-item dropdown no-caret me-3 d-lg-none">
             <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="searchDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="search"></i></a>
             <!-- Dropdown - Search-->
@@ -170,4 +181,31 @@
     }
     // Call the function to update user data initially
     updateUserData();
+</script>
+
+<?php
+    $currentTime = date("Y/m/d H:i:s");
+?>
+
+<script>
+    setInterval(function(){
+       var xhr = new XMLHttpRequest();
+       xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+             var currentTime = new Date(xhr.responseText);
+             var currentHours = currentTime.getHours();
+             var currentMinutes = currentTime.getMinutes();
+             var currentSeconds = currentTime.getSeconds();
+             currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
+             currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+             var timeOfDay = (currentHours < 12) ? "AM" : "PM";
+             currentHours = (currentHours > 12) ? currentHours - 12 : currentHours;
+             currentHours = (currentHours == 0) ? 12 : currentHours;
+             var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
+             document.getElementById("timer").innerHTML = currentTimeString;
+          }
+       };
+       xhr.open("GET", "../includes/server_time.php", true); // Change "server_time.php" to the actual path of your PHP file
+       xhr.send();
+    }, 1000);
 </script>
