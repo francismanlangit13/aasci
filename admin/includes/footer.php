@@ -3,13 +3,41 @@
                         <div class="row">
                             <div class="col-md-6 small">Copyright <?php echo date('Y'); ?> &copy; <?= $system['name'] ?></div>
                             <div class="col-md-6 text-md-end small">
-                                <a href="#!">Privacy Policy</a>
+                                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#btn_privacy">Privacy Policy</a>
                                 &middot;
-                                <a href="#!">Terms &amp; Conditions</a>
+                                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#btn_terms">Terms &amp; Conditions</a>
                             </div>
                         </div>
                     </div>
                 </footer>
+                <!-- Modal for View Privacy -->
+                <div class="modal fade" id="btn_privacy" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="view_userLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg d-grid" role="document" style="justify-items: center;">
+                        <div class="modal-content">
+                            <div class="modal-header card-header">
+                                <h6 class="modal-title"><?= $system['shortname'] ?> | Privacy Policy</h6>
+                                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div> 
+                            <div class="modal-body"> 
+                                <h6 style="text-align: justify; text-justify:inter-word"><?= $system['privacy'] ?></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal for View Terms -->
+                <div class="modal fade" id="btn_terms" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="view_userLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg d-grid" role="document" style="justify-items: center;">
+                        <div class="modal-content">
+                            <div class="modal-header card-header">
+                                <h6 class="modal-title"><?= $system['shortname'] ?> | Terms & Conditions</h6>
+                                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div> 
+                            <div class="modal-body"> 
+                                <h6 style="text-align: justify; text-justify:inter-word"><?= $system['terms'] ?></h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- Sweetalert JavaScript -->
