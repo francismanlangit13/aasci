@@ -1222,7 +1222,7 @@
    }
    // -------------------------------- Export Users CSV -------------------------------- //
    if (isset($_POST["btn_export_users"])) {
-      $sql = "SELECT * FROM `user` WHERE `user_type_id` != '3'";
+      $sql = "SELECT * FROM `user` WHERE `user_type_id` != '3' AND `user_status_id` != '3'";
       $result = mysqli_query($con, $sql);
 
       // Set the filename and mime type
@@ -1263,7 +1263,7 @@
    }
    // -------------------------------- Export Senior CSV -------------------------------- //
    if (isset($_POST["btn_export_senior"])) {
-      $sql = "SELECT * FROM `user` WHERE `user_type_id` = '3'";
+      $sql = "SELECT * FROM `user` WHERE `user_type_id` = '3' AND `user_status_id` != '3'";
       $result = mysqli_query($con, $sql);
 
       // Set the filename and mime type
