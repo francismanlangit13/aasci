@@ -504,12 +504,12 @@
       }
       echo json_encode($output);
    }
-   // -------------------------------- Delete Account -------------------------------- //
+   // -------------------------------- Delete Permanent Account -------------------------------- //
    if (isset($_POST["delete_account"])) {
       $req_Delete = $_POST['isDelete'];
       $currentPassword = $_POST['yourPassword'];
       if ($req_Delete == '1') {
-         $stmt = "UPDATE `user` SET `user_status_id`= '3' WHERE `user_id`='$user_id'";
+         $stmt = "DELETE FROM `user` WHERE `user_id`='$user_id'";
          $stmt_run = mysqli_query($con, $stmt);
          if ($stmt_run) {
             $output = array('status' => 'Your account will be successfully deleted, and you will be redirected in 5 seconds.', 'alert' => 'success');
@@ -1657,54 +1657,69 @@
       // Close MySQL connection
       mysqli_close($con);
    }
-   // -------------------------------- Export Senior CSV -------------------------------- //
-   if (isset($_POST["btn_export_senior123"])) {
-      $dateStart = $_POST['dateStart'];
-      $dateEnd = $_POST['dateEnd'];
-      if (isset($_POST['dateStart']) && isset($_POST['dateEnd'])){
-          // Fetch data from MySQL table
-          $sql = "SELECT * FROM `user` WHERE `user_type_id` != '3' AND (STR_TO_DATE(Order_Place_Date, '%m-%d-%Y %H:%i:%s') BETWEEN $dateStart AND $dateEnd)";
-          $result = mysqli_query($con, $sql);
-      } else{
-          // Fetch data from MySQL table
-          $sql = "SELECT * FROM `user` WHERE `user_type_id` != '3'";
-          $result = mysqli_query($con, $sql);
-      }
+   // // -------------------------------- Export Senior CSV -------------------------------- //
+   // if (isset($_POST["btn_export_senior123"])) {
+   //    $dateStart = $_POST['dateStart'];
+   //    $dateEnd = $_POST['dateEnd'];
+   //    if (isset($_POST['dateStart']) && isset($_POST['dateEnd'])){
+   //        // Fetch data from MySQL table
+   //        $sql = "SELECT * FROM `user` WHERE `user_type_id` != '3' AND (STR_TO_DATE(Order_Place_Date, '%m-%d-%Y %H:%i:%s') BETWEEN $dateStart AND $dateEnd)";
+   //        $result = mysqli_query($con, $sql);
+   //    } else{
+   //        // Fetch data from MySQL table
+   //        $sql = "SELECT * FROM `user` WHERE `user_type_id` != '3'";
+   //        $result = mysqli_query($con, $sql);
+   //    }
 
-      // Set the filename and mime type
-      $filename = "export_users_" . date('m-d-Y_H:i:s A') . ".csv";
-      header('Content-Type: text/csv');
-      header('Content-Disposition: attachment;filename="' . $filename . '"');
-      header('Cache-Control: max-age=0');
+   //    // Set the filename and mime type
+   //    $filename = "export_users_" . date('m-d-Y_H:i:s A') . ".csv";
+   //    header('Content-Type: text/csv');
+   //    header('Content-Disposition: attachment;filename="' . $filename . '"');
+   //    header('Cache-Control: max-age=0');
 
-      // Open file for writing
-      $file = fopen('php://output', 'w');
+   //    // Open file for writing
+   //    $file = fopen('php://output', 'w');
 
-      // Set the column headers
-      fputcsv($file, array('ID', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Civil Status', 'Email', 'Phone', 'Role', 'Status'));
+   //    // Set the column headers
+   //    fputcsv($file, array('ID', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Civil Status', 'Email', 'Phone', 'Role', 'Status'));
 
-      // Add the data to the file
-      while ($data = mysqli_fetch_assoc($result)){
-          fputcsv($file, array(
-              $data['user_id'],
-              $data['fname'],
-              $data['mname'],
-              $data['lname'],
-              $data['suffix'],
-              $data['gender'],
-              $data['birthday'],
-              $data['civil_status'],
-              $data['email'],
-              $data['phone'],
-              ($data['user_type_id'] == 1) ? 'Admin' : (($data['user_type_id'] == 2) ? 'Staff' : 'Unknown'),
-              ($data['user_status_id'] == 1) ? 'Active' : (($data['user_status_id'] == 2) ? 'Inactive' : 'Archived')
-          ));
-      }        
+   //    // Add the data to the file
+   //    while ($data = mysqli_fetch_assoc($result)){
+   //        fputcsv($file, array(
+   //            $data['user_id'],
+   //            $data['fname'],
+   //            $data['mname'],
+   //            $data['lname'],
+   //            $data['suffix'],
+   //            $data['gender'],
+   //            $data['birthday'],
+   //            $data['civil_status'],
+   //            $data['email'],
+   //            $data['phone'],
+   //            ($data['user_type_id'] == 1) ? 'Admin' : (($data['user_type_id'] == 2) ? 'Staff' : 'Unknown'),
+   //            ($data['user_status_id'] == 1) ? 'Active' : (($data['user_status_id'] == 2) ? 'Inactive' : 'Archived')
+   //        ));
+   //    }        
 
-      // Close file
-      fclose($file);
+   //    // Close file
+   //    fclose($file);
 
-      // Close MySQL connection
-      mysqli_close($con);
+   //    // Close MySQL connection
+   //    mysqli_close($con);
+   // }
+   // -------------------------------- Check Email and Phone -------------------------------- //
+   if (isset($_POST["check_email"])) {
+      $stmt = $con->prepare('SELECT COUNT(*) as count FROM user WHERE email = ? OR phone = ?');
+
+      // Bind the parameters to the placeholders and execute the statement
+      $stmt->bind_param('ss', $_POST['email'], $_POST['phone']);
+      $stmt->execute();
+
+      // Fetch the result as an associative array
+      $result = $stmt->get_result()->fetch_assoc();
+
+      // Return the result as JSON
+      header('Content-Type: application/json');
+      echo json_encode(array('exists' => ($result['count'] > 0)));
    }
 ?>

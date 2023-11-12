@@ -740,5 +740,133 @@
     }
 </script>
 
+<script>
+    $(document).ready(function() {
+        var initialEmail = $('#email').val(); // Store the initial email
+        var initialPhone = $('#phone').val(); // Store the initial phone
+
+        // debounce functions for each input field
+        var debouncedCheckEmail = _.debounce(checkEmail, 500);
+        var debouncedCheckPhone = _.debounce(checkPhone, 500);
+
+        // attach event listeners for each input field
+        $('#email').on('blur', debouncedCheckEmail);
+        $('#phone').on('blur', debouncedCheckPhone);
+        $('#email').on('input', debouncedCheckEmail); // Trigger on input change
+        $('#phone').on('input', debouncedCheckPhone); // Trigger on input change
+
+        function checkIfAllFieldsValid() {
+            // check if all input fields are valid and enable submit button if so
+            if ($('#email-error').is(':empty') && $('#phone-error').is(':empty')) {
+                $('#btn_change_info').prop('disabled', false);
+            } else {
+                $('#btn_change_info').prop('disabled', true);
+            }
+        }
+
+        function checkEmail() {
+            var email = $('#email').val();
+            
+            // show error if email is empty
+            if (email === '') {
+                $('#email-error').text('Please input email').css('color', 'red');
+                $('#email').addClass('is-invalid');
+                checkIfAllFieldsValid();
+                return;
+            }
+
+            // check if email format is valid
+            var emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+            if (!emailPattern.test(email)) {
+                $('#email-error').text('Invalid email format').css('color', 'red');
+                $('#email').addClass('is-invalid');
+                checkIfAllFieldsValid();
+                return;
+            }
+            
+            if (email !== initialEmail) { // Check if email is different from the initial email
+                // make AJAX call to check if email exists
+                $.ajax({
+                    url: 'ajax.php', // replace with the actual URL to check email
+                    method: 'POST', // use the appropriate HTTP method
+                    data: { check_email: 1, email: email },
+                    success: function(response) {
+                        if (response.exists) {
+                            // disable submit button if email is taken
+                            $('#btn_change_info').prop('disabled', true);
+                            $('#email-error').text('Email already taken').css('color', 'red');
+                            $('#email').addClass('is-invalid');
+                        } else {
+                            $('#email-error').empty();
+                            $('#email').removeClass('is-invalid');
+                            // enable submit button if email is valid
+                            checkIfAllFieldsValid();
+                        }
+                    },
+                    error: function() {
+                        $('#email-error').text('Error checking email');
+                    }
+                });
+            } else{
+                $('#email-error').empty();
+                $('#email').removeClass('is-invalid');
+                // enable submit button if email is valid
+                checkIfAllFieldsValid();
+            }
+        }
+
+        function checkPhone() {
+            var phone = $('#phone').val().trim();
+
+            // show error if phone number is empty
+            if (phone === '') {
+                $('#phone-error').text('Please input phone number').css('color', 'red');
+                $('#phone').addClass('is-invalid');
+                checkIfAllFieldsValid();
+                return;
+            }
+
+            // check if phone number format is valid
+            var phoneNumberPattern = /^09[0-9]{9}$/;
+            if (!phoneNumberPattern.test(phone)) {
+                $('#phone-error').text('Invalid phone number format').css('color', 'red');
+                $('#phone').addClass('is-invalid');
+                checkIfAllFieldsValid();
+                return;
+            }
+
+            if (phone !== initialPhone) { // Check if email is different from the initial email
+                // make AJAX call to check if phone number exists
+                $.ajax({
+                    url: 'ajax.php', // replace with the actual URL to check phone
+                    method: 'POST', // use the appropriate HTTP method
+                    data: { check_email: 1, phone: phone },
+                    success: function(response) {
+                        if (response.exists) {
+                            $('#phone-error').text('Phone number already taken').css('color', 'red');
+                            $('#phone').addClass('is-invalid');
+                            // disable submit button if phone number is taken
+                            $('#btn_change_info').prop('disabled', true);
+                        } else {
+                            $('#phone-error').empty();
+                            $('#phone').removeClass('is-invalid');
+                            // enable submit button if phone number is valid
+                            checkIfAllFieldsValid();
+                        }
+                    },
+                    error: function() {
+                        $('#phone-error').text('Error checking phone number');
+                    }
+                });
+            } else{
+                $('#phone-error').empty();
+                $('#phone').removeClass('is-invalid');
+                // enable submit button if phone number is valid
+                checkIfAllFieldsValid();
+            }
+        }
+    });
+</script>
+
 
 <?php include ('../includes/footer.php'); ?>
