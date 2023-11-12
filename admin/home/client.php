@@ -29,7 +29,7 @@
                 </form>
             </div>
             <div class="card-body">
-                <table id="dataTable" class="display cell-border stripe table table-bordered dataTable no-footer">
+                <table id="dataTable" class="display cell-border stripe table table-bordered dataTable no-footer" style="width:99% !important">
                     <thead>
                         <tr>
                             <th>ID</th>

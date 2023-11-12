@@ -19,6 +19,114 @@
          echo $e->getMessage();
       }
    }
+   // -------------------------------- DataTable Archive User -------------------------------- //
+   if (isset($_POST["user_list_archive"])){
+      // Reading value
+      $draw = $_POST['draw'];
+      $row = $_POST['start'];
+      $rowperpage = $_POST['length']; // Rows display per page
+      $columnIndex = $_POST['order'][0]['column']; // Column index
+      $columnName = $_POST['columns'][$columnIndex]['data']; // Column name
+      $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
+      $searchValue = $_POST['search']['value']; // Search value
+      $searchArray = array();
+      // Search
+      $searchQuery = " ";
+      if($searchValue != ''){
+         $searchQuery = " AND (user_id LIKE :user_id OR 
+            CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) LIKE :fullname OR
+            gender LIKE :gender OR
+            DATE_FORMAT(birthday, '%m-%d-%Y') LIKE :newbirthday OR
+            civil_status LIKE :civil_status OR
+            email LIKE :email OR
+            phone LIKE :phone OR
+            user_type_id LIKE :user_type_id OR
+            user_status_id LIKE :user_status_id) ";
+         $searchArray = array( 
+            'user_id'=>"%$searchValue%",
+            'fullname'=>"%$searchValue%",
+            'gender'=>"%$searchValue%",
+            'newbirthday'=>"%$searchValue%",
+            'civil_status'=>"%$searchValue%",
+            'email'=>"%$searchValue%",
+            'phone'=>"%$searchValue%",
+            'user_type_id'=>"%$searchValue%"
+         );
+      }
+      // Total number of records without filtering
+      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM user WHERE user_status_id = 3 AND user_type_id != 3 AND user_id != '$user_id' ");
+      $stmt->execute();
+      $records = $stmt->fetch();
+      $totalRecords = $records['allcount'];
+      // Total number of records with filtering
+      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM user WHERE user_status_id = 3 AND user_type_id != 3 AND user_id != '$user_id' ".$searchQuery);
+      $stmt->execute($searchArray);
+      $records = $stmt->fetch();
+      $totalRecordwithFilter = $records['allcount'];
+      // Fetch records
+      $stmt = $conn->prepare("SELECT *, CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname, DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday FROM user WHERE user_status_id = 3 AND user_type_id != 3 AND user_id != '$user_id' ".$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
+      // Bind values
+      foreach ($searchArray as $key=>$search){
+         $stmt->bindValue(':'.$key, $search,PDO::PARAM_STR);
+      }
+      $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
+      $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
+      $stmt->execute();
+      $empRecords = $stmt->fetchAll();
+      $data = array();
+      foreach ($empRecords as $row){
+         $data[] = array(
+            "user_id"=>$row['user_id'],
+            "fullname"=>$row['fullname'],
+            "fname"=>$row['fname'],
+            "mname"=>$row['mname'],
+            "lname"=>$row['lname'],
+            "suffix"=>$row['suffix'],
+            "gender"=>$row['gender'],
+            "birthday"=>$row['birthday'],
+            "newbirthday"=>$row['newbirthday'],
+            "civil_status"=>$row['civil_status'],
+            "email"=>$row['email'],
+            "phone"=>$row['phone'],
+            "user_type_id"=>$row['user_type_id']
+         );
+      }
+      // Response
+      $response = array(
+         "draw" => intval($draw),
+         "iTotalRecords" => $totalRecords,
+         "iTotalDisplayRecords" => $totalRecordwithFilter,
+         "aaData" => $data
+      );
+      echo json_encode($response);
+   }
+   // -------------------------------- Restore Archive User -------------------------------- //
+   if (isset($_POST["restore_user"])){
+      // Validate and sanitize user inputs
+      $id = mysqli_real_escape_string($con, $_POST['restore_user_id']);
+      $user_status = '1';
+      $query = "UPDATE `user` SET `user_status_id` = '$user_status' WHERE `user_id` = '$id'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run){
+         $output = array('status' => "User restore successfully", 'alert' => "success");
+      } else{
+         $output = array('status' => "User was not restore", 'alert' => "error");
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Delete Archive User -------------------------------- //
+   if (isset($_POST["delete_user_archive"])){
+      // Validate and sanitize user inputs
+      $id = mysqli_real_escape_string($con, $_POST['delete_user_id']);
+      $query = "DELETE FROM `user` WHERE `user_id` = '$id'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run){
+         $output = array('status' => "User deleted successfully", 'alert' => "success");
+      } else{
+         $output = array('status' => "User was not deleted", 'alert' => "error");
+      }
+      echo json_encode($output);
+   }
    // -------------------------------- DataTable User -------------------------------- //
    if (isset($_POST["user_list"])){
       // Reading value
@@ -422,6 +530,151 @@
          } else {
             $output = array('status' => 'Incorrect current password', 'alert' => 'warning');
          }
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- DataTable Archive Client -------------------------------- //
+   if (isset($_POST["client_list_archive"])){
+      // Reading values
+      $draw = $_POST['draw'];
+      $row = $_POST['start'];
+      $rowperpage = $_POST['length'];
+      $columnIndex = $_POST['order'][0]['column'];
+      $columnName = $_POST['columns'][$columnIndex]['data'];
+      $columnSortOrder = $_POST['order'][0]['dir'];
+      $searchValue = $_POST['search']['value'];
+      $searchArray = array();
+      
+      // Search
+      $searchQuery = " ";
+      if ($searchValue != '') {
+         $searchQuery = " AND (user_id LIKE :user_id OR 
+            CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) LIKE :fullname OR
+            gender LIKE :gender OR
+            DATE_FORMAT(birthday, '%m-%d-%Y') LIKE :newbirthday OR
+            TIMESTAMPDIFF(YEAR, birthday, CURDATE()) = :age OR
+            barangay LIKE :barangay OR
+            DATE_FORMAT(date_issued, '%m-%d-%Y') LIKE :newdateissued OR
+            soc_pen LIKE :soc_pen OR
+            gsis LIKE :gsis OR
+            sss LIKE :sss OR
+            pvao LIKE :pvao OR
+            sup_with LIKE :sup_with OR
+            fourps LIKE :fourps OR
+            nhts LIKE :nhts OR
+            id_file LIKE :id_file OR
+            rrn LIKE :rrn) ";
+         $searchArray = array( 
+            'user_id' => "%$searchValue%",
+            'fullname' => "%$searchValue%",
+            'gender' => "%$searchValue%",
+            'newbirthday' => "%$searchValue%",
+            'age' => $searchValue, // Search for the exact age value
+            'barangay' => "%$searchValue%",
+            'newdateissued' => "%$searchValue%",
+            'soc_pen' => "%$searchValue%",
+            'gsis' => "%$searchValue%",
+            'sss' => "%$searchValue%",
+            'pvao' => "%$searchValue%",
+            'sup_with' => "%$searchValue%",
+            'fourps' => "%$searchValue%",
+            'nhts' => "%$searchValue%",
+            'id_file' => "%$searchValue%",
+            'rrn' => "%$searchValue%"
+         );
+     }     
+      
+      // Total number of records without filtering
+      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM user WHERE user_status_id = 3 AND user_type_id = 3");
+      $stmt->execute();
+      $records = $stmt->fetch();
+      $totalRecords = $records['allcount'];
+      
+      // Total number of records with filtering
+      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM user WHERE user_status_id = 3 AND user_type_id = 3" . $searchQuery);
+      $stmt->execute($searchArray);
+      $records = $stmt->fetch();
+      $totalRecordwithFilter = $records['allcount'];
+      
+      // Fetch records
+      $stmt = $conn->prepare("SELECT *, CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname, DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday, DATE_FORMAT(date_issued, '%m-%d-%Y') as newdateissued, TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age FROM user WHERE user_status_id = 3 AND user_type_id = 3" .$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
+      
+      // Bind values
+      foreach ($searchArray as $key => $search) {
+          $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
+      }
+      $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
+      $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
+      $stmt->execute();
+      $empRecords = $stmt->fetchAll();
+      
+      $data = array();
+      
+      foreach ($empRecords as $row) {
+          $data[] = array(
+              "user_id" => $row['user_id'],
+              "fullname" => $row['fullname'],
+              "fname" => $row['fname'],
+              "mname" => $row['mname'],
+              "lname" => $row['lname'],
+              "suffix" => $row['suffix'],
+              "gender" => $row['gender'],
+              "birthday" => $row['birthday'],
+              "newbirthday" => $row['newbirthday'],
+              "age" => $row['age'],
+              "barangay" => $row['barangay'],
+              "dateissued" => $row['date_issued'],
+              "newdateissued" => $row['newdateissued'],
+              "soc_pen" => $row['soc_pen'],
+              "gsis" => $row['gsis'],
+              "sss" => $row['sss'],
+              "pvao" => $row['pvao'],
+              "sup_with" => $row['sup_with'],
+              "fourps" => $row['fourps'],
+              "nhts" => $row['nhts'],
+              "id_file" => $row['id_file'],
+              "rrn" => $row['rrn'],
+              "deceased" => $row['is_deceased'],
+              "transfer" => $row['is_transfer'],
+              "profile" => $row['profile'],
+              "psa" => $row['psa']
+          );
+      }
+      
+      // Response
+      $response = array(
+          "draw" => intval($draw),
+          "iTotalRecords" => $totalRecords,
+          "iTotalDisplayRecords" => $totalRecordwithFilter,
+          "aaData" => $data
+      );
+      
+      echo json_encode($response);
+   }
+   // -------------------------------- Restore Archive Client -------------------------------- //
+   if (isset($_POST["restore_client"])){
+      // Validate and sanitize user inputs
+      $id = mysqli_real_escape_string($con, $_POST['restore_client_id']);
+      $user_status = '1';
+      $query = "UPDATE `user` SET `user_status_id` = '$user_status' WHERE `user_id` = '$id'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run){
+         $output = array('status' => "Senior restore successfully", 'alert' => "success");
+      } else{
+         $output = array('status' => "Senior was not restore", 'alert' => "error");
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Delete Archive Client -------------------------------- //
+   if (isset($_POST["delete_client_archive"])){
+      // Validate and sanitize user inputs
+      $id = mysqli_real_escape_string($con, $_POST['delete_client_id']);
+      $query = "DELETE FROM `user` WHERE `user_id` = '$id'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run){
+         $output = array('status' => "Senior deleted successfully", 'alert' => "success");
+      } else{
+         $output = array('status' => "Senior was not deleted", 'alert' => "error");
       }
       echo json_encode($output);
    }
@@ -1261,6 +1514,47 @@
       // Close MySQL connection
       mysqli_close($con);
    }
+   // -------------------------------- Export Archive Users CSV -------------------------------- //
+   if (isset($_POST["btn_export_users_archive"])) {
+      $sql = "SELECT * FROM `user` WHERE `user_type_id` != '3' AND `user_status_id` = '3'";
+      $result = mysqli_query($con, $sql);
+
+      // Set the filename and mime type
+      $filename = "export_archive_users_" . date('m-d-Y_H:i:s A') . ".csv";
+      header('Content-Type: text/csv');
+      header('Content-Disposition: attachment;filename="' . $filename . '"');
+      header('Cache-Control: max-age=0');
+
+      // Open file for writing
+      $file = fopen('php://output', 'w');
+
+      // Set the column headers
+      fputcsv($file, array('ID', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Civil Status', 'Email', 'Phone', 'Role', 'Status'));
+
+      // Add the data to the file
+      while ($data = mysqli_fetch_assoc($result)){
+          fputcsv($file, array(
+              $data['user_id'],
+              $data['fname'],
+              $data['mname'],
+              $data['lname'],
+              $data['suffix'],
+              $data['gender'],
+              $data['birthday'],
+              $data['civil_status'],
+              $data['email'],
+              $data['phone'],
+              ($data['user_type_id'] == 1) ? 'Admin' : (($data['user_type_id'] == 2) ? 'Staff' : 'Unknown'),
+              ($data['user_status_id'] == 1) ? 'Active' : (($data['user_status_id'] == 2) ? 'Inactive' : 'Archived')
+          ));
+      }        
+
+      // Close file
+      fclose($file);
+
+      // Close MySQL connection
+      mysqli_close($con);
+   }
    // -------------------------------- Export Senior CSV -------------------------------- //
    if (isset($_POST["btn_export_senior"])) {
       $sql = "SELECT * FROM `user` WHERE `user_type_id` = '3' AND `user_status_id` != '3'";
@@ -1268,6 +1562,57 @@
 
       // Set the filename and mime type
       $filename = "export_seniors_" . date('m-d-Y_H:i:s A') . ".csv";
+      header('Content-Type: text/csv');
+      header('Content-Disposition: attachment;filename="' . $filename . '"');
+      header('Cache-Control: max-age=0');
+
+      // Open file for writing
+      $file = fopen('php://output', 'w');
+
+      // Set the column headers
+      fputcsv($file, array('ID', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Date Issued', 'Soc-Pen', 'GSIS', 'SSS', 'PVAO', 'SUP-WITH', '4Ps', 'NHTS', 'ID-File', 'Barangay', 'RRN', 'Is Deceased', 'Deceased Date', 'Is Transfer', 'Transfer Date'));
+
+      // Add the data to the file
+      while ($data = mysqli_fetch_assoc($result)){
+          fputcsv($file, array(
+              $data['user_id'],
+              $data['fname'],
+              $data['mname'],
+              $data['lname'],
+              $data['suffix'],
+              $data['gender'],
+              $data['birthday'],
+              $data['date_issued'],
+              $data['soc_pen'],
+              $data['gsis'],
+              $data['sss'],
+              $data['pvao'],
+              $data['sup_with'],
+              $data['fourps'],
+              $data['nhts'],
+              $data['id_file'],
+              $data['barangay'],
+              $data['rrn'],
+              $data['is_deceased'],
+              $data['deceased_date'],
+              $data['is_transfer'],
+              $data['transfer_date']
+          ));
+      }        
+
+      // Close file
+      fclose($file);
+
+      // Close MySQL connection
+      mysqli_close($con);
+   }
+   // -------------------------------- Export Archive Senior CSV -------------------------------- //
+   if (isset($_POST["btn_export_senior_archive"])) {
+      $sql = "SELECT * FROM `user` WHERE `user_type_id` = '3' AND `user_status_id` = '3'";
+      $result = mysqli_query($con, $sql);
+
+      // Set the filename and mime type
+      $filename = "export_archive_seniors_" . date('m-d-Y_H:i:s A') . ".csv";
       header('Content-Type: text/csv');
       header('Content-Disposition: attachment;filename="' . $filename . '"');
       header('Cache-Control: max-age=0');

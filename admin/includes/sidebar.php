@@ -43,6 +43,20 @@
                             <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/client.php') !== false)  { echo 'active'; } ?>" href="client">Senior Citizen</a>
                         </nav>
                     </div>
+
+                    <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/archive_user.php') !== false || strpos($_SERVER['PHP_SELF'], 'home/archive_client.php') !== false)  {  } else{ echo'collapsed'; } ?>" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        <div class="nav-link-icon"><i data-feather="users"></i></div>
+                        Archive Accounts
+                        <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse <?php if (strpos($_SERVER['PHP_SELF'], 'home/archive_user.php') !== false  || strpos($_SERVER['PHP_SELF'], 'home/archive_client.php') !== false)  { echo'show'; }?>" id="collapsePages" data-bs-parent="#accordionSidenav">
+                        <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPagesMenu">
+                            <!-- Nested Sidenav Accordion (Accounts -> Users)-->
+                            <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/archive_user.php') !== false)  { echo 'active'; } ?>" href="archive_user">Users</a>
+                            <!-- Nested Sidenav Accordion (Accounts -> Client)-->
+                            <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/archive_client.php') !== false)  { echo 'active'; } ?>" href="archive_client">Senior Citizen</a>
+                        </nav>
+                    </div>
                     <!-- Sidenav Menu Heading (System)-->
                     <div class="sidenav-menu-heading">System</div>
                     <!-- Sidenav Accordion (Dashboard)-->
