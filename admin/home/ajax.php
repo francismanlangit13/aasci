@@ -563,7 +563,11 @@
             fourps LIKE :fourps OR
             nhts LIKE :nhts OR
             id_file LIKE :id_file OR
-            rrn LIKE :rrn) ";
+            rrn LIKE :rrn OR
+            is_deceased LIKE :deceased OR
+            DATE_FORMAT(deceased_date, '%m-%d-%Y') LIKE :new_deceased_date OR
+            is_transfer LIKE :transfer OR
+            DATE_FORMAT(transfer_date, '%m-%d-%Y') LIKE :new_transfer_date) ";
          $searchArray = array( 
             'user_id' => "%$searchValue%",
             'fullname' => "%$searchValue%",
@@ -580,7 +584,11 @@
             'fourps' => "%$searchValue%",
             'nhts' => "%$searchValue%",
             'id_file' => "%$searchValue%",
-            'rrn' => "%$searchValue%"
+            'rrn' => "%$searchValue%",
+            'deceased' => "%$searchValue%",
+            'new_deceased_date' => "%$searchValue%",
+            'transfer' => "%$searchValue%",
+            'new_transfer_date' => "%$searchValue%"
          );
      }     
       
@@ -597,7 +605,7 @@
       $totalRecordwithFilter = $records['allcount'];
       
       // Fetch records
-      $stmt = $conn->prepare("SELECT *, CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname, DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday, DATE_FORMAT(date_issued, '%m-%d-%Y') as newdateissued, TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age FROM user WHERE user_status_id = 3 AND user_type_id = 3" .$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
+      $stmt = $conn->prepare("SELECT *, CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname, DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday, DATE_FORMAT(date_issued, '%m-%d-%Y') as newdateissued, TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age, DATE_FORMAT(deceased_date, '%m-%d-%Y') as new_deceased_date, DATE_FORMAT(transfer_date, '%m-%d-%Y') as new_transfer_date FROM user WHERE user_status_id = 3 AND user_type_id = 3" .$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
       
       // Bind values
       foreach ($searchArray as $key => $search) {
@@ -635,7 +643,9 @@
               "id_file" => $row['id_file'],
               "rrn" => $row['rrn'],
               "deceased" => $row['is_deceased'],
+              "new_deceased_date" => $row['new_deceased_date'],
               "transfer" => $row['is_transfer'],
+              "new_transfer_date" => $row['new_transfer_date'],
               "profile" => $row['profile'],
               "psa" => $row['psa']
           );
@@ -709,6 +719,10 @@
             nhts LIKE :nhts OR
             id_file LIKE :id_file OR
             rrn LIKE :rrn OR
+            is_deceased LIKE :deceased OR
+            DATE_FORMAT(deceased_date, '%m-%d-%Y') LIKE :new_deceased_date OR
+            is_transfer LIKE :transfer OR
+            DATE_FORMAT(transfer_date, '%m-%d-%Y') LIKE :new_transfer_date OR
             user_status_id LIKE :user_status_id) ";
          $searchArray = array( 
             'user_id' => "%$searchValue%",
@@ -727,6 +741,10 @@
             'nhts' => "%$searchValue%",
             'id_file' => "%$searchValue%",
             'rrn' => "%$searchValue%",
+            'deceased' => "%$searchValue%",
+            'new_deceased_date' => "%$searchValue%",
+            'transfer' => "%$searchValue%",
+            'new_transfer_date' => "%$searchValue%",
             'user_status_id' => "%$searchValue%"
          );
      }     
@@ -744,7 +762,7 @@
       $totalRecordwithFilter = $records['allcount'];
       
       // Fetch records
-      $stmt = $conn->prepare("SELECT *, CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname, DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday, DATE_FORMAT(date_issued, '%m-%d-%Y') as newdateissued, TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age FROM user WHERE user_status_id != 3 AND user_type_id = 3" .$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
+      $stmt = $conn->prepare("SELECT *, CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname, DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday, DATE_FORMAT(date_issued, '%m-%d-%Y') as newdateissued, TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age, DATE_FORMAT(deceased_date, '%m-%d-%Y') as new_deceased_date, DATE_FORMAT(transfer_date, '%m-%d-%Y') as new_transfer_date FROM user WHERE user_status_id != 3 AND user_type_id = 3" .$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
       
       // Bind values
       foreach ($searchArray as $key => $search) {
@@ -783,7 +801,9 @@
               "rrn" => $row['rrn'],
               "user_status_id" => $row['user_status_id'],
               "deceased" => $row['is_deceased'],
+              "new_deceased_date" => $row['new_deceased_date'],
               "transfer" => $row['is_transfer'],
+              "new_transfer_date" => $row['new_transfer_date'],
               "profile" => $row['profile'],
               "psa" => $row['psa']
           );
@@ -974,7 +994,17 @@
       $id_file = mysqli_real_escape_string($con, $_POST['edit_id_file']);
       $user_status = mysqli_real_escape_string($con, $_POST['edit_status']);
       $is_deceased = mysqli_real_escape_string($con, $_POST['edit_deceased']);
+      if($is_deceased == 'Yes'){
+         $is_deceased_date = date;
+      } else {
+         $is_deceased_date = null;
+      }
       $is_transfer = mysqli_real_escape_string($con, $_POST['edit_transfer']);
+      if($is_transfer == 'Yes'){
+         $is_transfer_date = date;
+      } else {
+         $is_transfer_date = null;
+      }
       if (isset($_FILES['image5']) && is_uploaded_file($_FILES['image5']['tmp_name']) && $_FILES['image5']['error'] === UPLOAD_ERR_OK) {
          $fileImage5 = $_FILES['image5'];
          $OLDfileImage5 = $_POST['oldimage5'];
@@ -1057,7 +1087,7 @@
             $output = array('status' => 'Invalid file type', 'alert' => 'error');
          }
       }
-      $query = "UPDATE `user` SET `fname` = '$fname', `mname` = '$mname', `lname` = '$lname', `suffix` = '$suffix', `gender` = '$gender', `birthday` = '$birthday', `date_issued` = '$date_issued', `soc_pen` = '$soc_pen', `gsis` = '$gsis', `sss` = '$sss', `pvao` = '$pvao', `sup_with` = '$sup_with', `fourps` = '$fourps', `nhts` = '$nhts', `id_file` = '$id_file', `barangay` = '$barangay', `rrn` = '$rrn', `user_status_id` = '$user_status', `is_deceased` = '$is_deceased', `is_transfer` = '$is_transfer' WHERE `user_id` = '$id'";
+      $query = "UPDATE `user` SET `fname` = '$fname', `mname` = '$mname', `lname` = '$lname', `suffix` = '$suffix', `gender` = '$gender', `birthday` = '$birthday', `date_issued` = '$date_issued', `soc_pen` = '$soc_pen', `gsis` = '$gsis', `sss` = '$sss', `pvao` = '$pvao', `sup_with` = '$sup_with', `fourps` = '$fourps', `nhts` = '$nhts', `id_file` = '$id_file', `barangay` = '$barangay', `rrn` = '$rrn', `user_status_id` = '$user_status', `is_deceased` = '$is_deceased', `deceased_date` = '$is_deceased_date', `is_transfer` = '$is_transfer', `transfer_date` = '$is_transfer_date' WHERE `user_id` = '$id'";
       $query_run = mysqli_query($con, $query);
       if ($query_run){
          $output = array('status' => "Senior citizen updated successfully", 'alert' => "success");

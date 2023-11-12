@@ -43,6 +43,10 @@
                             <th>NHTS</th>
                             <th>ID File</th>
                             <th>RRN</th>
+                            <th>Deceased</th>
+                            <th>Deceased Date</th>
+                            <th>Transfer</th>
+                            <th>Transfer Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -80,6 +84,10 @@
                                     { data: 'nhts', className: 'text-center' },
                                     { data: 'id_file', className: 'text-center' },
                                     { data: 'rrn', className: 'text-center' },
+                                    { data: 'deceased', className: 'text-center' },
+                                    { data: 'new_deceased_date', className: 'text-center' },
+                                    { data: 'transfer', className: 'text-center' },
+                                    { data: 'new_transfer_date', className: 'text-center' },
                                     {
                                         data: null,
                                         render: function(data, type, row, meta) {
