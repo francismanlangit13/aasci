@@ -54,10 +54,10 @@
             </div>
             <!-- Sidenav Footer-->
             <div class="sidenav-footer">
-                <?php $userID = $_SESSION['auth_user'] ['user_id']; ?>
+                <?php $userID = $_SESSION['auth_role']; ?>
                 <div class="sidenav-footer-content">
                     <div class="sidenav-footer-subtitle">Logged in as:</div>
-                    <div class="sidenav-footer-title"><?php if($userID == 1) { echo 'Administrator'; } elseif ($userID == 2){  echo 'Staff'; } else {  echo 'Client'; } ?></div>
+                    <div class="sidenav-footer-title"><?php if($userID == 1) { echo 'Administrator'; } else{ echo 'Staff'; } ?></div>
                 </div>
             </div>
         </nav>
