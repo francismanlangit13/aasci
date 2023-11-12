@@ -17,9 +17,16 @@
             <div class="card-header text-white bg-teal">Senior Citizen Table
                 <button class="btn btn-primary btn-icon-split btn-sm float-end" data-bs-toggle="modal" data-bs-target="#btn_add_client"> 
                     <span class="icon text-white">
-                        <i class="fas fa-user-plus"></i> Add Senior Citizen Account
+                        <i class="fas fa-user-plus"></i> Add Senior Citizen
                     </span>
                 </button>
+                <form action="ajax.php" method="post" name="export_excel" enctype="multipart/form-data" class="form-horizontal">
+                    <button class="btn btn-primary btn-icon-split btn-sm float-end" style="margin-right: 0.5rem; margin-top: -1.5rem" name="btn_export_senior"> 
+                        <span class="icon text-white">
+                            <i class="fas fa-file-export"></i> Export
+                        </span>
+                    </button>
+                </form>
             </div>
             <div class="card-body">
                 <table id="dataTable" class="display cell-border stripe table table-bordered dataTable no-footer">

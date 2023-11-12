@@ -1206,18 +1206,160 @@
    }
   // -------------------------------- Get Logo Picture -------------------------------- //
   if (isset($_POST["get_syslogo"])) {
-   // Prepare and execute the SQL query
-   $query = $con->prepare("SELECT * FROM system_setting WHERE meta = ?");
-   $meta = 'logo'; // Set the value of the parameter
-   $query->bind_param("s", $meta); // Use "s" for a string parameter
-   $query->execute();
-   $result = $query->get_result();
-   if ($result->num_rows > 0) {
-       $row = $result->fetch_assoc();
-       $output = array('logo' => $row['meta_value']);
+      // Prepare and execute the SQL query
+      $query = $con->prepare("SELECT * FROM system_setting WHERE meta = ?");
+      $meta = 'logo'; // Set the value of the parameter
+      $query->bind_param("s", $meta); // Use "s" for a string parameter
+      $query->execute();
+      $result = $query->get_result();
+      if ($result->num_rows > 0) {
+         $row = $result->fetch_assoc();
+         $output = array('logo' => $row['meta_value']);
+      }
+      // Return user data as JSON
+      header('Content-Type: application/json');
+      echo json_encode($output);
    }
-   // Return user data as JSON
-   header('Content-Type: application/json');
-   echo json_encode($output);
-}
+   // -------------------------------- Export Users CSV -------------------------------- //
+   if (isset($_POST["btn_export_users"])) {
+      $sql = "SELECT * FROM `user` WHERE `user_type_id` != '3'";
+      $result = mysqli_query($con, $sql);
+
+      // Set the filename and mime type
+      $filename = "export_users_" . date('m-d-Y_H:i:s A') . ".csv";
+      header('Content-Type: text/csv');
+      header('Content-Disposition: attachment;filename="' . $filename . '"');
+      header('Cache-Control: max-age=0');
+
+      // Open file for writing
+      $file = fopen('php://output', 'w');
+
+      // Set the column headers
+      fputcsv($file, array('ID', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Civil Status', 'Email', 'Phone', 'Role', 'Status'));
+
+      // Add the data to the file
+      while ($data = mysqli_fetch_assoc($result)){
+          fputcsv($file, array(
+              $data['user_id'],
+              $data['fname'],
+              $data['mname'],
+              $data['lname'],
+              $data['suffix'],
+              $data['gender'],
+              $data['birthday'],
+              $data['civil_status'],
+              $data['email'],
+              $data['phone'],
+              ($data['user_type_id'] == 1) ? 'Admin' : (($data['user_type_id'] == 2) ? 'Staff' : 'Unknown'),
+              ($data['user_status_id'] == 1) ? 'Active' : (($data['user_status_id'] == 2) ? 'Inactive' : 'Archived')
+          ));
+      }        
+
+      // Close file
+      fclose($file);
+
+      // Close MySQL connection
+      mysqli_close($con);
+   }
+   // -------------------------------- Export Senior CSV -------------------------------- //
+   if (isset($_POST["btn_export_senior"])) {
+      $sql = "SELECT * FROM `user` WHERE `user_type_id` = '3'";
+      $result = mysqli_query($con, $sql);
+
+      // Set the filename and mime type
+      $filename = "export_seniors_" . date('m-d-Y_H:i:s A') . ".csv";
+      header('Content-Type: text/csv');
+      header('Content-Disposition: attachment;filename="' . $filename . '"');
+      header('Cache-Control: max-age=0');
+
+      // Open file for writing
+      $file = fopen('php://output', 'w');
+
+      // Set the column headers
+      fputcsv($file, array('ID', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Date Issued', 'Soc-Pen', 'GSIS', 'SSS', 'PVAO', 'SUP-WITH', '4Ps', 'NHTS', 'ID-File', 'Barangay', 'RRN', 'Is Deceased', 'Deceased Date', 'Is Transfer', 'Transfer Date'));
+
+      // Add the data to the file
+      while ($data = mysqli_fetch_assoc($result)){
+          fputcsv($file, array(
+              $data['user_id'],
+              $data['fname'],
+              $data['mname'],
+              $data['lname'],
+              $data['suffix'],
+              $data['gender'],
+              $data['birthday'],
+              $data['date_issued'],
+              $data['soc_pen'],
+              $data['gsis'],
+              $data['sss'],
+              $data['pvao'],
+              $data['sup_with'],
+              $data['fourps'],
+              $data['nhts'],
+              $data['id_file'],
+              $data['barangay'],
+              $data['rrn'],
+              $data['is_deceased'],
+              $data['deceased_date'],
+              $data['is_transfer'],
+              $data['transfer_date']
+          ));
+      }        
+
+      // Close file
+      fclose($file);
+
+      // Close MySQL connection
+      mysqli_close($con);
+   }
+   // -------------------------------- Export Senior CSV -------------------------------- //
+   if (isset($_POST["btn_export_senior123"])) {
+      $dateStart = $_POST['dateStart'];
+      $dateEnd = $_POST['dateEnd'];
+      if (isset($_POST['dateStart']) && isset($_POST['dateEnd'])){
+          // Fetch data from MySQL table
+          $sql = "SELECT * FROM `user` WHERE `user_type_id` != '3' AND (STR_TO_DATE(Order_Place_Date, '%m-%d-%Y %H:%i:%s') BETWEEN $dateStart AND $dateEnd)";
+          $result = mysqli_query($con, $sql);
+      } else{
+          // Fetch data from MySQL table
+          $sql = "SELECT * FROM `user` WHERE `user_type_id` != '3'";
+          $result = mysqli_query($con, $sql);
+      }
+
+      // Set the filename and mime type
+      $filename = "export_users_" . date('m-d-Y_H:i:s A') . ".csv";
+      header('Content-Type: text/csv');
+      header('Content-Disposition: attachment;filename="' . $filename . '"');
+      header('Cache-Control: max-age=0');
+
+      // Open file for writing
+      $file = fopen('php://output', 'w');
+
+      // Set the column headers
+      fputcsv($file, array('ID', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Civil Status', 'Email', 'Phone', 'Role', 'Status'));
+
+      // Add the data to the file
+      while ($data = mysqli_fetch_assoc($result)){
+          fputcsv($file, array(
+              $data['user_id'],
+              $data['fname'],
+              $data['mname'],
+              $data['lname'],
+              $data['suffix'],
+              $data['gender'],
+              $data['birthday'],
+              $data['civil_status'],
+              $data['email'],
+              $data['phone'],
+              ($data['user_type_id'] == 1) ? 'Admin' : (($data['user_type_id'] == 2) ? 'Staff' : 'Unknown'),
+              ($data['user_status_id'] == 1) ? 'Active' : (($data['user_status_id'] == 2) ? 'Inactive' : 'Archived')
+          ));
+      }        
+
+      // Close file
+      fclose($file);
+
+      // Close MySQL connection
+      mysqli_close($con);
+   }
 ?>

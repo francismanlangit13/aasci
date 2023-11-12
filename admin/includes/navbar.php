@@ -17,7 +17,7 @@
     <!-- Navbar Items-->
 
     <!-- Current datetime-->
-    <div class="input-group input-group-joined border-0 shadow" style="width: 0.5rem; margin-right:10px;">
+    <div class="input-group input-group-joined border-0 shadow no-caret d-none d-md-block me-5" style="width: 0.5rem; margin-right:10px;">
         <label class="input-group-text"><i data-feather="calendar"></i>
         <div class="small d-flex" style="margin-left: 5px; margin-top: 3px; font-size:16px">
             <span class="fw-500 text-primary mr-1" style="margin-right:3px"><?php echo date("l") ?></span>
@@ -30,16 +30,16 @@
         <!-- * * Note: * * Visible only below the lg breakpoint-->
         
         <li class="nav-item dropdown no-caret me-3 d-lg-none">
-            <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="searchDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="search"></i></a>
+            <!-- <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="searchDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="search"></i></a> -->
             <!-- Dropdown - Search-->
-            <div class="dropdown-menu dropdown-menu-end p-3 shadow animated--fade-in-up" aria-labelledby="searchDropdown">
+            <!-- <div class="dropdown-menu dropdown-menu-end p-3 shadow animated--fade-in-up" aria-labelledby="searchDropdown">
                 <form class="form-inline me-auto w-100">
                     <div class="input-group input-group-joined input-group-solid">
                         <input class="form-control pe-0" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
                         <div class="input-group-text"><i data-feather="search"></i></div>
                     </div>
                 </form>
-            </div>
+            </div> -->
         </li>
         <!-- Alerts Dropdown-->
         <li class="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications">

@@ -17,9 +17,16 @@
             <div class="card-header text-white bg-teal">Users Table
                 <button class="btn btn-primary btn-icon-split btn-sm float-end" data-bs-toggle="modal" data-bs-target="#btn_add_user"> 
                     <span class="icon text-white">
-                        <i class="fas fa-user-plus"></i> Add User Account
+                        <i class="fas fa-user-plus"></i> Add User
                     </span>
                 </button>
+                <form action="ajax.php" method="post" name="export_excel" enctype="multipart/form-data" class="form-horizontal">
+                    <button class="btn btn-primary btn-icon-split btn-sm float-end" style="margin-right: 0.5rem; margin-top: -1.5rem" name="btn_export_users"> 
+                        <span class="icon text-white">
+                            <i class="fas fa-file-export"></i> Export
+                        </span>
+                    </button>
+                </form>
             </div>
             <div class="card-body">
                 <table id="dataTable" class="display cell-border stripe table table-bordered dataTable no-footer">
