@@ -5,6 +5,10 @@
     <!-- Website Title -->
     <title><?= $system['shortname'] ?> | System Settings</title>
     <script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
+    <!-- include summernote css/js -->
+    <script src="<?php echo base_url ?>assets/js/jquery-3.5.1.min.js"></script>
+    <link href="<?php echo base_url ?>assets/vendor/summernote/summernote-lite.css" rel="stylesheet">
+    <script src="<?php echo base_url ?>assets/vendor/summernote/summernote-lite.js"></script>
     <style>
         #IconuploadForm label {
             margin: 2px;
@@ -273,6 +277,71 @@
                             <div id="system_number-error"></div>
                         </div>
                         <button class="btn btn-primary float-end mt-3" type="button" data-bs-toggle="modal" data-bs-target="#Upload_System_Logo">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Advanced Tab -->
+        <div id="advanced-tab" class="row myaccount-tab d-none">
+            <div class="row">
+                <div class="col-xl-6">
+                    <!-- System information card-->
+                    <div class="card mb-4">
+                        <div class="card-header">System Infomation (Privacy Policy)</div>
+                        <div class="card-body">
+                            <form id="system-information-privacy">
+                                <!-- Form Row-->
+                                <div class="row gx-3 mb-3">
+                                    <!-- Form Group (System Privacy)-->
+                                    <div class="col-md-12 mb-3">
+                                        <textarea class="form-control" id="system_privacy" name="system_privacy" type="text" rows="20" placeholder="Enter system privacy policy" required><?= $system['privacy'] ?></textarea>
+                                        <div id="system_privacy-error"></div>
+                                    </div>
+                                </div>
+                                <!-- Save changes button-->
+                                <button class="btn btn-primary float-end" type="submit" id="btn_update_system_information_privacy">Save changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <!-- System information card-->
+                    <div class="card mb-4">
+                        <div class="card-header">System Infomation (Terms & Condition)</div>
+                        <div class="card-body">
+                            <form id="system-information-terms">
+                                <!-- Form Row-->
+                                <div class="row gx-3 mb-3">
+                                    <!-- Form Group (System Terms)-->
+                                    <div class="col-md-12 mb-3">
+                                        <textarea class="form-control" id="system_terms" name="system_terms" type="text" rows="20" placeholder="Enter system terms and condition" required><?= $system['terms'] ?></textarea>
+                                        <div id="system_terms-error"></div>
+                                    </div>
+                                </div>
+                                <!-- Save changes button-->
+                                <button class="btn btn-primary float-end" type="submit" id="btn_update_system_information_terms">Save changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-12">
+                    <!-- System information card-->
+                    <div class="card mb-4">
+                        <div class="card-header">System Infomation (Republic ACT)</div>
+                        <div class="card-body">
+                            <form id="system-information-act">
+                                <!-- Form Row-->
+                                <div class="row gx-3 mb-3">
+                                    <!-- Form Group (System Terms)-->
+                                    <div class="col-md-12 mb-3">
+                                        <textarea class="form-control" id="summernote" name="system_act" type="text" rows="20" placeholder="Enter system republic act" required><?= $system['sysact'] ?></textarea>
+                                        <div id="system_act-error"></div>
+                                    </div>
+                                </div>
+                                <!-- Save changes button-->
+                                <button class="btn btn-primary float-end" type="submit" id="btn_update_system_information_act">Save changes</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -767,6 +836,226 @@
     }
     // Call the function to update user data initially
     updateUserData();
+</script>
+
+<!-- Ajax for Change System Info Privacy-->
+<script>
+    $(document).ready(function () {
+        // Submit form via AJAX
+        $('#system-information-privacy').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            var formData = new FormData(this);
+            formData.append('update_system_info_privacy', '1');
+            $.ajax({
+                type: 'POST',
+                url: 'ajax.php',
+                data: formData,
+                processData: false,
+                cache: false,
+                contentType: false,
+                beforeSend: function () {
+                    $('#btn_update_system_information_privacy').attr('disabled', 'disabled');
+                },
+                success: function (data) {
+                    data = JSON.parse(data); // Parse the JSON response
+
+                    if (data.inform == 'Yes') {
+                        swal({
+                            title: "Notice",
+                            text: data.status,
+                            icon: data.alert,
+                            button: false,
+                            timer: 2000
+                        }).then(function () {
+                            // Display the confirmation SweetAlert
+                            swal({
+                                title: "Notice",
+                                text: 'System Information Modified. Do you want to refresh the page to take effect?',
+                                icon: 'info',
+                                buttons: {
+                                    yes: "Yes",
+                                    no: "No"
+                                },
+                            }).then(function (value) {
+                                if (value === "yes") {
+                                    window.location.reload();
+                                } else {
+                                    $('#btn_update_system_information_privacy').removeAttr('disabled');
+                                }
+                            });
+                        });
+                    } else {
+                        // If 'inform' is not 'Yes', display the initial success SweetAlert without confirmation
+                        swal({
+                            title: "Notice",
+                            text: data.status,
+                            icon: data.alert,
+                            button: true
+                        }).then(function () {
+                            $('#btn_update_system_information_privacy').removeAttr('disabled');
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Handle any errors that occur during the AJAX request
+                    console.error('Error:', error);
+                }
+            });
+        });
+    });
+</script>
+
+<!-- Ajax for Change System Info Terms-->
+<script>
+    $(document).ready(function () {
+        // Submit form via AJAX
+        $('#system-information-terms').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            var formData = new FormData(this);
+            formData.append('update_system_info_terms', '1');
+            $.ajax({
+                type: 'POST',
+                url: 'ajax.php',
+                data: formData,
+                processData: false,
+                cache: false,
+                contentType: false,
+                beforeSend: function () {
+                    $('#btn_update_system_information_terms').attr('disabled', 'disabled');
+                },
+                success: function (data) {
+                    data = JSON.parse(data); // Parse the JSON response
+
+                    if (data.inform == 'Yes') {
+                        swal({
+                            title: "Notice",
+                            text: data.status,
+                            icon: data.alert,
+                            button: false,
+                            timer: 2000
+                        }).then(function () {
+                            // Display the confirmation SweetAlert
+                            swal({
+                                title: "Notice",
+                                text: 'System Information Modified. Do you want to refresh the page to take effect?',
+                                icon: 'info',
+                                buttons: {
+                                    yes: "Yes",
+                                    no: "No"
+                                },
+                            }).then(function (value) {
+                                if (value === "yes") {
+                                    window.location.reload();
+                                } else {
+                                    $('#btn_update_system_information_terms').removeAttr('disabled');
+                                }
+                            });
+                        });
+                    } else {
+                        // If 'inform' is not 'Yes', display the initial success SweetAlert without confirmation
+                        swal({
+                            title: "Notice",
+                            text: data.status,
+                            icon: data.alert,
+                            button: true
+                        }).then(function () {
+                            $('#btn_update_system_information_terms').removeAttr('disabled');
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Handle any errors that occur during the AJAX request
+                    console.error('Error:', error);
+                }
+            });
+        });
+    });
+</script>
+
+<!-- Ajax for Change System Info ACT-->
+<script>
+    $(document).ready(function () {
+        // Submit form via AJAX
+        $('#system-information-act').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            var formData = new FormData(this);
+            formData.append('update_system_info_act', '1');
+            $.ajax({
+                type: 'POST',
+                url: 'ajax.php',
+                data: formData,
+                processData: false,
+                cache: false,
+                contentType: false,
+                beforeSend: function () {
+                    $('#btn_update_system_information_act').attr('disabled', 'disabled');
+                },
+                success: function (data) {
+                    data = JSON.parse(data); // Parse the JSON response
+
+                    if (data.inform == 'Yes') {
+                        swal({
+                            title: "Notice",
+                            text: data.status,
+                            icon: data.alert,
+                            button: false,
+                            timer: 2000
+                        }).then(function () {
+                            // Display the confirmation SweetAlert
+                            swal({
+                                title: "Notice",
+                                text: 'System Information Modified. Do you want to refresh the page to take effect?',
+                                icon: 'info',
+                                buttons: {
+                                    yes: "Yes",
+                                    no: "No"
+                                },
+                            }).then(function (value) {
+                                if (value === "yes") {
+                                    window.location.reload();
+                                } else {
+                                    $('#btn_update_system_information_act').removeAttr('disabled');
+                                }
+                            });
+                        });
+                    } else {
+                        // If 'inform' is not 'Yes', display the initial success SweetAlert without confirmation
+                        swal({
+                            title: "Notice",
+                            text: data.status,
+                            icon: data.alert,
+                            button: true
+                        }).then(function () {
+                            $('#btn_update_system_information_act').removeAttr('disabled');
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Handle any errors that occur during the AJAX request
+                    console.error('Error:', error);
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            placeholder: 'Hello stand alone ui',
+            tabsize: 2,
+            height: 500,
+            toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+    });
 </script>
 
 <?php include ('../includes/footer.php'); ?>

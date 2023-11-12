@@ -855,6 +855,85 @@
       }
       echo json_encode($output);
    }
+   // -------------------------------- Update System Info Privacy -------------------------------- //
+   if (isset($_POST["update_system_info_privacy"])) {
+      // Assuming you have an associative array with keys and values
+      $updates = [
+         'privacy' => $_POST['system_privacy']
+      ];
+      $success = true;
+      // Assuming $this->conn is a valid MySQLi connection
+      foreach ($updates as $key => $value) {
+         $query = "UPDATE `system_setting` SET `meta_value`='$value' WHERE `meta`='$key'";
+         $query_run = mysqli_query($con, $query);
+         if (!$query_run) {
+            // If the update for any field fails, set $success to false
+            $success = false;
+            break; // Exit the loop
+         }
+      }
+      if ($success) {
+         $output = array('status' => 'Privacy information updated successfully', 'alert' => 'success', 'inform' => 'Yes');
+      } else {
+         $output = array('status' => 'Privacy information were not updated', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Update System Info Terms -------------------------------- //
+   if (isset($_POST["update_system_info_terms"])) {
+      // Assuming you have an associative array with keys and values
+      $updates = [
+         'terms' => $_POST['system_terms']
+      ];
+      $success = true;
+      // Assuming $this->conn is a valid MySQLi connection
+      foreach ($updates as $key => $value) {
+         $query = "UPDATE `system_setting` SET `meta_value`='$value' WHERE `meta`='$key'";
+         $query_run = mysqli_query($con, $query);
+         if (!$query_run) {
+            // If the update for any field fails, set $success to false
+            $success = false;
+            break; // Exit the loop
+         }
+      }
+      if ($success) {
+         $output = array('status' => 'Terms information updated successfully', 'alert' => 'success', 'inform' => 'Yes');
+      } else {
+         $output = array('status' => 'Terms information were not updated', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Update System Info ACT -------------------------------- //
+   if (isset($_POST["update_system_info_act"])) {
+      // Assuming you have an associative array with keys and values
+      $updates = ['sysact' => $_POST['system_act']];
+      $success = true;
+      // Assuming $con is your MySQLi connection
+      foreach ($updates as $key => $value) {
+         $query = "UPDATE `system_setting` SET `meta_value`=? WHERE `meta`=?";
+         $stmt = mysqli_prepare($con, $query);
+         if ($stmt) {
+            mysqli_stmt_bind_param($stmt, 'ss', $value, $key);
+            $query_run = mysqli_stmt_execute($stmt);
+            if (!$query_run) {
+               // If the update for any field fails, set $success to false
+               $success = false;
+               break; // Exit the loop
+            }
+            mysqli_stmt_close($stmt);
+         } else {
+            // Handle the case where the prepared statement fails
+            $success = false;
+            break; // Exit the loop
+         }
+      }
+      if ($success) {
+         $output = array('status' => 'Repubic Act information updated successfully', 'alert' => 'success', 'inform' => 'Yes');
+      } else {
+         $output = array('status' => 'Repubic Act information were not updated', 'alert' => 'error');
+      }
+      echo json_encode($output);
+  }  
    // -------------------------------- Facebook switch -------------------------------- //
    if (isset($_POST['switch_facebook'])) {
       $switchState = intval($_POST['switch_facebook']); // Convert to integer (1 or 0)
