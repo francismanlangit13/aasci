@@ -1,7 +1,7 @@
 <?php include ('../includes/header.php'); ?>
 <head>
     <!-- Website Title -->
-    <title><?= $system['shortname'] ?> | Senior Citizen</title>
+    <title><?= $system['shortname'] ?> | Archive Senior Citizen</title>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 </head>
 <main>

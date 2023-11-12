@@ -1,4 +1,4 @@
-                <footer class="footer-admin mt-auto footer-light">
+                <footer class="footer-admin mt-auto footer-light noprint">
                     <div class="container-xl px-4">
                         <div class="row">
                             <div class="col-md-6 small">Copyright <?php echo date('Y'); ?> &copy; <?= $system['name'] ?></div>

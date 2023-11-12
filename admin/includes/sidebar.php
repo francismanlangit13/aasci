@@ -30,12 +30,12 @@
                     <!-- Sidenav Heading (Users)-->
                     <div class="sidenav-menu-heading">Users</div>
                     <!-- Sidenav Accordion (Pages)-->
-                    <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/user.php') !== false || strpos($_SERVER['PHP_SELF'], 'home/client.php') !== false)  {  } else{ echo'collapsed'; } ?>" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                    <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/user.php') !== false || strpos($_SERVER['PHP_SELF'], 'home/client.php') !== false)  {  } else{ echo'collapsed'; } ?>" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseAccounts" aria-expanded="false" aria-controls="collapseAccounts">
                         <div class="nav-link-icon"><i data-feather="users"></i></div>
                         Accounts
                         <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                     </a>
-                    <div class="collapse <?php if (strpos($_SERVER['PHP_SELF'], 'home/user.php') !== false  || strpos($_SERVER['PHP_SELF'], 'home/client.php') !== false)  { echo'show'; }?>" id="collapsePages" data-bs-parent="#accordionSidenav">
+                    <div class="collapse <?php if (strpos($_SERVER['PHP_SELF'], 'home/user.php') !== false  || strpos($_SERVER['PHP_SELF'], 'home/client.php') !== false)  { echo'show'; }?>" id="collapseAccounts" data-bs-parent="#accordionSidenav">
                         <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPagesMenu">
                             <!-- Nested Sidenav Accordion (Accounts -> Users)-->
                             <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/user.php') !== false)  { echo 'active'; } ?>" href="user">Users</a>
@@ -44,12 +44,12 @@
                         </nav>
                     </div>
 
-                    <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/archive_user.php') !== false || strpos($_SERVER['PHP_SELF'], 'home/archive_client.php') !== false)  {  } else{ echo'collapsed'; } ?>" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                    <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/archive_user.php') !== false || strpos($_SERVER['PHP_SELF'], 'home/archive_client.php') !== false)  {  } else{ echo'collapsed'; } ?>" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseArchived" aria-expanded="false" aria-controls="collapseArchived">
                         <div class="nav-link-icon"><i data-feather="users"></i></div>
                         Archive Accounts
                         <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                     </a>
-                    <div class="collapse <?php if (strpos($_SERVER['PHP_SELF'], 'home/archive_user.php') !== false  || strpos($_SERVER['PHP_SELF'], 'home/archive_client.php') !== false)  { echo'show'; }?>" id="collapsePages" data-bs-parent="#accordionSidenav">
+                    <div class="collapse <?php if (strpos($_SERVER['PHP_SELF'], 'home/archive_user.php') !== false  || strpos($_SERVER['PHP_SELF'], 'home/archive_client.php') !== false)  { echo'show'; }?>" id="collapseArchived" data-bs-parent="#accordionSidenav">
                         <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPagesMenu">
                             <!-- Nested Sidenav Accordion (Accounts -> Users)-->
                             <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/archive_user.php') !== false)  { echo 'active'; } ?>" href="archive_user">Users</a>
@@ -57,6 +57,12 @@
                             <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/archive_client.php') !== false)  { echo 'active'; } ?>" href="archive_client">Senior Citizen</a>
                         </nav>
                     </div>
+                    <!-- Sidenav Heading (Reports)-->
+                    <div class="sidenav-menu-heading">Reports</div>
+                    <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/generate.php') !== false)  { echo 'active'; } ?>" href="generate">
+                        <div class="nav-link-icon"><i data-feather="cloud-rain"></i></div>
+                        Generate Senior
+                    </a>
                     <!-- Sidenav Menu Heading (System)-->
                     <div class="sidenav-menu-heading">System</div>
                     <!-- Sidenav Accordion (Dashboard)-->
