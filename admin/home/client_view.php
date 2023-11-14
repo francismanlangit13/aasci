@@ -12,7 +12,7 @@
         }
         // Fetch the data
         $row = $result->fetch_assoc();
-        $link = base_url . 'view_id?=';
+        $link = base_url . 'view-senior?referrer_sig=AQAAALlBtMUw4ijnuwuB1_ELMGm0j_LDQFR7JkepuUdtEUZlkWR_E8B1hpz84xnQcU2MWhGqYgqw1M2fKXNWP3tcP42AxniLgydvkoy2WHzQOrWSrT6wxtCsmk3ClX7csfHjkNFfHrR3BY5Q1evqYO43BcH51CGey1yhnFoukIyF7OPU&id=';
         $username = $link . $row["user_id"];
         // Close the MySQL connection
         $con->close();

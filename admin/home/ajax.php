@@ -1821,7 +1821,8 @@
       $title = mysqli_real_escape_string($con, $_POST['add_title']);
       $description = mysqli_real_escape_string($con, $_POST['add_description']);
       $status = mysqli_real_escape_string($con, $_POST['add_status']);
-      $query = "INSERT INTO `announcement`(`ann_title`, `ann_description`, `ann_status`) VALUES ('$title','$description','$status')";
+      $ann_date = date;
+      $query = "INSERT INTO `announcement`(`ann_title`, `ann_description`, `ann_status`, `ann_date`) VALUES ('$title','$description','$status','$ann_date')";
       $query_run = mysqli_query($con, $query);
       if ($query_run){
          $output = array('status' => "Announcement added successfully", 'alert' => "success");
