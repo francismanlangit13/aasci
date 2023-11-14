@@ -1752,4 +1752,111 @@
       header('Content-Type: application/json');
       echo json_encode(array('exists' => ($result['count'] > 0)));
    }
+   // -------------------------------- DataTable Announcements -------------------------------- //
+   if (isset($_POST["ann_list"])){
+      // Reading value
+      $draw = $_POST['draw'];
+      $row = $_POST['start'];
+      $rowperpage = $_POST['length']; // Rows display per page
+      $columnIndex = $_POST['order'][0]['column']; // Column index
+      $columnName = $_POST['columns'][$columnIndex]['data']; // Column name
+      $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
+      $searchValue = $_POST['search']['value']; // Search value
+      $searchArray = array();
+      // Search
+      $searchQuery = " ";
+      if($searchValue != ''){
+         $searchQuery = " AND (ann_id LIKE :ann_id OR 
+            ann_title LIKE :ann_title OR
+            ann_description LIKE :ann_description OR
+            ann_status LIKE :ann_status) ";
+         $searchArray = array( 
+            'ann_id'=>"%$searchValue%",
+            'ann_title'=>"%$searchValue%",
+            'ann_description'=>"%$searchValue%",
+            'ann_status'=>"%$searchValue%"
+         );
+      }
+      // Total number of records without filtering
+      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM announcement");
+      $stmt->execute();
+      $records = $stmt->fetch();
+      $totalRecords = $records['allcount'];
+      // Total number of records with filtering
+      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM announcement".$searchQuery);
+      $stmt->execute($searchArray);
+      $records = $stmt->fetch();
+      $totalRecordwithFilter = $records['allcount'];
+      // Fetch records
+      $stmt = $conn->prepare("SELECT * FROM announcement".$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
+      // Bind values
+      foreach ($searchArray as $key=>$search){
+         $stmt->bindValue(':'.$key, $search,PDO::PARAM_STR);
+      }
+      $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
+      $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
+      $stmt->execute();
+      $empRecords = $stmt->fetchAll();
+      $data = array();
+      foreach ($empRecords as $row){
+         $data[] = array(
+            "ann_id"=>$row['ann_id'],
+            "ann_title"=>$row['ann_title'],
+            "ann_description"=>$row['ann_description'],
+            "ann_status"=>$row['ann_status']
+         );
+      }
+      // Response
+      $response = array(
+         "draw" => intval($draw),
+         "iTotalRecords" => $totalRecords,
+         "iTotalDisplayRecords" => $totalRecordwithFilter,
+         "aaData" => $data
+      );
+      echo json_encode($response);
+   }
+   // -------------------------------- Add Announcement -------------------------------- //
+   if (isset($_POST["add_ann"])){
+      // Validate and sanitize announcement inputs
+      $title = mysqli_real_escape_string($con, $_POST['add_title']);
+      $description = mysqli_real_escape_string($con, $_POST['add_description']);
+      $status = mysqli_real_escape_string($con, $_POST['add_status']);
+      $query = "INSERT INTO `announcement`(`ann_title`, `ann_description`, `ann_status`) VALUES ('$title','$description','$status')";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run){
+         $output = array('status' => "Announcement added successfully", 'alert' => "success");
+      } else{
+         $output = array('status' => "Announcement was not added", 'alert' => "error");
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Edit Announcement -------------------------------- //
+   if (isset($_POST["edit_ann"])){
+      // Validate and sanitize announcement inputs
+      $id = mysqli_real_escape_string($con, $_POST['edit_ann_id']);
+      $title = mysqli_real_escape_string($con, $_POST['edit_title']);
+      $description = mysqli_real_escape_string($con, $_POST['edit_description']);
+      $status = mysqli_real_escape_string($con, $_POST['edit_status']);
+      $query = "UPDATE `announcement` SET `ann_title` = '$title', `ann_description` = '$description', `ann_status` = '$status' WHERE `ann_id` = '$id'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run){
+         $output = array('status' => "Announcement updated successfully", 'alert' => "success");
+      } else{
+         $output = array('status' => "Announcement was not updated", 'alert' => "error");
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Delete Announcement -------------------------------- //
+   if (isset($_POST["delete_ann"])){
+      // Validate and sanitize announcement inputs
+      $id = mysqli_real_escape_string($con, $_POST['delete_ann_id']);
+      $query = "DELETE FROM `announcement` WHERE `user_id` = '$id'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run){
+         $output = array('status' => "Announcement deleted successfully", 'alert' => "success");
+      } else{
+         $output = array('status' => "Announcement was not deleted", 'alert' => "error");
+      }
+      echo json_encode($output);
+   }
 ?>

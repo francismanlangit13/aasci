@@ -27,6 +27,12 @@
                         <div class="nav-link-icon"><i data-feather="home"></i></div>
                         Dashboard
                     </a>
+                    <!-- Sidenav Heading (Notifications)-->
+                    <div class="sidenav-menu-heading">Notifications</div>
+                    <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/announcement.php') !== false)  { echo 'active'; } ?>" href="announcement">
+                        <div class="nav-link-icon"><i data-feather="rss"></i></div>
+                        Announcements
+                    </a>
                     <!-- Sidenav Heading (Users)-->
                     <div class="sidenav-menu-heading">Users</div>
                     <!-- Sidenav Accordion (Pages)-->
