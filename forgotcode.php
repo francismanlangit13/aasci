@@ -104,14 +104,11 @@
                 foreach($user_query_run as $data){
                     $user_id = $data['user_id'];
                 }
-
                 $_SESSION['status'] = "Password updated successfully";
                 $_SESSION['status_code'] = "success";
-                header("Location: " . base_url . "login");
-                exit(0);
+                $output = array('alert' => "success");
             }
-        }
-        else{
+        } else{
             $output = array('status' => "Something went wrong", 'alert' => "error");
         }
         echo json_encode($output);

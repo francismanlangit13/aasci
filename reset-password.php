@@ -94,24 +94,30 @@
                                     <div class="card-body">
                                         <div class="small mb-3 text-muted">Enter your email address and we will send you a link to reset your password.</div>
                                         <!-- Reset password form-->
-                                        <form action="forgotcode.php" method="POST">
+                                        <form id="form_changepass" method="POST" enctype="multipart/form-data">
                                             <!-- Form Group (new password)-->
                                             <div class="mb-3">
                                                 <label class="small mb-1" for="password">New password</label>
-                                                <input class="form-control" name="password" id="password" type="password" placeholder="Enter new password">
+                                                <a href="javascript:void(0)" class="password-toggle float-right text-decoration-none" onclick="togglePassword('password')">
+                                                    <i class="fa fa-eye"></i> Show
+                                                </a>
+                                                <input class="form-control" name="password" id="password" type="password" placeholder="Enter new password" required>
                                                 <div class="invalid-feedback ml-3" id="password-error"></div>
                                             </div>
                                             <!-- Form Group (confirm new password)-->
                                             <div class="mb-3">
-                                                <label class="small mb-1" for="cpassword">Email</label>
-                                                <input class="form-control" name="cpassword" id="cpassword" type="password" placeholder="Enter confirm new password">
+                                                <label class="small mb-1" for="cpassword">Confirm password</label>
+                                                <a href="javascript:void(0)" class="password-toggle float-right text-decoration-none" onclick="togglePassword('cpassword')">
+                                                    <i class="fa fa-eye"></i> Show
+                                                </a>
+                                                <input class="form-control" name="cpassword" id="cpassword" type="password" placeholder="Enter confirm new password" required>
                                                 <div class="invalid-feedback ml-3" id="cpassword-error"></div>
                                             </div>
                                             <!-- Form Group (submit options)-->
                                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                                 <a class="small" href="login">Return to login</a>
                                                 <input type="hidden" name="email" value = "<?php echo $email; ?>"/>
-                                                <button class="btn btn-primary" id="submit-btn" name="changepass_btn" href="auth-login-basic.html">Reset Password</button>
+                                                <button type="submit" class="btn btn-primary" id="submit-btn">Reset Password</button>
                                             </div>
                                         </form>
                                     </div>
@@ -136,6 +142,55 @@
         <script src="<?php echo base_url ?>assets/js/underscore-min.js"></script>
         <!-- Restrictions forms -->
         <script src="<?php echo base_url ?>assets/js/disable-key.js"></script>
+
+        <script type="text/javascript">
+            var base_url = "<?php echo base_url ?>";
+            $(document).ready(function() {
+                // Forgot password
+                $('#form_changepass').submit(function (e) {
+                    e.preventDefault(); // Prevent the default form submission
+                    var formData = new FormData(this);
+                    formData.append('changepass_btn', '1'); // Identifier
+                    $.ajax({
+                        url: "forgotcode.php",
+                        method: "POST",
+                        data: formData,
+                        dataType: "json",
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        beforeSend: function() {
+                            $('#submit-btn').text("Please wait...");
+                            $('#submit-btn').attr('disabled', 'disabled');
+                            $('#password').attr('disabled', 'disabled');
+                            $('#cpassword').attr('disabled', 'disabled');
+                        },
+                        success: function(data) {
+                            if(data.alert = 'success') {
+                                window.location.href = base_url + "login";
+                            } else {
+                                swal({
+                                    title: "Notice",
+                                    text: data.status,
+                                    icon: data.alert,
+                                    button: false,
+                                    timer: 2000
+                                }).then(function() {
+                                    $('#form_changepass')[0].reset();
+                                    $('#submit-btn').removeAttr('disabled');
+                                    $('#password').removeAttr('disabled');
+                                    $('#cpassword').removeAttr('disabled');
+                                    $('#submit-btn').text("Reset Password");
+                                });
+                            }
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            console.error(errorThrown);
+                        }
+                    });
+                });
+            });
+        </script>
 
         <script>
             // Get references to the password fields and label
@@ -246,6 +301,28 @@
                 }
                 }
             });
+        </script>
+
+        <script type="text/javascript">
+            function togglePassword(inputId) {
+                const passwordInput = document.getElementById(inputId);
+
+                if (passwordInput) {
+                    const passwordToggle = passwordInput.parentElement.querySelector('.password-toggle');
+
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        if (passwordToggle) {
+                            passwordToggle.innerHTML = '<i class="fa fa-eye-slash"></i> Hide';
+                        }
+                    } else {
+                        passwordInput.type = 'password';
+                        if (passwordToggle) {
+                            passwordToggle.innerHTML = '<i class="fa fa-eye"></i> Show';
+                        }
+                    }
+                }
+            }
         </script>
 
         <!-- Sweetalert message popup -->

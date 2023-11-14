@@ -82,7 +82,7 @@
                                             <!-- Form Group (email address)-->
                                             <div class="mb-3">
                                                 <label class="small mb-1" for="email">Email</label>
-                                                <input class="form-control" name="email" id="email" type="email" aria-describedby="emailHelp" placeholder="Enter email address">
+                                                <input class="form-control" name="email" id="email" type="email" aria-describedby="emailHelp" placeholder="Enter email address" required>
                                                 <div class="invalid-feedback ml-3" id="email-error"></div>
                                             </div>
                                             <!-- Form Group (submit options)-->
@@ -131,6 +131,7 @@
                         processData: false,
                         beforeSend: function() {
                             $('#submit-btn').text("Please wait...");
+                            $('#email').attr('disabled', 'disabled');
                             $('#submit-btn').attr('disabled', 'disabled');
                         },
                         success: function(data) {
@@ -142,6 +143,7 @@
                                 timer: data.timer
                             }).then(function() {
                                 $('#form_forgot')[0].reset();
+                                $('#email').removeAttr('disabled');
                                 $('#submit-btn').removeAttr('disabled');
                                 $('#email').removeClass('is-valid');
                                 $('#submit-btn').text("Reset Password");
