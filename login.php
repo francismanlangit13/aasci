@@ -39,8 +39,69 @@
                 margin: 0;
                 background-color: #f8f9fc;
             }
+            .btn-close {
+                box-sizing: content-box;
+                width: 1em;
+                height: 1em;
+                padding: 0.25em 0.25em;
+                color: #000;
+                background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+                border: 0;
+                border-radius: 0.35rem;
+                opacity: 0.5;
+            }
+            .btn-close:hover {
+                color: #000;
+                text-decoration: none;
+                opacity: 0.75;
+            }
+            .btn-close:focus {
+                outline: 0;
+                box-shadow: 0 0 0 0.25rem rgba(0, 97, 242, 0.25);
+                opacity: 1;
+            }
+            .btn-close:disabled, .btn-close.disabled {
+                pointer-events: none;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                opacity: 0.25;
+            }
+
+            .btn-close-white {
+                filter: invert(1) grayscale(100%) brightness(200%);
+            }
         </style>
     </head>
+    <?php
+        if(isset($_SESSION['auth'])){
+            if ($_SESSION['auth_role'] == "1"){
+                if(!isset($_SESSION['status'])){
+                $_SESSION['status'] = "You are already logged in";
+                $_SESSION['status_code'] = "error";
+                }
+                header("Location: " . base_url . "admin");
+                exit(0);
+            }
+            elseif ($_SESSION['auth_role'] == "2"){
+                if(!isset($_SESSION['status'])){
+                $_SESSION['status'] = "You are already logged in";
+                $_SESSION['status_code'] = "error";
+                }
+                header("Location: " . base_url . "staff");
+                exit(0);
+            }
+            else{
+                if(!isset($_SESSION['status'])){
+                    $_SESSION['status'] = "Login first to access dashboard";
+                    $_SESSION['status_code'] = "error";
+                }
+                header("Location: " . base_url . "login");
+                exit(0);
+            }
+        }
+    ?>
     <body class="bg-gradient-primary">
         <!-- Loading Screen -->
         <div class="noprint-scroll" id="loading">
@@ -76,7 +137,7 @@
                                             </div>
                                             <button type="submit" name="login_btn" id="loginButton" class="btn btn-primary btn-user btn-block">Login</button>
                                         </form>
-                                        <label class="h6 text-gray-900 mt-3">By clicking login you agree the <a href="#">terms and conditions</a> and <a href="#">privacy policy</a>.</lab>
+                                        <label class="h6 text-gray-900 mt-3">By clicking login you agree the <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#btn_terms">terms and conditions</a> and <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#btn_privacy">privacy policy</a>.</lab>
                                         <hr>
                                         <div class="text-center">
                                             <a class="small text-decoration-none" href="forgot">Forgot Password?</a>
@@ -105,6 +166,9 @@
         <script src="<?php echo base_url ?>assets/js/underscore-min.js"></script>
         <!-- Restrictions forms -->
         <script src="<?php echo base_url ?>assets/js/disable-key.js"></script>
+        <!-- Bootstrap JavaScript -->
+        <script src="<?php echo base_url ?>assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="<?php echo base_url ?>assets/js/scripts.js"></script>
         <!-- Script for save last inputed Email or Password -->
         <script>
             // Restore input values from localStorage when the page loads
@@ -212,6 +276,35 @@
                 }
             });
         </script>
+
+        <!-- Modal for View Privacy -->
+        <div class="modal fade" id="btn_privacy" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="view_userLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg d-grid" role="document" style="justify-items: center;">
+                <div class="modal-content">
+                    <div class="modal-header card-header">
+                        <h6 class="modal-title"><?= $system['shortname'] ?> | Privacy Policy</h6>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div> 
+                    <div class="modal-body"> 
+                        <h6 style="text-align: justify; text-justify:inter-word"><?= $system['privacy'] ?></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal for View Terms -->
+        <div class="modal fade" id="btn_terms" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="view_userLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg d-grid" role="document" style="justify-items: center;">
+                <div class="modal-content">
+                    <div class="modal-header card-header">
+                        <h6 class="modal-title"><?= $system['shortname'] ?> | Terms & Conditions</h6>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div> 
+                    <div class="modal-body"> 
+                        <h6 style="text-align: justify; text-justify:inter-word"><?= $system['terms'] ?></h6>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Sweetalert message popup -->
         <?php include ('message.php'); ?> 
