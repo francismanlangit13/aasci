@@ -22,11 +22,6 @@
             }
             mysqli_query($con,"DELETE FROM `twostepauth` WHERE `user_id` = '$user_id'");
 
-            $date = date('Y-m-d H:i:s');
-            $login_success = "Login";
-            $login_success_log = "success using email and password";
-            mysqli_query($con,"INSERT INTO user_log (user_id, type, log, date) values('".$user_id."','".$login_success."','".$login_success_log."','$date')");
-
             $_SESSION['auth'] = true;
             $_SESSION['auth_role'] = "$role_as";
             $_SESSION['auth_user'] = [
@@ -36,24 +31,22 @@
             ];
         
             if( $_SESSION['auth_role'] == '1'){
+                unset($_SESSION['is_second_auth']);
                 $_SESSION['status'] = "Welcome $full_name!";
                 $_SESSION['status_code'] = "success";
-                header("Location: " . base_url . "admin");
-                exit(0);
+                $output = array('alert' => "success", 'type' => "admin");
             }
             elseif( $_SESSION['auth_role'] == '2'){
+                unset($_SESSION['is_second_auth']);
                 $_SESSION['status'] = "Welcome $full_name!";
                 $_SESSION['status_code'] = "success";
-                header("Location: " . base_url . "staff");
-                exit(0);
+                $output = array('alert' => "success", 'type' => "admin");
             }
         }
         else {
-            $_SESSION['status'] = "Invalid OTP Code";
-            $_SESSION['status_code'] = "warning";
-            header("Location: " . base_url . "loginauth");
-            exit(0);
+            $output = array('status' => "Invalid OTP Code or expired", 'alert' => "error");
         }
+        echo json_encode($output);
     }
     // -------------------------------- Resend OTP -------------------------------- //
     if (isset($_POST["send_otp"])){
@@ -96,13 +89,6 @@
             $output = array('status' => "Resend OTP unsuccessful", 'alert' => "error");
         }
         echo json_encode($output);
-    }
-    else {
-        $_SESSION['status'] = "You are not allowed to access this site";
-        $_SESSION['status_code'] = "error";
-        header("Location: " . base_url . "login");
-        
-        exit(0);
     }
 
 ?>

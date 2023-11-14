@@ -49,11 +49,10 @@
                     $mail->send();
 
                     $_SESSION['auth_user'] = ['user_email' =>$user_email, 'user_name' =>$full_name,];
-                    header("Location: " . base_url . "loginauth");
+                    $_SESSION['is_second_auth'] = 'Yes';
+                    $output = array('alert' => "success", 'is_secondauth' => "Yes");
                 } else{
-                    $_SESSION['status'] = "There is something error Please try again";
-                    $_SESSION['status_code'] = "error";
-                    header("Location: " . base_url . "login");
+                    $output = array('status' => "Something went wrong", 'alert' => "error");
                 }
             } else {
 
@@ -68,43 +67,23 @@
                 if( $_SESSION['auth_role'] == '1'){
                     $_SESSION['status'] = "Welcome $full_name!";
                     $_SESSION['status_code'] = "success";
-                    header("Location: " . base_url . "admin");
-                    exit(0);
+                    $output = array('alert' => "success", 'is_secondauth' => "No", 'type' => "admin");
                 }
                 elseif( $_SESSION['auth_role'] == '2'){
                     $_SESSION['status'] = "Welcome $full_name!";
                     $_SESSION['status_code'] = "success";
-                    header("Location: " . base_url . "staff");
-                    exit(0);
+                    $output = array('alert' => "success", 'is_secondauth' => "No", 'type' => "admin");
                 }
             }
         }
         else {
-            $login_error = "SELECT * FROM user WHERE email = '$email' AND user_status_id = 1 LIMIT 1";
-            $login_error_run = mysqli_query($con, $login_error);
-            if(mysqli_num_rows($login_error_run) > 0){
-                foreach($login_error_run as $data){
-                    $user_id = $data['user_id'];
-                }
-
-                $_SESSION['status'] = "Invalid Email or Password";
-                $_SESSION['status_code'] = "warning";
-                header("Location: " . base_url . "login");
-                exit(0);
-            }
-            else{
-                $_SESSION['status'] = "Invalid Email or Password";
-                $_SESSION['status_code'] = "warning";
-                header("Location: " . base_url . "login");
-                exit(0);
-            }
+            $output = array('status' => "Invalid Email or Password", 'alert' => "error");
         }
-    }   
-    else {
+        echo json_encode($output);
+    } else {
         $_SESSION['status'] = "You are not allowed to access this site";
         $_SESSION['status_code'] = "error";
         header("Location: " . base_url . "login");
-        
         exit(0);
     }
 

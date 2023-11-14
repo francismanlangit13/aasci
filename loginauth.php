@@ -1,6 +1,6 @@
 <?php
     include ('db_conn.php');
-    if($_SESSION['auth_user'] == null){
+    if($_SESSION['is_second_auth'] == null){
         header("Location: " . base_url . "login");
     }
 ?>
@@ -63,7 +63,7 @@
                                             <h1 class="h4 text-gray-900 mb-4">Verify OTP</h1>
                                             <h5 class="text-gray-900">Open your email address and enter the code for <?= $system['shortname'] ?></h5>
                                         </div>
-                                        <form class="user" action="loginauthcode.php" method="POST">
+                                        <form class="user" id="form_verify" method="POST" enctype="multipart/form-data">
                                             <?php
                                                 $user_email = $_SESSION['auth_user']['user_email'];
                                                 $username = $_SESSION['auth_user']['user_name'];
@@ -73,9 +73,9 @@
                                                 <input type="text" class="form-control form-control-user" id="user_email" value="<?=htmlspecialchars($user_email);?>" disabled>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" id="verify_code" name="verify_code" class="form-control form-control-user" maxlength="6" placeholder="Enter OTP" required>
+                                                <input type="text" id="verify_code" name="verify_code" class="form-control form-control-user" minlength="6" maxlength="6" placeholder="Enter OTP" required>
                                             </div>
-                                            <button type="submit" name="verify_btn" id="verifyButton" class="btn btn-primary btn-user btn-block">Verify</button>
+                                            <button type="submit" id="verifyButton" class="btn btn-primary btn-user btn-block">Verify</button>
                                         </form>
                                         <div class="row mt-2">
                                             <div class="col-md-7 mt-1" id="countdown"></div>
@@ -113,6 +113,59 @@
 
         <!-- Sweetalert message popup -->
         <?php include ('message.php'); ?> 
+
+        <script type="text/javascript">
+            var base_url = "<?php echo base_url ?>";
+            $(document).ready(function() {
+                // 2FA verify
+                $('#form_verify').submit(function (e) {
+                    e.preventDefault(); // Prevent the default form submission
+                    var formData = new FormData(this);
+                    formData.append('verify_btn', '1'); // Identifier
+                    $.ajax({
+                        url: "loginauthcode.php",
+                        method: "POST",
+                        data: formData,
+                        dataType: "json",
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        beforeSend: function() {
+                            $('#verify_code').attr('disabled', 'disabled');
+                            $('#verifyButton').text("Please wait...");
+                            $('#verifyButton').attr('disabled', 'disabled');
+                            setTimeout(function() {
+                                $('#verifyButton').attr('disabled', 'disabled');
+                            }, 450);
+                        },
+                        success: function(data) {
+                            if (data.alert == 'success') {
+                                if (data.type == 'admin') {
+                                    window.location.href = base_url + "admin";
+                                } else {
+                                    window.location.href = base_url + "staff";
+                                }
+                            } else {
+                                swal({
+                                    title: "Notice",
+                                    text: data.status,
+                                    icon: data.alert,
+                                    button: false,
+                                    timer: 2000
+                                }).then(function() {
+                                    $('#verify_code').removeAttr('disabled');
+                                    $('#verifyButton').text("Verify");
+                                    $('#verifyButton').removeAttr('disabled');
+                                });
+                            }
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            console.error(errorThrown);
+                        }
+                    });
+                });
+            });
+        </script>
 
         <script type="text/javascript">
             $(document).ready(function() {

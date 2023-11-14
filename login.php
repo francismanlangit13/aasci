@@ -123,7 +123,7 @@
                                             <hr style="margin-top:5px !important; margin-bottom:5px !important">
                                             <h1 class="h4 text-gray-900 mb-4">LOGIN</h1>
                                         </div>
-                                        <form class="user" action="logincode.php" method="POST">
+                                        <form class="user" id="form_login" method="POST" enctype="multipart/form-data">
                                             <div class="form-group">
                                                 <input type="text" id="email" name="email_phone" class="form-control form-control-user" placeholder="Email" required>
                                                 <div class="invalid-feedback ml-3" id="email-error"></div>
@@ -135,7 +135,7 @@
                                                     <div class="invalid-feedback ml-3" id="password-error"></div>
                                                 </div>
                                             </div>
-                                            <button type="submit" name="login_btn" id="loginButton" class="btn btn-primary btn-user btn-block">Login</button>
+                                            <button type="submit" id="submit-btn" class="btn btn-primary btn-user btn-block">Login</button>
                                         </form>
                                         <label class="h6 text-gray-900 mt-3">By clicking login you agree the <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#btn_terms">terms and conditions</a> and <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#btn_privacy">privacy policy</a>.</lab>
                                         <hr>
@@ -169,38 +169,67 @@
         <!-- Bootstrap JavaScript -->
         <script src="<?php echo base_url ?>assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="<?php echo base_url ?>assets/js/scripts.js"></script>
-        <!-- Script for save last inputed Email or Password -->
-        <script>
-            // Restore input values from localStorage when the page loads
-            window.onload = function() {
-                var emailPhoneInput = document.getElementById("email");
-                var passwordInput = document.getElementById("password");
-                
-                if (localStorage.getItem("savedEmailPhone")) {
-                    emailPhoneInput.value = localStorage.getItem("savedEmailPhone"); // Gets the value email or phone from localstorage or cookie
-                    localStorage.setItem("savedEmailPhone", ''); // Clear the value email or phone if user click reload the page.
-                }
-                
-                if (localStorage.getItem("savedPassword")) {
-                    passwordInput.value = localStorage.getItem("savedPassword"); // Gets the value password from localstorage or cookie
-                    localStorage.setItem("savedPassword", ''); // Clear the value password if user click reload the page.
-                }
-            };
+        <script src="<?php echo base_url ?>assets/vendor/feather-icons/feather.min.js" crossorigin="anonymous"></script>
 
-            // Save input values to localStorage when the login button is clicked
-            document.getElementById("loginButton").addEventListener("click", function() {
-                var emailPhoneInput = document.getElementById("email");
-                var passwordInput = document.getElementById("password");
-                
-                localStorage.setItem("savedEmailPhone", emailPhoneInput.value); // Will save the value email or phone from localstorage or cookie
-                localStorage.setItem("savedPassword", passwordInput.value); // Will save the value password from localstorage or cookie
+        <script type="text/javascript">
+            var base_url = "<?php echo base_url ?>";
+            $(document).ready(function() {
+                // Forgot password
+                $('#form_login').submit(function (e) {
+                    e.preventDefault(); // Prevent the default form submission
+                    var formData = new FormData(this);
+                    formData.append('login_btn', '1'); // Identifier
+                    $.ajax({
+                        url: "logincode.php",
+                        method: "POST",
+                        data: formData,
+                        dataType: "json",
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        beforeSend: function() {
+                            $('#email').attr('disabled', 'disabled');
+                            $('#password').attr('disabled', 'disabled');
+                            $('#submit-btn').text("Please wait...");
+                            $('#submit-btn').attr('disabled', 'disabled');
+                            setTimeout(function() {
+                                $('#submit-btn').attr('disabled', 'disabled');
+                            }, 450);
+                        },
+                        success: function(data) {
+                            if (data.alert == 'success' && data.is_secondauth == 'Yes') {
+                                window.location.href = base_url + "loginauth";
+                            } else if (data.alert == 'success' && data.is_secondauth == 'No') {
+                                if (data.type == 'admin') {
+                                    window.location.href = base_url + "admin";
+                                } else {
+                                    window.location.href = base_url + "staff";
+                                }
+                            } else {
+                                swal({
+                                    title: "Notice",
+                                    text: data.status,
+                                    icon: data.alert,
+                                    button: false,
+                                    timer: 2000
+                                }).then(function() {
+                                    $('#email').removeAttr('disabled');
+                                    $('#password').removeAttr('disabled');
+                                    $('#submit-btn').text("Login");
+                                    $('#submit-btn').removeAttr('disabled');
+                                });
+                            }
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            console.error(errorThrown);
+                        }
+                    });
+                });
             });
         </script>
 
         <script>
             $(document).ready(function() {
-                // disable submit button by default
-                //$('#submit-btn').prop('disabled', true);
 
                 // debounce functions for each input field
                 var debouncedCheckEmail = _.debounce(checkEmail, 500);
