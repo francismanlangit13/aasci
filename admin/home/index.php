@@ -518,7 +518,7 @@
             ],
             datasets: [
                 {
-                    label: "Registered",
+                    label: "Deceased",
                     lineTension: 0.3,
                     backgroundColor: "rgba(0, 97, 242, 0.05)",
                     borderColor: "rgba(0, 97, 242, 1)",
@@ -752,7 +752,7 @@
         data: {
             labels: ["<?php echo date('Y') - 5; ?>", "<?php echo date('Y') - 4; ?>", "<?php echo date('Y') - 3; ?>", "<?php echo date('Y') - 2; ?>", "<?php echo date('Y') - 1; ?>", "<?php echo date('Y');?>"],
             datasets: [{
-                label: "Registered ",
+                label: "Deceased ",
                 backgroundColor: "rgba(0, 97, 242, 1)",
                 hoverBackgroundColor: "rgba(0, 97, 242, 0.9)",
                 borderColor: "#4e73df",
