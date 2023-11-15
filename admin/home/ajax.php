@@ -1860,4 +1860,127 @@
       }
       echo json_encode($output);
    }
+   // -------------------------------- DataTable Annual Dues -------------------------------- //
+   if (isset($_POST["dues_list"])){
+      // Reading value
+      $draw = $_POST['draw'];
+      $row = $_POST['start'];
+      $rowperpage = $_POST['length']; // Rows display per page
+      $columnIndex = $_POST['order'][0]['column']; // Column index
+      $columnName = $_POST['columns'][$columnIndex]['data']; // Column name
+      $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
+      $searchValue = $_POST['search']['value']; // Search value
+      $searchArray = array();
+      // Search
+      $searchQuery = " ";
+      if($searchValue != ''){
+         $searchQuery = " AND (dues_id LIKE :dues_id OR 
+            id_number LIKE :id_number OR
+            CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) LIKE :fullname OR
+            gender LIKE :gender OR
+            barangay LIKE :barangay OR
+            amount LIKE :amount OR
+            `year` LIKE :`year` OR
+            DATE_FORMAT(date_paid, '%m-%d-%Y') LIKE :new_date_paid OR) ";
+         $searchArray = array( 
+            'dues_id'=>"%$searchValue%",
+            'id_number'=>"%$searchValue%",
+            'fullname'=>"%$searchValue%",
+            'gender'=>"%$searchValue%",
+            'barangay'=>"%$searchValue%",
+            'amount'=>"%$searchValue%",
+            'year'=>"%$searchValue%",
+            'new_date_paid'=>"%$searchValue%"
+         );
+      }
+      // Total number of records without filtering
+      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM annual_dues INNER JOIN user ON user.user_id = annual_dues.user_id WHERE user_type_id = '3'");
+      $stmt->execute();
+      $records = $stmt->fetch();
+      $totalRecords = $records['allcount'];
+      // Total number of records with filtering
+      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM annual_dues INNER JOIN user ON user.user_id = annual_dues.user_id WHERE user_type_id = '3'".$searchQuery);
+      $stmt->execute($searchArray);
+      $records = $stmt->fetch();
+      $totalRecordwithFilter = $records['allcount'];
+      // Fetch records
+      $stmt = $conn->prepare("SELECT *, CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname, DATE_FORMAT(date_paid, '%m-%d-%Y') as new_date_paid FROM annual_dues INNER JOIN user ON user.user_id = annual_dues.user_id WHERE user_type_id = '3'".$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
+      // Bind values
+      foreach ($searchArray as $key=>$search){
+         $stmt->bindValue(':'.$key, $search,PDO::PARAM_STR);
+      }
+      $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
+      $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
+      $stmt->execute();
+      $empRecords = $stmt->fetchAll();
+      $data = array();
+      foreach ($empRecords as $row){
+         $data[] = array(
+            "user_id"=>$row["user_id"],
+            "dues_id"=>$row['dues_id'],
+            "id_number"=>$row['id_number'],
+            "fullname"=>$row['fullname'],
+            "gender"=>$row['gender'],
+            "barangay"=>$row['barangay'],
+            "amount"=>$row['amount'],
+            "year"=>$row['year'],
+            "date_paid"=>$row['date_paid'],
+            "new_date_paid"=>$row['new_date_paid'],
+         );
+      }
+      // Response
+      $response = array(
+         "draw" => intval($draw),
+         "iTotalRecords" => $totalRecords,
+         "iTotalDisplayRecords" => $totalRecordwithFilter,
+         "aaData" => $data
+      );
+      echo json_encode($response);
+   }
+   // -------------------------------- Add Payment -------------------------------- //
+   if (isset($_POST["add_dues"])){
+      // Validate and sanitize announcement inputs
+      $userid = mysqli_real_escape_string($con, $_POST['add_senior']);
+      $amount = mysqli_real_escape_string($con, $_POST['add_amount']);
+      $year = mysqli_real_escape_string($con, $_POST['add_year']);
+      $date_paid = mysqli_real_escape_string($con, $_POST['add_paid']);
+      $query = "INSERT INTO `annual_dues`(`user_id`, `amount`, `year`, `date_paid`) VALUES ('$userid','$amount','$year','$date_paid')";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run){
+         $output = array('status' => "Payment added successfully", 'alert' => "success");
+      } else{
+         $output = array('status' => "Payment was not added", 'alert' => "error");
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Edit Payment -------------------------------- //
+   if (isset($_POST["edit_dues"])){
+      // Validate and sanitize announcement inputs
+      $id = mysqli_real_escape_string($con, $_POST['edit_dues_id']);
+      $userid = mysqli_real_escape_string($con, $_POST['edit_senior']);
+      $amount = mysqli_real_escape_string($con, $_POST['edit_amount']);
+      $year = mysqli_real_escape_string($con, $_POST['edit_year']);
+      $date_paid = mysqli_real_escape_string($con, $_POST['edit_paid']);
+      $query = "UPDATE `annual_dues` SET `user_id` = '$userid', `amount` = '$amount', `year` = '$year', `date_paid` = '$date_paid' WHERE `dues_id` = '$id'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run){
+         $output = array('status' => "Payment updated successfully", 'alert' => "success");
+      } else{
+         $output = array('status' => "Payment was not updated", 'alert' => "error");
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Delete Payment -------------------------------- //
+   if (isset($_POST["delete_dues"])){
+      // Validate and sanitize announcement inputs
+      $id = mysqli_real_escape_string($con, $_POST['delete_dues_id']);
+      $query = "DELETE FROM `annual_dues` WHERE `dues_id` = '$id'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run){
+         $output = array('status' => "Payment deleted successfully", 'alert' => "success");
+      } else{
+         $output = array('status' => "Payment was not deleted", 'alert' => "error");
+      }
+      echo json_encode($output);
+   }
 ?>

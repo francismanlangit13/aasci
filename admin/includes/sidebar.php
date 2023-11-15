@@ -33,6 +33,12 @@
                         <div class="nav-link-icon"><i data-feather="rss"></i></div>
                         Announcements
                     </a>
+                    <!-- Sidenav Heading (Manage)-->
+                    <div class="sidenav-menu-heading">Manage</div>
+                    <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/annual.php') !== false)  { echo 'active'; } ?>" href="annual">
+                        <div class="nav-link-icon"><i data-feather="credit-card"></i></div>
+                        Annual Dues
+                    </a>
                     <!-- Sidenav Heading (Users)-->
                     <div class="sidenav-menu-heading">Users</div>
                     <!-- Sidenav Accordion (Pages)-->
