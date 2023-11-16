@@ -1189,7 +1189,7 @@
    // -------------------------------- Update System Info ACT -------------------------------- //
    if (isset($_POST["update_system_info_act"])) {
       // Assuming you have an associative array with keys and values
-      $updates = ['sysact' => $_POST['system_act']];
+      $updates = ['sysacttitle' => $_POST['system_title'], 'sysact' => $_POST['system_act']];
       $success = true;
       // Assuming $con is your MySQLi connection
       foreach ($updates as $key => $value) {
@@ -1231,6 +1231,18 @@
       }
       echo json_encode($output);
    }
+   // -------------------------------- Facebook forms -------------------------------- //
+   if (isset($_POST['update_system_facebook'])) {
+      $form = $_POST['system_facebook'];
+      $query = "UPDATE `system_setting` SET `meta_value`='$form' WHERE `meta`='facebook'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run) {
+         $output = array('status' => 'Facebook updated successfully', 'alert' => 'success');
+      } else {
+         $output = array('status' => 'There is problem updated facebook', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
    // -------------------------------- Instagram switch -------------------------------- //
    if (isset($_POST['switch_instagram'])) {
       $switchState = intval($_POST['switch_instagram']); // Convert to integer (1 or 0)
@@ -1242,6 +1254,18 @@
          $output = array('status' => 'Instagram turn off', 'alert' => 'success', 'switch' => '0');
       } else {
          $output = array('status' => 'There is problem switching instagram', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Instagram forms -------------------------------- //
+   if (isset($_POST['update_system_instagram'])) {
+      $form = $_POST['system_instagram'];
+      $query = "UPDATE `system_setting` SET `meta_value`='$form' WHERE `meta`='instagram'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run) {
+         $output = array('status' => 'Instagram updated successfully', 'alert' => 'success');
+      } else {
+         $output = array('status' => 'There is problem updated instagram', 'alert' => 'error');
       }
       echo json_encode($output);
    }
@@ -1259,6 +1283,18 @@
       }
       echo json_encode($output);
    }
+   // -------------------------------- Twitter forms -------------------------------- //
+   if (isset($_POST['update_system_twitter'])) {
+      $form = $_POST['system_twitter'];
+      $query = "UPDATE `system_setting` SET `meta_value`='$form' WHERE `meta`='twitter'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run) {
+         $output = array('status' => 'Twitter updated successfully', 'alert' => 'success');
+      } else {
+         $output = array('status' => 'There is problem updated twitter', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
    // -------------------------------- Tumblr switch -------------------------------- //
    if (isset($_POST['switch_tumblr'])) {
       $switchState = intval($_POST['switch_tumblr']); // Convert to integer (1 or 0)
@@ -1270,6 +1306,18 @@
          $output = array('status' => 'Tumblr turn off', 'alert' => 'success', 'switch' => '0');
       } else {
          $output = array('status' => 'There is problem switching tumblr', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Tumblr forms -------------------------------- //
+   if (isset($_POST['update_system_tumblr'])) {
+      $form = $_POST['system_tumblr'];
+      $query = "UPDATE `system_setting` SET `meta_value`='$form' WHERE `meta`='tumblr'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run) {
+         $output = array('status' => 'Tumblr updated successfully', 'alert' => 'success');
+      } else {
+         $output = array('status' => 'There is problem updated tumblr', 'alert' => 'error');
       }
       echo json_encode($output);
    }
@@ -1287,6 +1335,18 @@
       }
       echo json_encode($output);
    }
+   // -------------------------------- Email forms -------------------------------- //
+   if (isset($_POST['update_system_email'])) {
+      $form = $_POST['system_email'];
+      $query = "UPDATE `system_setting` SET `meta_value`='$form' WHERE `meta`='email'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run) {
+         $output = array('status' => 'Email updated successfully', 'alert' => 'success');
+      } else {
+         $output = array('status' => 'There is problem updated email', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
    // -------------------------------- Phone switch -------------------------------- //
    if (isset($_POST['switch_phone'])) {
       $switchState = intval($_POST['switch_phone']); // Convert to integer (1 or 0)
@@ -1298,6 +1358,18 @@
          $output = array('status' => 'Phone turn off', 'alert' => 'success', 'switch' => '0');
       } else {
          $output = array('status' => 'There is problem switching number', 'alert' => 'error');
+      }
+      echo json_encode($output);
+   }
+   // -------------------------------- Phone forms -------------------------------- //
+   if (isset($_POST['update_system_phone'])) {
+      $form = $_POST['system_number'];
+      $query = "UPDATE `system_setting` SET `meta_value`='$form' WHERE `meta`='phone'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run) {
+         $output = array('status' => 'Phone updated successfully', 'alert' => 'success');
+      } else {
+         $output = array('status' => 'There is problem updated phone', 'alert' => 'error');
       }
       echo json_encode($output);
    }

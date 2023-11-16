@@ -153,15 +153,17 @@
                         </div>
                     </div>
                     <div class="card-body text-center">
-                        <!-- Profile picture image-->
-                        <img class="img-account-profile rounded-circle mb-2" alt="system_logo" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative; <?php if ($system_switch['facebook']=='0') { echo 'filter: grayscale(100%);'; } ?>" id="image_facebook" src="<?php echo base_url ?>assets/files/system/system_facebook.png"/>
-                        <!-- Profile picture upload button-->
-                        <div class="col-md-12 mb-3">
-                            <label class="small mb-1 required float-start" for="system_facebook">Facebook</label>
-                            <input class="form-control" id="system_facebook" name="system_facebook" type="text" placeholder="Enter facebook link" value="<?=$system['facebook'];?>" required/>
-                            <div id="system_facebook-error"></div>
-                        </div>
-                        <button class="btn btn-primary float-end mt-3" type="button" data-bs-toggle="modal" data-bs-target="#Upload_System_Logo">Save</button>
+                        <form id="system-facebook">
+                            <!-- Profile picture image-->
+                            <img class="img-account-profile rounded-circle mb-2" alt="system_logo" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative; <?php if ($system_switch['facebook']=='0') { echo 'filter: grayscale(100%);'; } ?>" id="image_facebook" src="<?php echo base_url ?>assets/files/system/system_facebook.png"/>
+                            <!-- Profile picture upload button-->
+                            <div class="col-md-12 mb-3">
+                                <label class="small mb-1 required float-start" for="system_facebook">Facebook</label>
+                                <input class="form-control" id="system_facebook" name="system_facebook" type="text" placeholder="Enter facebook link" value="<?=$system['facebook'];?>" required/>
+                                <div id="system_facebook-error"></div>
+                            </div>
+                            <button class="btn btn-primary float-end mt-3" type="submit" id="btn_facebook">Save</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -176,15 +178,17 @@
                         </div>
                     </div>
                     <div class="card-body text-center">
-                        <!-- Profile picture image-->
-                        <img class="img-account-profile rounded-circle mb-2" alt="system_logo" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative; <?php if ($system_switch['instagram']=='0') { echo 'filter: grayscale(100%);'; } ?>" id="image_instagram" src="<?php echo base_url ?>assets/files/system/system_instagram.png"/>
-                        <!-- Profile picture upload button-->
-                        <div class="col-md-12 mb-3">
-                            <label class="small mb-1 required float-start" for="system_instagram">Instagram</label>
-                            <input class="form-control" id="system_instagram" name="system_instagram" type="text" placeholder="Enter instagram link" value="<?=$system['instagram'];?>" required/>
-                            <div id="system_instagram-error"></div>
-                        </div>
-                        <button class="btn btn-primary float-end mt-3" type="button" data-bs-toggle="modal" data-bs-target="#Upload_System_Logo">Save</button>
+                        <form id="system-instagram">
+                            <!-- Profile picture image-->
+                            <img class="img-account-profile rounded-circle mb-2" alt="system_logo" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative; <?php if ($system_switch['instagram']=='0') { echo 'filter: grayscale(100%);'; } ?>" id="image_instagram" src="<?php echo base_url ?>assets/files/system/system_instagram.png"/>
+                            <!-- Profile picture upload button-->
+                            <div class="col-md-12 mb-3">
+                                <label class="small mb-1 required float-start" for="system_instagram">Instagram</label>
+                                <input class="form-control" id="system_instagram" name="system_instagram" type="text" placeholder="Enter instagram link" value="<?=$system['instagram'];?>" required/>
+                                <div id="system_instagram-error"></div>
+                            </div>
+                            <button class="btn btn-primary float-end mt-3" type="submit" id="btn_instagram">Save</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -199,15 +203,17 @@
                         </div>
                     </div>
                     <div class="card-body text-center">
-                        <!-- Profile picture image-->
-                        <img class="img-account-profile rounded-circle mb-2" alt="system_logo" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative; <?php if ($system_switch['twitter']=='0') { echo 'filter: grayscale(100%);'; } ?>" id="image_twitter" src="<?php echo base_url ?>assets/files/system/system_twitter.png"/>
-                        <!-- Profile picture upload button-->
-                        <div class="col-md-12 mb-3">
-                            <label class="small mb-1 required float-start" for="system_twitter">Instagram</label>
-                            <input class="form-control" id="system_twitter" name="system_twitter" type="text" placeholder="Enter twitter link" value="<?=$system['twitter'];?>" required/>
-                            <div id="system_twitter-error"></div>
-                        </div>
-                        <button class="btn btn-primary float-end mt-3" type="button" data-bs-toggle="modal" data-bs-target="#Upload_System_Logo">Save</button>
+                        <form id="system-twitter">
+                            <!-- Profile picture image-->
+                            <img class="img-account-profile rounded-circle mb-2" alt="system_logo" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative; <?php if ($system_switch['twitter']=='0') { echo 'filter: grayscale(100%);'; } ?>" id="image_twitter" src="<?php echo base_url ?>assets/files/system/system_twitter.png"/>
+                            <!-- Profile picture upload button-->
+                            <div class="col-md-12 mb-3">
+                                <label class="small mb-1 required float-start" for="system_twitter">Twitter</label>
+                                <input class="form-control" id="system_twitter" name="system_twitter" type="text" placeholder="Enter twitter link" value="<?=$system['twitter'];?>" required/>
+                                <div id="system_twitter-error"></div>
+                            </div>
+                            <button class="btn btn-primary float-end mt-3" type="submit" id="btn_twitter">Save</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -222,15 +228,17 @@
                         </div>
                     </div>
                     <div class="card-body text-center">
-                        <!-- Profile picture image-->
-                        <img class="img-account-profile rounded-circle mb-2" alt="system_logo" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative; <?php if ($system_switch['tumblr']=='0') { echo 'filter: grayscale(100%);'; } ?>" id="image_tumblr" src="<?php echo base_url ?>assets/files/system/system_tumblr.png"/>
-                        <!-- Profile picture upload button-->
-                        <div class="col-md-12 mb-3">
-                            <label class="small mb-1 required float-start" for="system_tumblr">Tumblr</label>
-                            <input class="form-control" id="system_tumblr" name="system_tumblr" type="text" placeholder="Enter tumblr link" value="<?=$system['tumblr'];?>" required/>
-                            <div id="system_tumblr-error"></div>
-                        </div>
-                        <button class="btn btn-primary float-end mt-3" type="button" data-bs-toggle="modal" data-bs-target="#Upload_System_Logo">Save</button>
+                        <form id="system-tumblr">
+                            <!-- Profile picture image-->
+                            <img class="img-account-profile rounded-circle mb-2" alt="system_logo" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative; <?php if ($system_switch['tumblr']=='0') { echo 'filter: grayscale(100%);'; } ?>" id="image_tumblr" src="<?php echo base_url ?>assets/files/system/system_tumblr.png"/>
+                            <!-- Profile picture upload button-->
+                            <div class="col-md-12 mb-3">
+                                <label class="small mb-1 required float-start" for="system_tumblr">Tumblr</label>
+                                <input class="form-control" id="system_tumblr" name="system_tumblr" type="text" placeholder="Enter tumblr link" value="<?=$system['tumblr'];?>" required/>
+                                <div id="system_tumblr-error"></div>
+                            </div>
+                            <button class="btn btn-primary float-end mt-3" type="submit" id="btn_tumblr">Save</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -245,15 +253,17 @@
                         </div>
                     </div>
                     <div class="card-body text-center">
-                        <!-- Profile picture image-->
-                        <img class="img-account-profile rounded-circle mb-2" alt="system_logo" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative; <?php if ($system_switch['email']=='0') { echo 'filter: grayscale(100%);'; } ?>" id="image_email" src="<?php echo base_url ?>assets/files/system/system_email.png"/>
-                        <!-- Profile picture upload button-->
-                        <div class="col-md-12 mb-3">
-                            <label class="small mb-1 required float-start" for="system_email">Email</label>
-                            <input class="form-control" id="system_email" name="system_email" type="email" placeholder="Enter email" value="<?=$system['email'];?>" required/>
-                            <div id="system_email-error"></div>
-                        </div>
-                        <button class="btn btn-primary float-end mt-3" type="button" data-bs-toggle="modal" data-bs-target="#Upload_System_Logo">Save</button>
+                        <form id="system-email">
+                            <!-- Profile picture image-->
+                            <img class="img-account-profile rounded-circle mb-2" alt="system_logo" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative; <?php if ($system_switch['email']=='0') { echo 'filter: grayscale(100%);'; } ?>" id="image_email" src="<?php echo base_url ?>assets/files/system/system_email.png"/>
+                            <!-- Profile picture upload button-->
+                            <div class="col-md-12 mb-3">
+                                <label class="small mb-1 required float-start" for="system_email">Email</label>
+                                <input class="form-control" id="system_email" name="system_email" type="email" placeholder="Enter email" value="<?=$system['email'];?>" required/>
+                                <div id="system_email-error"></div>
+                            </div>
+                            <button class="btn btn-primary float-end mt-3" type="submit" id="btn_email">Save</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -268,15 +278,17 @@
                         </div>
                     </div>
                     <div class="card-body text-center">
-                        <!-- Profile picture image-->
-                        <img class="img-account-profile rounded-circle mb-2" alt="system_logo" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative; <?php if ($system_switch['number']=='0') { echo 'filter: grayscale(100%);'; } ?>" id="image_phone" src="<?php echo base_url ?>assets/files/system/system_phone.png"/>
-                        <!-- Profile picture upload button-->
-                        <div class="col-md-12 mb-3">
-                            <label class="small mb-1 required float-start" for="system_number">Phone</label>
-                            <input class="form-control" id="system_number" name="system_number" type="text" placeholder="Enter phone number" value="<?=$system['number'];?>" required/>
-                            <div id="system_number-error"></div>
-                        </div>
-                        <button class="btn btn-primary float-end mt-3" type="button" data-bs-toggle="modal" data-bs-target="#Upload_System_Logo">Save</button>
+                        <form id="system-phone">
+                            <!-- Profile picture image-->
+                            <img class="img-account-profile rounded-circle mb-2" alt="system_logo" style="object-fit: cover; width: 180px; height: 180px; overflow: hidden; position: relative; <?php if ($system_switch['number']=='0') { echo 'filter: grayscale(100%);'; } ?>" id="image_phone" src="<?php echo base_url ?>assets/files/system/system_phone.png"/>
+                            <!-- Profile picture upload button-->
+                            <div class="col-md-12 mb-3">
+                                <label class="small mb-1 required float-start" for="system_number">Phone</label>
+                                <input class="form-control" id="system_number" name="system_number" type="text" placeholder="Enter phone number" value="<?=$system['number'];?>" required/>
+                                <div id="system_number-error"></div>
+                            </div>
+                            <button class="btn btn-primary float-end mt-3" type="submit" id="btn_phone">Save</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -333,6 +345,11 @@
                                 <!-- Form Row-->
                                 <div class="row gx-3 mb-3">
                                     <!-- Form Group (System Terms)-->
+                                    <div class="col-md-12 mb-3">
+                                        <label for="system_title" class="required">Title</label>
+                                        <input type="text" name="system_title" id="system_title" class="form-control" value="<?= $system['sysacttitle'] ?>" required>
+                                        <div id="system_title-error"></div>
+                                    </div>
                                     <div class="col-md-12 mb-3">
                                         <textarea class="form-control" id="summernote" name="system_act" type="text" rows="20" placeholder="Enter system republic act" required><?= $system['sysact'] ?></textarea>
                                         <div id="system_act-error"></div>
@@ -1054,6 +1071,199 @@
             ['insert', ['link', 'picture', 'video']],
             ['view', ['fullscreen', 'codeview', 'help']]
             ]
+        });
+    });
+</script>
+
+<!-- Ajax for Change System Social-->
+<script>
+    $(document).ready(function () {
+        // Submit form via AJAX
+        $('#system-facebook').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            var formData = new FormData(this);
+            formData.append('update_system_facebook', '1');
+            $.ajax({
+                type: 'POST',
+                url: 'ajax.php',
+                data: formData,
+                processData: false,
+                cache: false,
+                contentType: false,
+                beforeSend: function () {
+                    $('#btn_facebook').attr('disabled', 'disabled');
+                },
+                success: function (data) {
+                    data = JSON.parse(data); // Parse the JSON response
+                    swal({
+                        title: "Notice",
+                        text: data.status,
+                        icon: data.alert,
+                        button: true
+                    }).then(function () {
+                        $('#btn_facebook').removeAttr('disabled');
+                    });
+                },
+                error: function (xhr, status, error) {
+                    // Handle any errors that occur during the AJAX request
+                    console.error('Error:', error);
+                }
+            });
+        });
+        $('#system-instagram').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            var formData = new FormData(this);
+            formData.append('update_system_instagram', '1');
+            $.ajax({
+                type: 'POST',
+                url: 'ajax.php',
+                data: formData,
+                processData: false,
+                cache: false,
+                contentType: false,
+                beforeSend: function () {
+                    $('#btn_instagram').attr('disabled', 'disabled');
+                },
+                success: function (data) {
+                    data = JSON.parse(data); // Parse the JSON response
+                    swal({
+                        title: "Notice",
+                        text: data.status,
+                        icon: data.alert,
+                        button: true
+                    }).then(function () {
+                        $('#btn_instagram').removeAttr('disabled');
+                    });
+                },
+                error: function (xhr, status, error) {
+                    // Handle any errors that occur during the AJAX request
+                    console.error('Error:', error);
+                }
+            });
+        });
+        $('#system-twitter').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            var formData = new FormData(this);
+            formData.append('update_system_twitter', '1');
+            $.ajax({
+                type: 'POST',
+                url: 'ajax.php',
+                data: formData,
+                processData: false,
+                cache: false,
+                contentType: false,
+                beforeSend: function () {
+                    $('#btn_twitter').attr('disabled', 'disabled');
+                },
+                success: function (data) {
+                    data = JSON.parse(data); // Parse the JSON response
+                    swal({
+                        title: "Notice",
+                        text: data.status,
+                        icon: data.alert,
+                        button: true
+                    }).then(function () {
+                        $('#btn_twitter').removeAttr('disabled');
+                    });
+                },
+                error: function (xhr, status, error) {
+                    // Handle any errors that occur during the AJAX request
+                    console.error('Error:', error);
+                }
+            });
+        });
+        $('#system-tumblr').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            var formData = new FormData(this);
+            formData.append('update_system_tumblr', '1');
+            $.ajax({
+                type: 'POST',
+                url: 'ajax.php',
+                data: formData,
+                processData: false,
+                cache: false,
+                contentType: false,
+                beforeSend: function () {
+                    $('#btn_tumblr').attr('disabled', 'disabled');
+                },
+                success: function (data) {
+                    data = JSON.parse(data); // Parse the JSON response
+                    swal({
+                        title: "Notice",
+                        text: data.status,
+                        icon: data.alert,
+                        button: true
+                    }).then(function () {
+                        $('#btn_tumblr').removeAttr('disabled');
+                    });
+                },
+                error: function (xhr, status, error) {
+                    // Handle any errors that occur during the AJAX request
+                    console.error('Error:', error);
+                }
+            });
+        });
+        $('#system-email').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            var formData = new FormData(this);
+            formData.append('update_system_email', '1');
+            $.ajax({
+                type: 'POST',
+                url: 'ajax.php',
+                data: formData,
+                processData: false,
+                cache: false,
+                contentType: false,
+                beforeSend: function () {
+                    $('#btn_email').attr('disabled', 'disabled');
+                },
+                success: function (data) {
+                    data = JSON.parse(data); // Parse the JSON response
+                    swal({
+                        title: "Notice",
+                        text: data.status,
+                        icon: data.alert,
+                        button: true
+                    }).then(function () {
+                        $('#btn_email').removeAttr('disabled');
+                    });
+                },
+                error: function (xhr, status, error) {
+                    // Handle any errors that occur during the AJAX request
+                    console.error('Error:', error);
+                }
+            });
+        });
+        $('#system-phone').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            var formData = new FormData(this);
+            formData.append('update_system_phone', '1');
+            $.ajax({
+                type: 'POST',
+                url: 'ajax.php',
+                data: formData,
+                processData: false,
+                cache: false,
+                contentType: false,
+                beforeSend: function () {
+                    $('#btn_phone').attr('disabled', 'disabled');
+                },
+                success: function (data) {
+                    data = JSON.parse(data); // Parse the JSON response
+                    swal({
+                        title: "Notice",
+                        text: data.status,
+                        icon: data.alert,
+                        button: true
+                    }).then(function () {
+                        $('#btn_phone').removeAttr('disabled');
+                    });
+                },
+                error: function (xhr, status, error) {
+                    // Handle any errors that occur during the AJAX request
+                    console.error('Error:', error);
+                }
+            });
         });
     });
 </script>
