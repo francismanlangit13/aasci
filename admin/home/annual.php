@@ -28,13 +28,13 @@
                         <i class="fas fa-user-plus"></i> Add Annual Dues
                     </span>
                 </button>
-                <form action="ajax.php" method="post" name="export_excel" enctype="multipart/form-data" class="form-horizontal">
+                <!-- <form action="ajax.php" method="post" name="export_excel" enctype="multipart/form-data" class="form-horizontal">
                     <button class="btn btn-primary btn-icon-split btn-sm float-end" style="margin-right: 0.5rem; margin-top: -1.5rem" name="btn_export_dues"> 
                         <span class="icon text-white">
                             <i class="fas fa-file-export"></i> Export
                         </span>
                     </button>
-                </form>
+                </form> -->
             </div>
             <div class="card-body">
                 <table id="dataTable" class="display cell-border stripe table table-bordered dataTable no-footer" style="width:99% !important">
