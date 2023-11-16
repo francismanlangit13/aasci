@@ -33,6 +33,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>ID Number</th>
                             <th>Full Name</th>
                             <th>Gender</th>
                             <th>Birthday</th>
@@ -75,6 +76,7 @@
                                 'scrollCollapse': true, // Allow vertical scrollbar when necessary
                                 'columns': [
                                     { data: 'user_id', className: 'text-center' },
+                                    { data: 'id_number', className: 'text-center' },
                                     { data: 'fullname', className: 'text-center', },
                                     { data: 'gender', className: 'text-center' },
                                     { data: 'newbirthday', className: 'text-center' },
@@ -110,8 +112,8 @@
                                         data: null,
                                         render: function(data, type, row, meta) {
                                             return '<div class="row d-flex" style="justify-content:space-evenly;">'+
-                                            '<button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#btn_view_client" data-view_id="' + data.user_id + '" data-view_profile="' + data.profile + '" data-view_psa="' + data.psa + '" onclick="viewModal(this)" title="View"><i class="fa fa-eye"></i></button>'+
-                                            '<button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#btn_edit_client" data-edit_client_id="' + data.user_id + '" data-edit_fname="' + data.fname + '" data-edit_mname="' + data.mname + '" data-edit_lname="' + data.lname + '" data-edit_suffix="' + data.suffix + '" data-edit_gender="' + data.gender + '" data-edit_birthday="' + data.birthday + '" data-edit_barangay="' + data.barangay + '" data-edit_date_issued="' + data.dateissued + '" data-edit_rrn="' + data.rrn + '" data-edit_soc_pen="' + data.soc_pen + '" data-edit_gsis="' + data.gsis + '" data-edit_sss="' + data.sss + '" data-edit_pvao="' + data.pvao + '" data-edit_sup_with="' + data.sup_with + '" data-edit_4ps="' + data.fourps + '" data-edit_nhts="' + data.nhts + '" data-edit_id_file="' + data.id_file + '" data-edit_status="' + data.user_status_id + '" data-edit_deceased="' + data.deceased + '" data-edit_transfer="' + data.transfer + '" data-edit_profile="' + data.profile + '" data-edit_psa="' + data.psa + '" onclick="editModal(this)" title="Edit"><i class="fa fa-edit"></i></button>'+
+                                            '<button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#btn_view_client" data-view_id="' + data.user_id + '" data-view_id_number="' + data.id_number + '" data-view_profile="' + data.profile + '" data-view_psa="' + data.psa + '" onclick="viewModal(this)" title="View"><i class="fa fa-eye"></i></button>'+
+                                            '<button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#btn_edit_client" data-edit_client_id="' + data.user_id + '" data-edit_client_id_number="' + data.id_number + '" data-edit_fname="' + data.fname + '" data-edit_mname="' + data.mname + '" data-edit_lname="' + data.lname + '" data-edit_suffix="' + data.suffix + '" data-edit_gender="' + data.gender + '" data-edit_birthday="' + data.birthday + '" data-edit_barangay="' + data.barangay + '" data-edit_date_issued="' + data.dateissued + '" data-edit_rrn="' + data.rrn + '" data-edit_soc_pen="' + data.soc_pen + '" data-edit_gsis="' + data.gsis + '" data-edit_sss="' + data.sss + '" data-edit_pvao="' + data.pvao + '" data-edit_sup_with="' + data.sup_with + '" data-edit_4ps="' + data.fourps + '" data-edit_nhts="' + data.nhts + '" data-edit_id_file="' + data.id_file + '" data-edit_status="' + data.user_status_id + '" data-edit_deceased="' + data.deceased + '" data-edit_transfer="' + data.transfer + '" data-edit_profile="' + data.profile + '" data-edit_psa="' + data.psa + '" onclick="editModal(this)" title="Edit"><i class="fa fa-edit"></i></button>'+
                                             '<button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#btn_delete_client" data-delete_client_id="' + data.user_id + '" data-delete_fname="' + data.fname + '" data-delete_mname="' + data.mname + '" data-delete_lname="' + data.lname + '" data-delete_suffix="' + data.suffix + '" onclick="deleteModal(this)" title="Delete"><i class="fa fa-trash"></i></button>'+
                                             '</div>';
                                         },
@@ -155,24 +157,24 @@
                         <div class="card-body">
                             <div class="row">
                                 <h6 class="mb-3"><sup class="text-red p-1">Note!</sup>Fields marked with <code class="text-red">*</code> are mandatory and <code class="text-green">*</code> are optional.</h6>
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="add_fname" class="required">First Name</label>
                                     <input required placeholder="Enter First Name" type="text" id="add_fname" name="add_fname" class="form-control">
                                     <div id="add_fname-error"></div>
                                 </div> 
                             
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="add_mname" class="optional">Middle Name</label>
                                     <input placeholder="Enter Middle Name" type="text" id="add_mname" name="add_mname" class="form-control">
                                 </div>
 
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="add_lname" class="required">Last Name</label>
                                     <input required placeholder="Enter Last Name" type="text" id="add_lname" name="add_lname" class="form-control">
                                     <div id="add_lname-error"></div>
                                 </div>
 
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="add_suffix" class="required">Suffix</label>
                                     <select required class="form-control" id="add_suffix" name="add_suffix">
                                         <option value="" selected>Select Suffix</option>
@@ -187,6 +189,12 @@
                                         <option value="VI">VI</option>
                                     </select>
                                     <div id="add_suffix-error"></div>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label for="add_id_number" class="required">ID Number</label>
+                                    <input required placeholder="Enter ID Number" type="number" id="add_id_number" name="add_id_number" class="form-control">
+                                    <div id="add_id_number-error"></div>
                                 </div>
 
                                 <div class="col-md-4 mb-3">
@@ -366,6 +374,8 @@
         $('#add_lname-error').empty();
         $('#add_suffix').removeClass('is-invalid');
         $('#add_suffix-error').empty();
+        $('#add_id_number').removeClass('is-invalid');
+        $('#add_id_number-error').empty();
         $('#add_gender').removeClass('is-invalid');
         $('#add_gender-error').empty();
         $('#add_birthday').removeClass('is-invalid');
@@ -401,6 +411,7 @@
         var debouncedCheckadd_Fname = _.debounce(checkadd_Fname, 500);
         var debouncedCheckadd_Lname = _.debounce(checkadd_Lname, 500);
         var debouncedCheckadd_Suffix = _.debounce(checkadd_Suffix, 500);
+        var debouncedCheckadd_Id = _.debounce(checkadd_Id, 500);
         var debouncedCheckadd_Gender = _.debounce(checkadd_Gender, 500);
         var debouncedCheckadd_Birthday = _.debounce(checkadd_Birthday, 500);
         var debouncedCheckadd_Barangay = _.debounce(checkadd_Barangay, 500);
@@ -419,6 +430,7 @@
         $('#add_fname').on('input', debouncedCheckadd_Fname);
         $('#add_lname').on('input', debouncedCheckadd_Lname);
         $('#add_suffix').on('change', debouncedCheckadd_Suffix);
+        $('#add_id_number').on('input', debouncedCheckadd_Id);
         $('#add_gender').on('input', debouncedCheckadd_Gender);
         $('#add_birthday').on('input', debouncedCheckadd_Birthday);
         $('#add_barangay').on('input', debouncedCheckadd_Barangay);
@@ -445,6 +457,7 @@
         $('#add_fname').on('blur', debouncedCheckadd_Fname);
         $('#add_lname').on('blur', debouncedCheckadd_Lname);
         $('#add_suffix').on('blur', debouncedCheckadd_Suffix);
+        $('#add_id_number').on('blur', debouncedCheckadd_Id);
         $('#add_gender').on('blur', debouncedCheckadd_Gender);
         $('#add_birthday').on('blur', debouncedCheckadd_Birthday);
         $('#add_barangay').on('blur', debouncedCheckadd_Barangay);
@@ -469,7 +482,7 @@
 
         function checkIfAllFieldsValid() {
             // check if all input fields are valid and enable submit button if so
-            if ($('#add_fname-error').is(':empty') && $('#add_lname-error').is(':empty') && $('#add_suffix-error').is(':empty') && $('#add_gender-error').is(':empty') && $('#add_birthday-error').is(':empty') && $('#add_barangay-error').is(':empty') && $('#add_date_issued-error').is(':empty') && $('#add_rrn-error').is(':empty') && $('#add_soc_pen-error').is(':empty') && $('#add_gsis-error').is(':empty') && $('#add_sss-error').is(':empty') && $('#add_pvao-error').is(':empty') && $('#add_sup_with-error').is(':empty') && $('#add_4ps-error').is(':empty') && $('#add_nhts-error').is(':empty') && $('#add_id_file-error').is(':empty')) {
+            if ($('#add_fname-error').is(':empty') && $('#add_lname-error').is(':empty') && $('#add_suffix-error').is(':empty') && $('#add_id_number-error').is(':empty') && $('#add_gender-error').is(':empty') && $('#add_birthday-error').is(':empty') && $('#add_barangay-error').is(':empty') && $('#add_date_issued-error').is(':empty') && $('#add_rrn-error').is(':empty') && $('#add_soc_pen-error').is(':empty') && $('#add_gsis-error').is(':empty') && $('#add_sss-error').is(':empty') && $('#add_pvao-error').is(':empty') && $('#add_sup_with-error').is(':empty') && $('#add_4ps-error').is(':empty') && $('#add_nhts-error').is(':empty') && $('#add_id_file-error').is(':empty')) {
                 $('#add_client').prop('disabled', false);
             } else {
                 $('#add_client').prop('disabled', true);
@@ -522,6 +535,22 @@
             // Perform additional validation for suffix if needed
             $('#add_suffix-error').empty();
             $('#add_suffix').removeClass('is-invalid');
+            checkIfAllFieldsValid();
+        }
+
+        function checkadd_Id() {
+            var add_id_number = $('#add_id_number').val().trim();
+            // show error if id number is empty
+            if (add_id_number === '') {
+                $('#add_id_number-error').text('Please input id number').css('color', 'red');
+                $('#add_id_number').addClass('is-invalid');
+                checkIfAllFieldsValid();
+                return;
+            }
+            
+            // Perform additional validation for last name if needed
+            $('#add_id_number-error').empty();
+            $('#add_id_number').removeClass('is-invalid');
             checkIfAllFieldsValid();
         }
 
@@ -839,24 +868,24 @@
                         <div class="card-body">
                             <div class="row">
                                 <h6 class="mb-3"><sup class="text-red p-1">Note!</sup>Fields marked with <code class="text-red">*</code> are mandatory and <code class="text-green">*</code> are optional.</h6>
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="edit_fname" class="required">First Name</label>
                                     <input required placeholder="Enter First Name" type="text" id="edit_fname" name="edit_fname" class="form-control">
                                     <div id="edit_fname-error"></div>
                                 </div> 
                             
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="edit_mname" class="optional">Middle Name</label>
                                     <input placeholder="Enter Middle Name" type="text" id="edit_mname" name="edit_mname" class="form-control">
                                 </div>
 
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="edit_lname" class="required">Last Name</label>
                                     <input required placeholder="Enter Last Name" type="text" id="edit_lname" name="edit_lname" class="form-control">
                                     <div id="edit_lname-error"></div>
                                 </div>
 
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="edit_suffix" class="required">Suffix</label>
                                     <select required class="form-control" id="edit_suffix" name="edit_suffix">
                                         <option value="" selected>Select Suffix</option>
@@ -871,6 +900,12 @@
                                         <option value="VI">VI</option>
                                     </select>
                                     <div id="edit_suffix-error"></div>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label for="edit_id_number" class="required">ID Number</label>
+                                    <input required placeholder="Enter ID Number" type="text" id="edit_id_number" name="edit_id_number" class="form-control">
+                                    <div id="edit_id_number-error"></div>
                                 </div>
 
                                 <div class="col-md-4 mb-3">
@@ -1082,6 +1117,7 @@
         document.getElementById("edit_mname").value = button.getAttribute("data-edit_mname");
         document.getElementById("edit_lname").value = button.getAttribute("data-edit_lname");
         document.getElementById("edit_suffix").value = button.getAttribute("data-edit_suffix");
+        document.getElementById("edit_id_number").value = button.getAttribute("data-edit_id_number");
         document.getElementById("edit_gender").value = button.getAttribute("data-edit_gender");
         document.getElementById("edit_birthday").value = button.getAttribute("data-edit_birthday");
         document.getElementById("edit_barangay").value = button.getAttribute("data-edit_barangay");
@@ -1145,6 +1181,8 @@
         $('#edit_lname-error').empty();
         $('#edit_suffix').removeClass('is-invalid');
         $('#edit_suffix-error').empty();
+        $('#edit_id_number').removeClass('is-invalid');
+        $('#edit_id_number-error').empty();
         $('#edit_gender').removeClass('is-invalid');
         $('#edit_gender-error').empty();
         $('#edit_birthday').removeClass('is-invalid');
@@ -1182,6 +1220,7 @@
         var debouncedCheckedit_Fname = _.debounce(checkedit_Fname, 500);
         var debouncedCheckedit_Lname = _.debounce(checkedit_Lname, 500);
         var debouncedCheckedit_Suffix = _.debounce(checkedit_Suffix, 500);
+        var debouncedCheckedit_Id = _.debounce(checkedit_Id, 500);
         var debouncedCheckedit_Gender = _.debounce(checkedit_Gender, 500);
         var debouncedCheckedit_Birthday = _.debounce(checkedit_Birthday, 500);
         var debouncedCheckedit_Barangay = _.debounce(checkedit_Barangay, 500);
@@ -1201,6 +1240,7 @@
         $('#edit_fname').on('input', debouncedCheckedit_Fname);
         $('#edit_lname').on('input', debouncedCheckedit_Lname);
         $('#edit_suffix').on('change', debouncedCheckedit_Suffix);
+        $('#edit_id_number').on('input', debouncedCheckedit_Id);
         $('#edit_gender').on('input', debouncedCheckedit_Gender);
         $('#edit_birthday').on('input', debouncedCheckedit_Birthday);
         $('#edit_barangay').on('input', debouncedCheckedit_Barangay);
@@ -1228,6 +1268,7 @@
         $('#edit_fname').on('blur', debouncedCheckedit_Fname);
         $('#edit_lname').on('blur', debouncedCheckedit_Lname);
         $('#edit_suffix').on('blur', debouncedCheckedit_Suffix);
+        $('#edit_id_number').on('blur', debouncedCheckedit_Id);
         $('#edit_gender').on('blur', debouncedCheckedit_Gender);
         $('#edit_birthday').on('blur', debouncedCheckedit_Birthday);
         $('#edit_barangay').on('blur', debouncedCheckedit_Barangay);
@@ -1253,7 +1294,7 @@
 
         function checkIfAllFieldsValid() {
             // check if all input fields are valid and enable submit button if so
-            if ($('#edit_fname-error').is(':empty') && $('#edit_lname-error').is(':empty') && $('#edit_suffix-error').is(':empty') && $('#edit_gender-error').is(':empty') && $('#edit_birthday-error').is(':empty') && $('#edit_barangay-error').is(':empty') && $('#edit_date_issued-error').is(':empty') && $('#edit_rrn-error').is(':empty') && $('#edit_soc_pen-error').is(':empty') && $('#edit_gsis-error').is(':empty') && $('#edit_sss-error').is(':empty') && $('#edit_pvao-error').is(':empty') && $('#edit_sup_with-error').is(':empty') && $('#edit_4ps-error').is(':empty') && $('#edit_nhts-error').is(':empty') && $('#edit_id_file-error').is(':empty') && $('#edit_status-error').is(':empty')) {
+            if ($('#edit_fname-error').is(':empty') && $('#edit_lname-error').is(':empty') && $('#edit_suffix-error').is(':empty') && $('#edit_id_number-error').is(':empty') && $('#edit_gender-error').is(':empty') && $('#edit_birthday-error').is(':empty') && $('#edit_barangay-error').is(':empty') && $('#edit_date_issued-error').is(':empty') && $('#edit_rrn-error').is(':empty') && $('#edit_soc_pen-error').is(':empty') && $('#edit_gsis-error').is(':empty') && $('#edit_sss-error').is(':empty') && $('#edit_pvao-error').is(':empty') && $('#edit_sup_with-error').is(':empty') && $('#edit_4ps-error').is(':empty') && $('#edit_nhts-error').is(':empty') && $('#edit_id_file-error').is(':empty') && $('#edit_status-error').is(':empty')) {
                 $('#edit_client').prop('disabled', false);
             } else {
                 $('#edit_client').prop('disabled', true);
@@ -1306,6 +1347,22 @@
             // Perform additional validation for suffix if needed
             $('#edit_suffix-error').empty();
             $('#edit_suffix').removeClass('is-invalid');
+            checkIfAllFieldsValid();
+        }
+
+        function checkedit_Id() {
+            var edit_id_number = $('#edit_id_number').val().trim();
+            // show error if id number is empty
+            if (edit_id_number === '') {
+                $('#edit_id_number-error').text('Please input id number').css('color', 'red');
+                $('#edit_id_number').addClass('is-invalid');
+                checkIfAllFieldsValid();
+                return;
+            }
+            
+            // Perform additional validation for id number if needed
+            $('#edit_id_number-error').empty();
+            $('#edit_id_number').removeClass('is-invalid');
             checkIfAllFieldsValid();
         }
 

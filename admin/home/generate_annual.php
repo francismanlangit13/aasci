@@ -1,7 +1,7 @@
 <?php include ('../includes/header.php'); ?>
 <head>
     <!-- Website Title -->
-    <title><?= $system['shortname'] ?> | Reports</title>
+    <title><?= $system['shortname'] ?> | Annual Reports</title>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <style>
         @media print{
@@ -43,7 +43,7 @@
         <nav class="rounded bg-gray-200 mb-4 noprint" aria-label="breadcrumb">
             <ol class="breadcrumb px-3 py-2 rounded mb-0">
                 <li class="breadcrumb-item"><a class="text-decoration-none" href="../home">Home</a></li>
-                <li class="breadcrumb-item active">Reports</li>
+                <li class="breadcrumb-item active">Annual Reports</li>
             </ol>
         </nav>
         <div class="card mb-4 noprint">
@@ -116,52 +116,28 @@
                                     <label class="form-check-label" for="Age">Age</label>
                                 </div>
                                 <div class='col-md-2'>
-                                    <input class="form-check-input" type="checkbox" value="Date_Issued" id="Date_Issued" name="Date_Issued">
-                                    <label class="form-check-label" for="Date_Issued">Date Issued</label>
+                                    <input class="form-check-input" type="checkbox" value="2018" id="2018" name="2018">
+                                    <label class="form-check-label" for="2018">2018</label>
                                 </div>
                                 <div class='col-md-2'>
-                                    <input class="form-check-input" type="checkbox" value="Soc_Pen" id="Soc_Pen" name="Soc_Pen">
-                                    <label class="form-check-label" for="Soc_Pen">Soc-Pen</label>
+                                    <input class="form-check-input" type="checkbox" value="2019" id="2019" name="2019">
+                                    <label class="form-check-label" for="2019">2019</label>
                                 </div>
                                 <div class='col-md-2'>
-                                    <input class="form-check-input" type="checkbox" value="GSIS" id="GSIS" name="GSIS">
-                                    <label class="form-check-label" for="GSIS">GSIS</label>
+                                    <input class="form-check-input" type="checkbox" value="2020" id="2020" name="2020">
+                                    <label class="form-check-label" for="2020">2020</label>
                                 </div>
                                 <div class='col-md-2'>
-                                    <input class="form-check-input" type="checkbox" value="SSS" id="SSS" name="SSS">
-                                    <label class="form-check-label" for="SSS">SSS</label>
+                                    <input class="form-check-input" type="checkbox" value="2021" id="2021" name="2021">
+                                    <label class="form-check-label" for="2021">2021</label>
                                 </div>
                                 <div class='col-md-2'>
-                                    <input class="form-check-input" type="checkbox" value="PVAO" id="PVAO" name="PVAO">
-                                    <label class="form-check-label" for="PVAO">PVAO</label>
+                                    <input class="form-check-input" type="checkbox" value="2022" id="2022" name="2022">
+                                    <label class="form-check-label" for="2022">2022</label>
                                 </div>
                                 <div class='col-md-2'>
-                                    <input class="form-check-input" type="checkbox" value="SUP_WITH" id="SUP_WITH" name="SUP_WITH">
-                                    <label class="form-check-label" for="SUP_WITH">SUP-WITH</label>
-                                </div>
-                                <div class='col-md-2'>
-                                    <input class="form-check-input" type="checkbox" value="4Ps" id="4Ps" name="4Ps">
-                                    <label class="form-check-label" for="4Ps">4Ps</label>
-                                </div>
-                                <div class='col-md-2'>
-                                    <input class="form-check-input" type="checkbox" value="NHTS" id="NHTS" name="NHTS">
-                                    <label class="form-check-label" for="NHTS">NHTS</label>
-                                </div>
-                                <div class='col-md-2'>
-                                    <input class="form-check-input" type="checkbox" value="ID_File" id="ID_File" name="ID_File">
-                                    <label class="form-check-label" for="ID_File">ID-File</label>
-                                </div>
-                                <div class='col-md-2'>
-                                    <input class="form-check-input" type="checkbox" value="RRN" id="RRN" name="RRN">
-                                    <label class="form-check-label" for="RRN">RRN</label>
-                                </div>
-                                <div class='col-md-2'>
-                                    <input class="form-check-input" type="checkbox" value="Deceased" id="Deceased" name="Deceased">
-                                    <label class="form-check-label" for="Deceased">Deceased</label>
-                                </div>
-                                <div class='col-md-2'>
-                                    <input class="form-check-input" type="checkbox" value="Transfer" id="Transfer" name="Transfer">
-                                    <label class="form-check-label" for="Transfer">Transfer</label>
+                                    <input class="form-check-input" type="checkbox" value="2023" id="2023" name="2023">
+                                    <label class="form-check-label" for="2023">2023</label>
                                 </div>
                             </div>
                             <div class="form-group col-md-6 mt-2">
@@ -190,16 +166,56 @@
             </div>
             <?php
                 if(!empty($_POST['Barangay'])) {
-                    $stmt = $con->prepare("SELECT *, CASE WHEN deceased_date IS NOT NULL THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM user WHERE user_type_id = 3 AND barangay = ?");
-                    $stmt->bind_param("s", $barangay);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
+                    $barangay = mysqli_real_escape_string($con, $barangay); // Escape the variable to prevent SQL injection
+
+                    $query = "
+                        SET @sql = NULL;
+                        SELECT GROUP_CONCAT(DISTINCT 'MAX(CASE WHEN year = \"', year, '\" THEN amount END) AS `', year, '`') INTO @columns
+                        FROM annual_dues;
+                        SET @sql = CONCAT('SELECT user.*, CASE WHEN deceased_date IS NOT NULL THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age, ', @columns, '
+                            FROM 
+                                user
+                            INNER JOIN 
+                                annual_dues ON annual_dues.user_id = user.user_id 
+                            WHERE 
+                                user.barangay = ''$barangay'' 
+                            GROUP BY 
+                                user.id_number');
+                        PREPARE stmt FROM @sql;
+                        EXECUTE stmt;
+                        DEALLOCATE PREPARE stmt;
+                    ";
+                    // Execute the SQL query
+                    $con->multi_query($query);
+                    // Move to the fifth result set (assuming four additional queries before)
+                    for ($i = 0; $i < 4; $i++) {
+                        $con->next_result();
+                    }
+                    // Fetch the result of the fifth query
+                    $result = $con->store_result();
                 } else{
-                    $stmt = $con->prepare("SELECT *, CASE WHEN deceased_date IS NOT NULL THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM user WHERE user_type_id = ?");
-                    $stmt->bind_param("i", $user_type_id); // "i" indicates integer, adjust it based on your data type
-                    $user_type_id = 3; // Set the value for the parameter
-                    $stmt->execute();
-                    $result = $stmt->get_result();
+                    $query = "
+                        SET @sql = NULL;
+                        SELECT GROUP_CONCAT(DISTINCT 'MAX(CASE WHEN year = \"', year, '\" THEN amount END) AS `', year, '`') INTO @columns
+                        FROM annual_dues;
+                        SET @sql = CONCAT('SELECT user.*, CASE WHEN deceased_date IS NOT NULL THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age, ', @columns, ' FROM user
+                        INNER JOIN annual_dues ON annual_dues.user_id = user.user_id
+                        GROUP BY user.id_number');
+                        PREPARE stmt FROM @sql;
+                        EXECUTE stmt;
+                        DEALLOCATE PREPARE stmt;
+                    ";
+
+                    // Execute the SQL query
+                    $con->multi_query($query);
+
+                    // Move to the fifth result set (assuming four additional queries before)
+                    for ($i = 0; $i < 4; $i++) {
+                        $con->next_result();
+                    }
+
+                    // Fetch the result of the fifth query
+                    $result = $con->store_result();
                 }
             ?>
             <div class="col-md-12 print-table-adjust" style="overflow-x: auto;">
@@ -221,115 +237,76 @@
                             <?php if(isset($_POST['Age'])) { ?>
                                 <th>Age</th>
                             <?php } ?>
-                            <?php if(isset($_POST['Date_Issued'])) { ?>
-                                <th>Date Issued</th>
+                            <?php if(isset($_POST['2018'])) { ?>
+                                <th>2018</th>
                             <?php } ?>
-                            <?php if(isset($_POST['Soc_Pen'])) { ?>
-                                <th>Soc-Pen</th>
+                            <?php if(isset($_POST['2019'])) { ?>
+                                <th>2019</th>
                             <?php } ?>
-                            <?php if(isset($_POST['GSIS'])) { ?>
-                                <th>GSIS</th>
+                            <?php if(isset($_POST['2020'])) { ?>
+                                <th>2020</th>
                             <?php } ?>
-                            <?php if(isset($_POST['SSS'])) { ?>
-                                <th>SSS</th>
+                            <?php if(isset($_POST['2021'])) { ?>
+                                <th>2021</th>
                             <?php } ?>
-                            <?php if(isset($_POST['PVAO'])) { ?>
-                                <th>PVAO</th>
+                            <?php if(isset($_POST['2022'])) { ?>
+                                <th>2022</th>
                             <?php } ?>
-                            <?php if(isset($_POST['SUP_WITH'])) { ?>
-                                <th>SUP-WITH</th>
-                            <?php } ?>
-                            <?php if(isset($_POST['4Ps'])) { ?>
-                                <th>4Ps</th>
-                            <?php } ?>
-                            <?php if(isset($_POST['NHTS'])) { ?>
-                                <th>NHTS</th>
-                            <?php } ?>
-                            <?php if(isset($_POST['ID_File'])) { ?>
-                                <th>ID-File</th>
-                            <?php } ?>
-                            <?php if(isset($_POST['RRN'])) { ?>
-                                <th>RRN</th>
-                            <?php } ?>
-                            <?php if(isset($_POST['Deceased'])) { ?>
-                                <th>Deceased</th>
-                                <th>Deceased Date</th>
-                            <?php } ?>
-                            <?php if(isset($_POST['Transfer'])) { ?>
-                                <th>Transfer</th>
-                                <th>Transfer Date</th>
+                            <?php if(isset($_POST['2023'])) { ?>
+                                <th>2023</th>
                             <?php } ?>
                         </tr>
                     </thead>
                     <tbody>
                         <?php		
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<tr>';
-                                        echo '<td class="text-center">' . $row['user_id'] . '</td>';
-                                        echo '<td class=""><p class="m-0">' . $row['fname'] . ' ' . $row['mname'] . ' ' . $row['lname'] . ' ' . $row['suffix'] . '</p></td>';
-                                        if(isset($_POST['Barangay'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['barangay'] . '</p></td>';
-                                        }
-                                        if(isset($_POST['ID'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['id_number'] . '</p></td>';
-                                        }
-                                        if(isset($_POST['Gender'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['gender'] . '</p></td>';
-                                        }
-                                        if(isset($_POST['Birthday'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['birthday'] . '</p></td>';
-                                        }
-                                        if(isset($_POST['Age'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['age'] . '</p></td>';
-                                        }
-                                        if(isset($_POST['Date_Issued'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['date_issued'] . '</p></td>';
-                                        }
-                                        if(isset($_POST['Soc_Pen'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['soc_pen'] . '</p></td>';
-                                        }
-                                        if(isset($_POST['GSIS'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['gsis'] . '</p></td>';
-                                        }
-                                        if(isset($_POST['SSS'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['sss'] . '</p></td>';
-                                        }
-                                        if(isset($_POST['PVAO'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['pvao'] . '</p></td>';
-                                        }
-                                        if(isset($_POST['SUP_WITH'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['sup_with'] . '</p></td>';
-                                        }
-                                        if(isset($_POST['4Ps'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['fourps'] . '</p></td>';
-                                        }
-                                        if(isset($_POST['NHTS'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['nhts'] . '</p></td>';
-                                        }
-                                        if(isset($_POST['ID_File'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['id_file'] . '</p></td>';
-                                        }
-                                        if(isset($_POST['RRN'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['rrn'] . '</p></td>';
-                                        }
-                                        if(isset($_POST['Deceased'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['is_deceased'] . '</p></td>';
-                                            echo '<td class=""><p class="m-0">' . $row['deceased_date'] . '</p></td>';
-                                        }
-                                        if(isset($_POST['Transfer'])) { 
-                                            echo '<td class=""><p class="m-0">' . $row['is_transfer'] . '</p></td>';
-                                            echo '<td class=""><p class="m-0">' . $row['transfer_date'] . '</p></td>';
-                                        }
-                                        echo '</tr>';
-                                    }
-                                } else {
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
                                     echo '<tr>';
-                                    echo '<th class="py-1 text-center" colspan="12">No Data.</th>';
+                                    echo '<td class="text-center">' . $row['user_id'] . '</td>';
+                                    echo '<td class=""><p class="m-0">' . $row['fname'] . ' ' . $row['mname'] . ' ' . $row['lname'] . ' ' . $row['suffix'] . '</p></td>';
+                                    if(isset($_POST['Barangay'])) { 
+                                        echo '<td class=""><p class="m-0">' . $row['barangay'] . '</p></td>';
+                                    }
+                                    if(isset($_POST['ID'])) { 
+                                        echo '<td class=""><p class="m-0">' . $row['id_number'] . '</p></td>';
+                                    }
+                                    if(isset($_POST['Gender'])) { 
+                                        echo '<td class=""><p class="m-0">' . $row['gender'] . '</p></td>';
+                                    }
+                                    if(isset($_POST['Birthday'])) { 
+                                        echo '<td class=""><p class="m-0">' . $row['birthday'] . '</p></td>';
+                                    }
+                                    if(isset($_POST['Age'])) { 
+                                        echo '<td class=""><p class="m-0">' . $row['age'] . '</p></td>';
+                                    }
+                                    if(isset($_POST['2018'])) { 
+                                        echo '<td class=""><p class="m-0">' . (isset($row['2018']) ? $row['2018'] : "") . '</p></td>';
+                                    }
+                                    if(isset($_POST['2019'])) { 
+                                        echo '<td class=""><p class="m-0">' . (isset($row['2019']) ? $row['2019'] : "") . '</p></td>';
+                                    }
+                                    if(isset($_POST['2020'])) { 
+                                        echo '<td class=""><p class="m-0">' . (isset($row['2020']) ? $row['2020'] : "") . '</p></td>';
+                                    }
+                                    if(isset($_POST['2021'])) { 
+                                        echo '<td class=""><p class="m-0">' . (isset($row['2021']) ? $row['2021'] : "") . '</p></td>';
+                                    }
+                                    if(isset($_POST['2022'])) { 
+                                        echo '<td class=""><p class="m-0">' . (isset($row['2022']) ? $row['2022'] : "") . '</p></td>';
+                                    }
+                                    if(isset($_POST['2023'])) { 
+                                        echo '<td class=""><p class="m-0">' . (isset($row['2023']) ? $row['2023'] : "") . '</p></td>';
+                                    }
                                     echo '</tr>';
                                 }
-
-                                $stmt->close(); ?>
+                            } else {
+                                echo '<tr>';
+                                echo '<th class="py-1 text-center" colspan="12">No Data.</th>';
+                                echo '</tr>';
+                            }
+                            // Close the statement
+                            $con->close();
+                        ?>
                     </tbody>
                 </table>
             </div>

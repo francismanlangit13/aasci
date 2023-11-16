@@ -75,6 +75,10 @@
                         <div class="nav-link-icon"><i data-feather="cloud-rain"></i></div>
                         Generate Senior
                     </a>
+                    <a class="nav-link <?php if (strpos($_SERVER['PHP_SELF'], 'home/generate_annual.php') !== false)  { echo 'active'; } ?>" href="generate_annual">
+                        <div class="nav-link-icon"><i data-feather="cloud-rain"></i></div>
+                        Generate Annual
+                    </a>
                     <!-- Sidenav Menu Heading (System)-->
                     <div class="sidenav-menu-heading">System</div>
                     <!-- Sidenav Accordion (Dashboard)-->

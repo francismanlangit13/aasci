@@ -25,7 +25,7 @@
             <div class="card-header text-white bg-teal">Annual Dues Table
                 <button class="btn btn-primary btn-icon-split btn-sm float-end" data-bs-toggle="modal" data-bs-target="#btn_add_dues"> 
                     <span class="icon text-white">
-                        <i class="fas fa-user-plus"></i> Add Payment
+                        <i class="fas fa-user-plus"></i> Add Annual Dues
                     </span>
                 </button>
                 <form action="ajax.php" method="post" name="export_excel" enctype="multipart/form-data" class="form-horizontal">
@@ -113,14 +113,14 @@
     <div class="modal-dialog modal-lg d-grid" role="document" style="justify-items: center;">
         <div class="modal-content">
             <div class="modal-header card-header">
-                <h5 class="modal-title" id="add_duesLabel">Add payment</h5>
+                <h5 class="modal-title" id="add_duesLabel">Add Annual Dues</h5>
                 <button class="btn-close" type="button" id="add_dues_close" data-bs-dismiss="modal" aria-label="Close" onclick="addModalclose(this)"></button>
             </div>
             <form id="add_dues_form" method="POST" enctype="multipart/form-data"> 
                 <div class="modal-body"> 
                     <div class="card mb-5">
                         <div class="card-header bg-teal">
-                            <h5 class="text-white"><i class="far fa-user"></i> Payment information</h5>
+                            <h5 class="text-white"><i class="far fa-user"></i> Annual Dues information</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -299,14 +299,14 @@
     <div class="modal-dialog modal-lg d-grid" role="document" style="justify-items: center;">
         <div class="modal-content">
             <div class="modal-header card-header">
-                <h5 class="modal-title" id="edit_duesLabel">Edit payment</h5>
+                <h5 class="modal-title" id="edit_duesLabel">Edit Annual Dues</h5>
                 <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" onclick="editModalclose(this)"></button>
             </div>
             <form id="edit_dues_form" method="POST" enctype="multipart/form-data"> 
                 <div class="modal-body"> 
                     <div class="card mb-4">
                         <div class="card-header bg-teal">
-                            <h5 class="text-white"><i class="far fa-user"></i> Payment information</h5>
+                            <h5 class="text-white"><i class="far fa-user"></i> Annual Dues information</h5>
                         </div>
                         <div class="card-body">
                             <div class="row"> 
@@ -495,10 +495,10 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="delete_duesLabel">Delete Payment</h5>
+                <h5 class="modal-title" id="delete_duesLabel">Delete Annual Dues</h5>
                 <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">Are you sure you want to delete this payment <b><span id="label"></span></b></div>
+            <div class="modal-body">Are you sure you want to delete this annual dues <b><span id="label"></span></b></div>
             <div class="modal-footer">
                 <form id="delete_dues_form" method="POST"  enctype="multipart/form-data">
                     <input type="hidden" id="delete_dues_id" name="delete_dues_id">

@@ -24,24 +24,29 @@
         QRcode::png($username, $saveTo, QR_ECLEVEL_L, $size);
         $response = "  
             <div class='row'>
-                <div class='col-md-4 mb-3'>
+                <div class='col-md-3 mb-3'>
                     <label for='view_fname'>First Name</label>
                     <input disabled type='text' class='form-control' id='view_fname' value='". $row['fname'] ."'>
                 </div> 
 
-                <div class='col-md-4 mb-3'>
+                <div class='col-md-3 mb-3'>
                     <label for='view_mname'>Middle Name</label>
                     <input disabled type='text' class='form-control' id='view_mname' value='". $row['mname'] ."'>
                 </div>
 
-                <div class='col-md-4 mb-3'>
+                <div class='col-md-3 mb-3'>
                     <label for='view_lname'>Last Name</label>
                     <input disabled type='text' class='form-control' id='view_lname' value='". $row['lname'] ."'>
                 </div>
 
-                <div class='col-md-4 mb-3'>
+                <div class='col-md-3 mb-3'>
                     <label for='view_suffix'>Suffix</label>
                     <input disabled type='text' class='form-control' id='view_suffix' value='". $row['suffix'] ."'>
+                </div>
+
+                <div class='col-md-4 mb-3'>
+                    <label for='view_id_number'>Last Name</label>
+                    <input disabled type='text' class='form-control' id='view_id_number' value='". $row['id_number'] ."'>
                 </div>
 
                 <div class='col-md-4 mb-3'>

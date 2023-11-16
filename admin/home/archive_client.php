@@ -28,6 +28,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>ID Number</th>
                             <th>Full Name</th>
                             <th>Gender</th>
                             <th>Birthday</th>
@@ -69,6 +70,7 @@
                                 'scrollCollapse': true, // Allow vertical scrollbar when necessary
                                 'columns': [
                                     { data: 'user_id', className: 'text-center' },
+                                    { data: 'id_number', className: 'text-center' },
                                     { data: 'fullname', className: 'text-center', },
                                     { data: 'gender', className: 'text-center' },
                                     { data: 'newbirthday', className: 'text-center' },
