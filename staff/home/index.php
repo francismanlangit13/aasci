@@ -193,35 +193,35 @@
                                             <i class="fas fa-circle fa-sm me-1 text-blue"></i>
                                             Social Security System
                                         </div>
-                                        <div class="fw-500 text-dark"><?= number_format($percentage_sss = ($count_sss_statistics / $total_users) * 100, 2); ?>%</div>
+                                        <div class="fw-500 text-dark"><?php if ($total_users != 0) { $percentage_sss = ($count_sss_statistics / $total_users) * 100; echo number_format($percentage_sss, 2) . "%"; } else { echo "0.00%"; } ?></div>
                                     </div>
                                     <div class="list-group-item d-flex align-items-center justify-content-between small px-0 py-2">
                                         <div class="me-3">
                                             <i class="fas fa-circle fa-sm me-1 text-purple"></i>
                                             Government Service Insurance System
                                         </div>
-                                        <div class="fw-500 text-dark"><?= number_format($percentage_gsis = ($count_gsis_statistics / $total_users) * 100, 2); ?>%</div>
+                                        <div class="fw-500 text-dark"><?php if ($total_users != 0) { $percentage_gsis = ($count_gsis_statistics / $total_users) * 100; echo number_format($percentage_gsis, 2) . "%"; } else { echo "0.00%"; } ?></div>
                                     </div>
                                     <div class="list-group-item d-flex align-items-center justify-content-between small px-0 py-2">
                                         <div class="me-3">
                                             <i class="fas fa-circle fa-sm me-1 text-red"></i>
                                             Pantawid Pamilyang Pilipino Program (4P's)
                                         </div>
-                                        <div class="fw-500 text-dark"><?= number_format($percentage_forps = ($count_forps_statistics / $total_users) * 100, 2); ?>%</div>
+                                        <div class="fw-500 text-dark"><?php if ($total_users != 0) { $percentage_forps = ($count_forps_statistics / $total_users) * 100; echo number_format($percentage_forps, 2) . "%"; } else { echo "0.00%"; } ?></div>
                                     </div>
                                     <div class="list-group-item d-flex align-items-center justify-content-between small px-0 py-2">
                                         <div class="me-3">
                                             <i class="fas fa-circle fa-sm me-1 text-black"></i>
                                             Philippine Veterans Affairs Office
                                         </div>
-                                        <div class="fw-500 text-dark"><?= number_format($percentage_pvao = ($count_pvao_statistics / $total_users) * 100, 2); ?>%</div>
+                                        <div class="fw-500 text-dark"><?php if ($total_users != 0) { $percentage_pvao = ($count_pvao_statistics / $total_users) * 100; echo number_format($percentage_pvao, 2) . "%"; } else { echo "0.00%"; } ?></div>
                                     </div>
                                     <div class="list-group-item d-flex align-items-center justify-content-between small px-0 py-2">
                                         <div class="me-3">
                                             <i class="fas fa-circle fa-sm me-1 text-green"></i>
                                             National Household Targeting System
                                         </div>
-                                        <div class="fw-500 text-dark"><?= number_format($percentage_nhts = ($count_nhts_statistics / $total_users) * 100, 2); ?>%</div>
+                                        <div class="fw-500 text-dark"><?php if ($total_users != 0) { $percentage_nhts = ($count_nhts_statistics / $total_users) * 100; echo number_format($percentage_nhts, 2) . "%"; } else { echo "0.00%"; } ?></div>
                                     </div>
                                 </div>
                             </div>
@@ -258,35 +258,35 @@
                                             <i class="fas fa-circle fa-sm me-1 text-blue"></i>
                                             Social Security System
                                         </div>
-                                        <div class="fw-500 text-dark"><?= number_format($percentage_sss_all = ($count_sss_statistics_all / $total_users_all) * 100, 2); ?>%</div>
+                                        <div class="fw-500 text-dark"><?php if ($total_users_all != 0) { $percentage_sss_all = ($count_sss_statistics_all / $total_users_all) * 100; echo number_format($percentage_sss_all, 2) . "%"; } else { echo "0.00%"; } ?></div>
                                     </div>
                                     <div class="list-group-item d-flex align-items-center justify-content-between small px-0 py-2">
                                         <div class="me-3">
                                             <i class="fas fa-circle fa-sm me-1 text-purple"></i>
                                             Government Service Insurance System
                                         </div>
-                                        <div class="fw-500 text-dark"><?= number_format($percentage_gsis_all = ($count_gsis_statistics_all / $total_users_all) * 100, 2); ?>%</div>
+                                        <div class="fw-500 text-dark"><?php if ($total_users_all != 0) { $percentage_gsis_all = ($count_gsis_statistics_all / $total_users_all) * 100; echo number_format($percentage_gsis_all, 2) . "%"; } else { echo "0.00%"; } ?></div>
                                     </div>
                                     <div class="list-group-item d-flex align-items-center justify-content-between small px-0 py-2">
                                         <div class="me-3">
                                             <i class="fas fa-circle fa-sm me-1 text-red"></i>
                                             Pantawid Pamilyang Pilipino Program (4P's)
                                         </div>
-                                        <div class="fw-500 text-dark"><?= number_format($percentage_forps_all = ($count_forps_statistics_all / $total_users_all) * 100, 2); ?>%</div>
+                                        <div class="fw-500 text-dark"><?php if ($total_users_all != 0) { $percentage_forps_all = ($count_forps_statistics_all / $total_users_all) * 100; echo number_format($percentage_forps_all, 2) . "%"; } else { echo "0.00%"; } ?></div>
                                     </div>
                                     <div class="list-group-item d-flex align-items-center justify-content-between small px-0 py-2">
                                         <div class="me-3">
                                             <i class="fas fa-circle fa-sm me-1 text-black"></i>
                                             Philippine Veterans Affairs Office
                                         </div>
-                                        <div class="fw-500 text-dark"><?= number_format($percentage_pvao_all = ($count_pvao_statistics_all / $total_users_all) * 100, 2); ?>%</div>
+                                        <div class="fw-500 text-dark"><?php if ($total_users_all != 0) { $percentage_pvao_all = ($count_pvao_statistics_all / $total_users_all) * 100; echo number_format($percentage_pvao_all, 2) . "%"; } else { echo "0.00%"; } ?></div>
                                     </div>
                                     <div class="list-group-item d-flex align-items-center justify-content-between small px-0 py-2">
                                         <div class="me-3">
                                             <i class="fas fa-circle fa-sm me-1 text-green"></i>
                                             National Household Targeting System
                                         </div>
-                                        <div class="fw-500 text-dark"><?= number_format($percentage_nhts_all = ($count_nhts_statistics_all / $total_users_all) * 100, 2); ?>%</div>
+                                        <div class="fw-500 text-dark"><?php if ($total_users_all != 0) { $percentage_nhts_all = ($count_nhts_statistics_all / $total_users_all) * 100; echo number_format($percentage_nhts_all, 2) . "%"; } else { echo "0.00%"; } ?></div>
                                     </div>
                                 </div>
                             </div>
