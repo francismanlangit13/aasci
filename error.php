@@ -102,6 +102,8 @@
 
         <!-- Loading JS -->
         <script src="<?php echo base_url ?>assets/js/loader.js"></script>
+        <!-- Restrictions forms -->
+        <script src="<?php echo base_url ?>assets/js/disable-key.js"></script>
 
     </body>
 
