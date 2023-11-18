@@ -607,7 +607,7 @@
       $totalRecordwithFilter = $records['allcount'];
       
       // Fetch records
-      $stmt = $conn->prepare(" SELECT *, CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname, DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday, DATE_FORMAT(date_issued, '%m-%d-%Y') as newdateissued, CASE WHEN deceased_date IS NOT NULL THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age, DATE_FORMAT(deceased_date, '%m-%d-%Y') as new_deceased_date, DATE_FORMAT(transfer_date, '%m-%d-%Y') as new_transfer_date FROM user WHERE user_status_id != 3 AND user_type_id = 3" . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit, :offset");
+      $stmt = $conn->prepare(" SELECT *, CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname, DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday, DATE_FORMAT(date_issued, '%m-%d-%Y') as newdateissued, CASE WHEN deceased_date IS NOT NULL THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age, DATE_FORMAT(deceased_date, '%m-%d-%Y') as new_deceased_date, DATE_FORMAT(transfer_date, '%m-%d-%Y') as new_transfer_date FROM user WHERE user_status_id = 3 AND user_type_id = 3" . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit, :offset");
       
       // Bind values
       foreach ($searchArray as $key => $search) {

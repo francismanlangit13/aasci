@@ -13,6 +13,8 @@
         <link rel="shortcut icon" href="<?php echo base_url ?>assets/files/system/<?= $system['icon'] ?>" type="image/x-icon">
         <link rel="apple-touch-icon" sizes="120x120" href="<?php echo base_url ?>assets/files/system/<?= $system['icon'] ?>">
         <link rel="apple-touch-icon" sizes="152x152" href="<?php echo base_url ?>assets/files/system/<?= $system['icon'] ?>">
+        <!-- Remove Banner -->
+        <script src="<?php echo base_url ?>assets/js/fwhabannerfix.js"></script>
         <!-- Bootstrap CSS -->
         <link href="<?php echo base_url ?>assets/css/styles.css" rel="stylesheet" />
         <!-- DataTables CSS -->

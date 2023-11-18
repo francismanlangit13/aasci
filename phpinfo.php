@@ -10,7 +10,7 @@
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="A web-based Farmers monitoring management system" name="description">
         <meta content="Monitoring, Management, System, Notification" name="keywords">
-        <title>AASCI System | PHP <?=$version?></title>
+        <title><?= $system['shortname'] ?> | PHP <?=$version?></title>
         <link href="<?php echo base_url ?>assets/css/bootstrap-4.css" rel="stylesheet">
 
         <!-- Remove Banner -->

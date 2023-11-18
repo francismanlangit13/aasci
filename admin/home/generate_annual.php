@@ -165,6 +165,7 @@
                 <div class="col-2"></div>
             </div>
             <?php
+                error_reporting(E_ERROR | E_PARSE);
                 if(!empty($_POST['Barangay'])) {
                     $barangay = mysqli_real_escape_string($con, $barangay); // Escape the variable to prevent SQL injection
 

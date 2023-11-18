@@ -40,7 +40,7 @@
                 unset($_SESSION['is_second_auth']);
                 $_SESSION['status'] = "Welcome $full_name!";
                 $_SESSION['status_code'] = "success";
-                $output = array('alert' => "success", 'type' => "admin");
+                $output = array('alert' => "success", 'type' => "staff");
             }
         }
         else {

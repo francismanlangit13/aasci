@@ -72,7 +72,7 @@
                 elseif( $_SESSION['auth_role'] == '2'){
                     $_SESSION['status'] = "Welcome $full_name!";
                     $_SESSION['status_code'] = "success";
-                    $output = array('alert' => "success", 'is_secondauth' => "No", 'type' => "admin");
+                    $output = array('alert' => "success", 'is_secondauth' => "No", 'type' => "staff");
                 }
             }
         }
