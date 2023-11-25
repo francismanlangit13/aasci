@@ -302,7 +302,7 @@
                                 }
                             } else {
                                 echo '<tr>';
-                                echo '<th class="py-1 text-center" colspan="12">No Data.</th>';
+                                echo '<th class="py-1 text-center" colspan="30">No Data.</th>';
                                 echo '</tr>';
                             }
                             // Close the statement
