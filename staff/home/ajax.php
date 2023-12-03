@@ -607,7 +607,20 @@
       $totalRecordwithFilter = $records['allcount'];
       
       // Fetch records
-      $stmt = $conn->prepare(" SELECT *, CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname, DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday, DATE_FORMAT(date_issued, '%m-%d-%Y') as newdateissued, CASE WHEN deceased_date IS NOT NULL THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age, DATE_FORMAT(deceased_date, '%m-%d-%Y') as new_deceased_date, DATE_FORMAT(transfer_date, '%m-%d-%Y') as new_transfer_date FROM user WHERE user_status_id = 3 AND user_type_id = 3" . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit, :offset");
+      $stmt = $conn->prepare("SELECT *,
+               CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname,
+               DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday,
+               DATE_FORMAT(date_issued, '%m-%d-%Y') as newdateissued,
+               CASE WHEN deceased_date IS NOT NULL AND is_deceased = 'Yes'
+                     THEN DATE_FORMAT(deceased_date, '%m-%d-%Y')
+                     ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age,
+               DATE_FORMAT(deceased_date, '%m-%d-%Y') as new_deceased_date,
+               DATE_FORMAT(transfer_date, '%m-%d-%Y') as new_transfer_date
+         FROM user
+         WHERE user_status_id = 3 AND user_type_id = 3" . $searchQuery . "
+         ORDER BY " . $columnName . " " . $columnSortOrder . "
+         LIMIT :limit, :offset
+      ");
       
       // Bind values
       foreach ($searchArray as $key => $search) {
@@ -767,7 +780,20 @@
       $totalRecordwithFilter = $records['allcount'];
       
       // Fetch records
-      $stmt = $conn->prepare(" SELECT *, CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname, DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday, DATE_FORMAT(date_issued, '%m-%d-%Y') as newdateissued, CASE WHEN deceased_date IS NOT NULL THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age, DATE_FORMAT(deceased_date, '%m-%d-%Y') as new_deceased_date, DATE_FORMAT(transfer_date, '%m-%d-%Y') as new_transfer_date FROM user WHERE user_status_id != 3 AND user_type_id = 3" . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit, :offset");
+      $stmt = $conn->prepare("SELECT *,
+               CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname,
+               DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday,
+               DATE_FORMAT(date_issued, '%m-%d-%Y') as newdateissued,
+               CASE WHEN deceased_date IS NOT NULL AND is_deceased = 'Yes'
+                     THEN DATE_FORMAT(deceased_date, '%m-%d-%Y')
+                     ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age,
+               DATE_FORMAT(deceased_date, '%m-%d-%Y') as new_deceased_date,
+               DATE_FORMAT(transfer_date, '%m-%d-%Y') as new_transfer_date
+         FROM user
+         WHERE user_status_id != 3 AND user_type_id = 3" . $searchQuery . "
+         ORDER BY " . $columnName . " " . $columnSortOrder . "
+         LIMIT :limit, :offset
+      ");
       
       // Bind values
       foreach ($searchArray as $key => $search) {
@@ -1667,7 +1693,7 @@
    }
    // -------------------------------- Export Senior CSV -------------------------------- //
    if (isset($_POST["btn_export_senior"])) {
-      $sql = "SELECT * FROM `user` WHERE `user_type_id` = '3' AND `user_status_id` != '3'";
+      $sql = "SELECT *, CASE WHEN deceased_date IS NOT NULL AND is_deceased = 'Yes' THEN DATE_FORMAT(deceased_date, '%m-%d-%Y') ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM `user` WHERE `user_type_id` = '3' AND `user_status_id` != '3'";
       $result = mysqli_query($con, $sql);
 
       // Set the filename and mime type
@@ -1680,18 +1706,20 @@
       $file = fopen('php://output', 'w');
 
       // Set the column headers
-      fputcsv($file, array('ID', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Date Issued', 'Soc-Pen', 'GSIS', 'SSS', 'PVAO', 'SUP-WITH', '4Ps', 'NHTS', 'ID-File', 'Barangay', 'RRN', 'Is Deceased', 'Deceased Date', 'Is Transfer', 'Transfer Date'));
+      fputcsv($file, array('No', 'ID Number', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Age', 'Date Issued', 'Soc-Pen', 'GSIS', 'SSS', 'PVAO', 'SUP-WITH', '4Ps', 'NHTS', 'ID-File', 'Barangay', 'RRN', 'Is Deceased', 'Deceased Date', 'Is Transfer', 'Transfer Date'));
 
       // Add the data to the file
       while ($data = mysqli_fetch_assoc($result)){
           fputcsv($file, array(
               $data['user_id'],
+              $data['id_number'],
               $data['fname'],
               $data['mname'],
               $data['lname'],
               $data['suffix'],
               $data['gender'],
               $data['birthday'],
+              $data['age'],
               $data['date_issued'],
               $data['soc_pen'],
               $data['gsis'],
@@ -1718,7 +1746,7 @@
    }
    // -------------------------------- Export Archive Senior CSV -------------------------------- //
    if (isset($_POST["btn_export_senior_archive"])) {
-      $sql = "SELECT * FROM `user` WHERE `user_type_id` = '3' AND `user_status_id` = '3'";
+      $sql = "SELECT *, CASE WHEN deceased_date IS NOT NULL AND is_deceased = 'Yes' THEN DATE_FORMAT(deceased_date, '%m-%d-%Y') ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM `user` WHERE `user_type_id` = '3' AND `user_status_id` = '3'";
       $result = mysqli_query($con, $sql);
 
       // Set the filename and mime type
@@ -1731,18 +1759,20 @@
       $file = fopen('php://output', 'w');
 
       // Set the column headers
-      fputcsv($file, array('ID', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Date Issued', 'Soc-Pen', 'GSIS', 'SSS', 'PVAO', 'SUP-WITH', '4Ps', 'NHTS', 'ID-File', 'Barangay', 'RRN', 'Is Deceased', 'Deceased Date', 'Is Transfer', 'Transfer Date'));
+      fputcsv($file, array('No.', 'ID Number', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Age', 'Date Issued', 'Soc-Pen', 'GSIS', 'SSS', 'PVAO', 'SUP-WITH', '4Ps', 'NHTS', 'ID-File', 'Barangay', 'RRN', 'Is Deceased', 'Deceased Date', 'Is Transfer', 'Transfer Date'));
 
       // Add the data to the file
       while ($data = mysqli_fetch_assoc($result)){
           fputcsv($file, array(
               $data['user_id'],
+              $data['id_number'],
               $data['fname'],
               $data['mname'],
               $data['lname'],
               $data['suffix'],
               $data['gender'],
               $data['birthday'],
+              $data['age'],
               $data['date_issued'],
               $data['soc_pen'],
               $data['gsis'],
@@ -1767,56 +1797,6 @@
       // Close MySQL connection
       mysqli_close($con);
    }
-   // // -------------------------------- Export Senior CSV -------------------------------- //
-   // if (isset($_POST["btn_export_senior123"])) {
-   //    $dateStart = $_POST['dateStart'];
-   //    $dateEnd = $_POST['dateEnd'];
-   //    if (isset($_POST['dateStart']) && isset($_POST['dateEnd'])){
-   //        // Fetch data from MySQL table
-   //        $sql = "SELECT * FROM `user` WHERE `user_type_id` != '3' AND (STR_TO_DATE(Order_Place_Date, '%m-%d-%Y %H:%i:%s') BETWEEN $dateStart AND $dateEnd)";
-   //        $result = mysqli_query($con, $sql);
-   //    } else{
-   //        // Fetch data from MySQL table
-   //        $sql = "SELECT * FROM `user` WHERE `user_type_id` != '3'";
-   //        $result = mysqli_query($con, $sql);
-   //    }
-
-   //    // Set the filename and mime type
-   //    $filename = "export_users_" . date('m-d-Y_H:i:s A') . ".csv";
-   //    header('Content-Type: text/csv');
-   //    header('Content-Disposition: attachment;filename="' . $filename . '"');
-   //    header('Cache-Control: max-age=0');
-
-   //    // Open file for writing
-   //    $file = fopen('php://output', 'w');
-
-   //    // Set the column headers
-   //    fputcsv($file, array('ID', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Civil Status', 'Email', 'Phone', 'Role', 'Status'));
-
-   //    // Add the data to the file
-   //    while ($data = mysqli_fetch_assoc($result)){
-   //        fputcsv($file, array(
-   //            $data['user_id'],
-   //            $data['fname'],
-   //            $data['mname'],
-   //            $data['lname'],
-   //            $data['suffix'],
-   //            $data['gender'],
-   //            $data['birthday'],
-   //            $data['civil_status'],
-   //            $data['email'],
-   //            $data['phone'],
-   //            ($data['user_type_id'] == 1) ? 'Admin' : (($data['user_type_id'] == 2) ? 'Staff' : 'Unknown'),
-   //            ($data['user_status_id'] == 1) ? 'Active' : (($data['user_status_id'] == 2) ? 'Inactive' : 'Archived')
-   //        ));
-   //    }        
-
-   //    // Close file
-   //    fclose($file);
-
-   //    // Close MySQL connection
-   //    mysqli_close($con);
-   // }
    // -------------------------------- Check Email and Phone -------------------------------- //
    if (isset($_POST["check_email"])) {
       $stmt = $con->prepare('SELECT COUNT(*) as count FROM user WHERE email = ? OR phone = ?');

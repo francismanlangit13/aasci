@@ -190,12 +190,12 @@
             </div>
             <?php
                 if(!empty($_POST['Barangay'])) {
-                    $stmt = $con->prepare("SELECT *, CASE WHEN deceased_date IS NOT NULL THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM user WHERE user_type_id = 3 AND barangay = ?");
+                    $stmt = $con->prepare("SELECT *, CASE WHEN deceased_date IS NOT NULL AND is_deceased = 'Yes' THEN DATE_FORMAT(deceased_date, '%m-%d-%Y') ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM user WHERE user_type_id = 3 AND barangay = ?");
                     $stmt->bind_param("s", $barangay);
                     $stmt->execute();
                     $result = $stmt->get_result();
                 } else{
-                    $stmt = $con->prepare("SELECT *, CASE WHEN deceased_date IS NOT NULL THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM user WHERE user_type_id = ?");
+                    $stmt = $con->prepare("SELECT *, CASE WHEN deceased_date IS NOT NULL AND is_deceased = 'Yes' THEN DATE_FORMAT(deceased_date, '%m-%d-%Y') ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM user WHERE user_type_id = ?");
                     $stmt->bind_param("i", $user_type_id); // "i" indicates integer, adjust it based on your data type
                     $user_type_id = 3; // Set the value for the parameter
                     $stmt->execute();

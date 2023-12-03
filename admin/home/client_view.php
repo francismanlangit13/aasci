@@ -5,7 +5,7 @@
     if (isset($_POST['id'])) {
         $id = $_POST['id'];
         // Query the database
-        $query = "SELECT * FROM `user` INNER JOIN `user_status` ON `user`.`user_status_id` = `user_status`.`user_status_id` WHERE `user_id`='$id'";
+        $query = "SELECT *, CASE WHEN deceased_date IS NOT NULL AND is_deceased = 'Yes' THEN DATE_FORMAT(deceased_date, '%m-%d-%Y') ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM `user` INNER JOIN `user_status` ON `user`.`user_status_id` = `user_status`.`user_status_id` WHERE `user_id`='$id'";
         $result = $con->query($query);
         if ($result === false) {
             die("Query failed: " . $con->error);
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class='col-md-4 mb-3'>
-                    <label for='view_id_number'>Last Name</label>
+                    <label for='view_id_number'>ID Number</label>
                     <input disabled type='text' class='form-control' id='view_id_number' value='". $row['id_number'] ."'>
                 </div>
 
@@ -61,7 +61,7 @@
 
                 <div class='col-md-4 mb-3'>
                     <label for='view_age'>Age</label>
-                    <input disabled type='text' class='form-control' id='view_age'>
+                    <input disabled type='text' class='form-control' id='view_age' value='". $row['age'] ."'>
                 </div>
 
                 <div class='col-md-4 mb-3'>
