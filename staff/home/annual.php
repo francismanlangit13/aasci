@@ -40,7 +40,7 @@
                 <table id="dataTable" class="display cell-border stripe table table-bordered dataTable no-footer" style="width:99% !important">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>No.</th>
                             <th>ID Number</th>
                             <th>Full Name</th>
                             <th>Gender</th>

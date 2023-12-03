@@ -25,7 +25,7 @@
                 <table id="dataTable" class="display cell-border stripe table table-bordered dataTable no-footer" style="width:99% !important">
                     <thead>
                         <tr>
-                            <th width="10%">ID</th>
+                            <th width="10%">No.</th>
                             <th width="25%">Title</th>
                             <th width="40%">Body</th>
                             <th width="15%">Status</th>
@@ -111,14 +111,14 @@
                             
                                 <div class="col-md-12 mb-3">
                                     <label for="add_description" class="required">Body</label>
-                                    <textarea placeholder="Enter Middle Name" type="text" id="add_description" rows="10" name="add_description" class="form-control"></textarea>
+                                    <textarea placeholder="Enter Announcement Body" type="text" id="add_description" rows="10" name="add_description" class="form-control"></textarea>
                                     <div id="add_description-error"></div>
                                 </div>
 
                                 <div class="col-md-4 mb-3">
                                     <label for="add_status" class="required">Status</label>
                                     <select id="add_status" name="add_status" required class="form-control">
-                                        <option value="" selected>Select Gender</option>
+                                        <option value="" selected>Select Status</option>
                                         <option value="Pending">Pending</option>
                                         <option value="Posted">Posted</option>
                                     </select>
@@ -288,13 +288,13 @@
                                 <h6 class="mb-3"><sup class="text-red p-1">Note!</sup>Fields marked with <code class="text-red">*</code> are mandatory and <code class="text-green">*</code> are optional.</h6>
                                 <div class="col-md-12 mb-3">
                                     <label for="edit_title" class="required">Title</label>
-                                    <input required placeholder="Enter First Name" type="text" id="edit_title" name="edit_title" class="form-control">
+                                    <input required placeholder="Enter Announcement Title" type="text" id="edit_title" name="edit_title" class="form-control">
                                     <div id="edit_title-error"></div>
                                 </div> 
                             
                                 <div class="col-md-12 mb-3">
                                     <label for="edit_description" class="required">Body</label>
-                                    <textarea placeholder="Enter Middle Name" type="text" id="edit_description" name="edit_description" rows="10" class="form-control"></textarea>
+                                    <textarea placeholder="Enter Announcement Body" type="text" id="edit_description" name="edit_description" rows="10" class="form-control"></textarea>
                                     <div id="edit_description-error"></div>
                                 </div>
 

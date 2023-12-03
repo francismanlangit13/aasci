@@ -807,9 +807,9 @@
                             </div>
                             <div class="col-md-12 text-center">
                                 <br>
-                                <label for="frame5">QR Code</label>
+                                <label for="frame7">QR Code</label>
                                 <a href="<?php echo base_url . 'assets/files/system/qr-code.png'?>" class="glightbox d-block" data-gallery="QRCode">
-                                    <img class="zoom img-fluid img-bordered-sm" id="frame5" alt="image" style="max-width: 250px; object-fit: cover; margin-bottom:-2.5rem;">
+                                    <img class="zoom img-fluid img-bordered-sm" id="frame7" alt="image" style="max-width: 250px; object-fit: cover; margin-bottom:-2.5rem;">
                                 </a>
                                 <h3 class="text-center mt-4"><a href="<?php echo base_url . 'assets/files/system/qr-code.png'?>" download>Download QR Code</a></h3>
                             </div>
@@ -836,7 +836,7 @@
                 document.getElementById("frame3").src = base_url + 'assets/files/clients/' + button.getAttribute("data-view_profile");
                 document.getElementById("a-psa_view").href = base_url + 'assets/files/documents/' + button.getAttribute("data-view_psa");
                 document.getElementById("frame4").src = base_url + 'assets/files/documents/' + button.getAttribute("data-view_psa");
-                document.getElementById("frame5").src = base_url + 'assets/files/system/qr-code.png?' + new Date().getTime();
+                document.getElementById("frame7").src = base_url + 'assets/files/system/qr-code.png?' + new Date().getTime();
             }
         };
         xhrAjax.send(`id=${id}`);
@@ -847,7 +847,7 @@
         document.getElementById("frame3").removeAttribute("src");
         document.getElementById("a-psa_view").removeAttribute("href");
         document.getElementById("frame4").removeAttribute("src");
-        document.getElementById("frame5").removeAttribute("src");
+        document.getElementById("frame7").removeAttribute("src");
     });
 </script>
 

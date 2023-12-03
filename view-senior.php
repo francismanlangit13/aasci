@@ -85,10 +85,11 @@
             </div>
         </header>
         <?php
+            error_reporting(E_ERROR | E_PARSE);
             if(isset($_GET['id'])){
                 if ($_GET['referrer_sig'] == 'AQAAALlBtMUw4ijnuwuB1_ELMGm0j_LDQFR7JkepuUdtEUZlkWR_E8B1hpz84xnQcU2MWhGqYgqw1M2fKXNWP3tcP42AxniLgydvkoy2WHzQOrWSrT6wxtCsmk3ClX7csfHjkNFfHrR3BY5Q1evqYO43BcH51CGey1yhnFoukIyF7OPU') {
                     $id = $_GET['id'];
-                    $senior = "SELECT *, CASE WHEN deceased_date IS NOT NULL THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM `user` WHERE `user_id` = $id AND `user_type_id` = '3' AND `user_status_id` != '3' LIMIT 1";
+                    $senior = "SELECT *, CASE WHEN deceased_date IS NOT NULL AND is_deceased = 'Yes' THEN DATE_FORMAT(deceased_date, '%m-%d-%Y') ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM `user` WHERE `user_id` = $id AND `user_type_id` = '3' AND `user_status_id` != '3' LIMIT 1";
                     $senior_run = mysqli_query($con, $senior);
                     if(mysqli_num_rows($senior_run) > 0){
                         foreach($senior_run as $row){
@@ -120,7 +121,7 @@
                                         <h6 class="card-title" style="font-size:14px"><?php echo $annrow['ann_description']; ?></h6>
                                     </div>
                                 </div>
-                                <?php } } ?>
+                                <?php } } else { echo "No Announcements"; } ?>
                             </div>
                         </div>
                         <!-- Categories widget-->
@@ -216,7 +217,7 @@
                                                             echo '<div class="col-md-4"><code>2023:</code> ' . (isset($annualrow['2023']) ? $annualrow['2023'] : "") . ' ' . (isset($annualrow['2023']) ? "<i class='fas fa-check-circle' style='color:blue' title='Paid' ></i>" : "") . '</div>';
                                                         }
                                                     } else {
-
+                                                        echo '<div class="col-md-4">No Data.</div>';
                                                     }
                                                 ?>
                                             </div>
