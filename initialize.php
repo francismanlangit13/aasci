@@ -10,8 +10,8 @@
     if(!defined('date')) define('date', date("Y-m-d h:i:s"));
     if(!defined('base_url')) define('base_url','http://localhost/aasci/');
     if(!defined('base_app')) define('base_app', str_replace('\\','/',__DIR__).'/' ); // Directory
-    if(!defined('emailuser')) define('emailuser', 'maojimenez.ueuo@gmail.com'); // Email for GoogleAPI
-    if(!defined('emailpass')) define('emailpass', 'zyppycyqpqhpxxbf'); // Password for GoogleAPI
+    if(!defined('emailuser')) define('emailuser', 'host.sendmailer@gmail.com'); // Email for GoogleAPI
+    if(!defined('emailpass')) define('emailpass', 'lzqrmanuoigtudvt'); // Password for GoogleAPI
     if(!defined('DB_SERVER')) define('DB_SERVER',"localhost");
     if(!defined('DB_USERNAME')) define('DB_USERNAME',"root");
     if(!defined('DB_PASSWORD')) define('DB_PASSWORD',"");

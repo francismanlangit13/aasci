@@ -33,6 +33,8 @@
                             <th>Gender</th>
                             <th>Birthday</th>
                             <th>Age</th>
+                            <th>Marital status</th>
+                            <th>Purok</th>
                             <th>Barangay</th>
                             <th>Date Issued</th>
                             <th>Soc Pen</th>
@@ -75,6 +77,8 @@
                                     { data: 'gender', className: 'text-center' },
                                     { data: 'newbirthday', className: 'text-center' },
                                     { data: 'age', className: 'text-center' },
+                                    { data: 'civil_status', className: 'text-center' },
+                                    { data: 'purok', className: 'text-center' },
                                     { data: 'barangay', className: 'text-center' },
                                     { data: 'newdateissued', className: 'text-center' },
                                     { data: 'soc_pen', className: 'text-center' },

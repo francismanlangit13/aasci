@@ -116,6 +116,14 @@
                                     <label class="form-check-label" for="Age">Age</label>
                                 </div>
                                 <div class='col-md-2'>
+                                    <input class="form-check-input" type="checkbox" value="Civil_Status" id="Civil_Status" name="Civil_Status">
+                                    <label class="form-check-label" for="Civil_Status">Marital Status</label>
+                                </div>
+                                <div class='col-md-2'>
+                                    <input class="form-check-input" type="checkbox" value="Purok" id="Purok" name="Purok">
+                                    <label class="form-check-label" for="Purok">Purok</label>
+                                </div>
+                                <div class='col-md-2'>
                                     <input class="form-check-input" type="checkbox" value="Date_Issued" id="Date_Issued" name="Date_Issued">
                                     <label class="form-check-label" for="Date_Issued">Date Issued</label>
                                 </div>
@@ -208,6 +216,9 @@
                         <tr class="bg-success text-light bg-success-print">
                             <th>No.</th>
                             <th>Full Name</th>
+                            <?php if(isset($_POST['Purok'])) { ?>
+                                <th>Purok</th>
+                            <?php } ?>
                             <th>Barangay</th>
                             <?php if(isset($_POST['ID'])) { ?>
                                 <th>ID Number</th>
@@ -220,6 +231,9 @@
                             <?php } ?>
                             <?php if(isset($_POST['Age'])) { ?>
                                 <th>Age</th>
+                            <?php } ?>
+                            <?php if(isset($_POST['Civil_Status'])) { ?>
+                                <th>Marital Status</th>
                             <?php } ?>
                             <?php if(isset($_POST['Date_Issued'])) { ?>
                                 <th>Date Issued</th>
@@ -268,6 +282,9 @@
                                         echo '<tr>';
                                         echo '<td class="text-center">' . $row['user_id'] . '</td>';
                                         echo '<td class=""><p class="m-0">' . $row['fname'] . ' ' . $row['mname'] . ' ' . $row['lname'] . ' ' . $row['suffix'] . '</p></td>';
+                                        if(isset($_POST['Purok'])) { 
+                                            echo '<td class=""><p class="m-0">' . $row['purok'] . '</p></td>';
+                                        }
                                         if(isset($_POST['Barangay'])) { 
                                             echo '<td class=""><p class="m-0">' . $row['barangay'] . '</p></td>';
                                         }
@@ -282,6 +299,9 @@
                                         }
                                         if(isset($_POST['Age'])) { 
                                             echo '<td class=""><p class="m-0">' . $row['age'] . '</p></td>';
+                                        }
+                                        if(isset($_POST['Civil_Status'])) { 
+                                            echo '<td class=""><p class="m-0">' . $row['civil_status'] . '</p></td>';
                                         }
                                         if(isset($_POST['Date_Issued'])) { 
                                             echo '<td class=""><p class="m-0">' . $row['date_issued'] . '</p></td>';

@@ -44,32 +44,42 @@
                     <input disabled type='text' class='form-control' id='view_suffix' value='". $row['suffix'] ."'>
                 </div>
 
-                <div class='col-md-4 mb-3'>
+                <div class='col-md-3 mb-3'>
                     <label for='view_id_number'>ID Number</label>
                     <input disabled type='text' class='form-control' id='view_id_number' value='". $row['id_number'] ."'>
                 </div>
 
-                <div class='col-md-4 mb-3'>
+                <div class='col-md-3 mb-3'>
                     <label for='view_gender'>Gender</label>
                     <input disabled type='text' class='form-control' id='view_gender' value='". $row['gender'] ."'>
                 </div>
 
-                <div class='col-md-4 mb-3'>
+                <div class='col-md-3 mb-3'>
                     <label for='view_birthday'>Birthday</label>
                     <input disabled type='text' class='form-control' id='view_birthday' value='". $row['birthday'] ."'>
                 </div>
 
-                <div class='col-md-4 mb-3'>
+                <div class='col-md-3 mb-3'>
                     <label for='view_age'>Age</label>
                     <input disabled type='text' class='form-control' id='view_age' value='". $row['age'] ."'>
                 </div>
 
-                <div class='col-md-4 mb-3'>
+                <div class='col-md-3 mb-3'>
+                    <label for='view_civil_status'>Marital Status</label>
+                    <input disabled type='text' class='form-control' id='view_civil_status' value='". $row['civil_status'] ."'>
+                </div>
+
+                <div class='col-md-3 mb-3'>
+                    <label for='view_purok'>Purok</label>
+                    <input disabled type='text' class='form-control' id='view_purok' value='". $row['purok'] ."'>
+                </div>
+
+                <div class='col-md-3 mb-3'>
                     <label for='view_barangay'>Barangay</label>
                     <input disabled type='text' class='form-control' id='view_barangay' value='". $row['barangay'] ."'>
                 </div>
 
-                <div class='col-md-4 mb-3'>
+                <div class='col-md-3 mb-3'>
                     <label for='view_date_issued'>Date Issued</label>
                     <input disabled type='text' class='form-control' id='view_date_issued' value='". $row['date_issued'] ."'>
                 </div>
@@ -130,10 +140,24 @@
                 </div>
 
                 <div class='col-md-4 mb-3'>
+                    <label for='view_deceased_date'>Deceased Date</label>
+                    <input disabled type='text' class='form-control' id='view_deceased_date' value='". $row['deceased_date'] ."'>
+                </div>
+
+                <div class='col-md-4 mb-3'>
                     <label for='view_transfer'>Transfer</label>
                     <input disabled type='text' class='form-control' id='view_transfer' value='". $row['is_transfer'] ."'>
                 </div>
 
+                <div class='col-md-4 mb-3'>
+                    <label for='view_transfer_date'>Transfer Date</label>
+                    <input disabled type='text' class='form-control' id='view_transfer_date' value='". $row['transfer_date'] ."'>
+                </div>
+
+                <div class='col-md-4 mb-3'>
+                    <label for='view_status'>Status</label>
+                    <input disabled type='text' class='form-control' id='view_status' value='" . (($row['user_status_id'] == '1') ? "Active" : "Inactive") . "'>
+                </div>
                 
             </div>
         ";

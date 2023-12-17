@@ -36,7 +36,7 @@
                             <th>Full Name</th>
                             <th>Gender</th>
                             <th>Birthday</th>
-                            <th>Civil Status</th>
+                            <th>Marital Status</th>
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Role</th>
@@ -193,9 +193,9 @@
                                 </div>
 
                                 <div class="col-md-4 mb-3">
-                                    <label for="add_civil_status" class="required">Civil Status</label>
+                                    <label for="add_civil_status" class="required">Marital Status</label>
                                     <select id="add_civil_status" name="add_civil_status" required class="form-control">
-                                        <option value="" selected>Select Civil Status</option>
+                                        <option value="" selected>Select Marital Status</option>
                                         <option value="Single">Single</option>
                                         <option value="Married">Married</option>
                                         <option value="Widowed">Widowed</option>
@@ -479,15 +479,15 @@
 
         function checkadd_Civilstatus() {
             var add_civil_status = $('#add_civil_status').val()
-            // show error if civil status is empty
+            // show error if marital status is empty
             if (!add_civil_status || add_civil_status.trim() === '') {
-                $('#add_civil_status-error').text('Please select civil status').css('color', 'red');
+                $('#add_civil_status-error').text('Please select marital status').css('color', 'red');
                 $('#add_civil_status').addClass('is-invalid');
                 checkIfAllFieldsValid();
                 return;
             }
             
-            // Perform additional validation for civil status if needed
+            // Perform additional validation for marital status if needed
             $('#add_civil_status-error').empty();
             $('#add_civil_status').removeClass('is-invalid');
             checkIfAllFieldsValid();
@@ -558,7 +558,7 @@
                             </div>
 
                             <div class="col-md-4 mb-3">
-                                <label for="view_civil_status">Civil Status</label>
+                                <label for="view_civil_status">Marital Status</label>
                                 <input disabled type="text" id="view_civil_status" class="form-control">
                             </div>
 
@@ -674,9 +674,9 @@
                                 </div>
 
                                 <div class="col-md-4 mb-3">
-                                    <label for="edit_civil_status" class="required">Civil Status</label>
+                                    <label for="edit_civil_status" class="required">Marital Status</label>
                                     <select id="edit_civil_status" name="edit_civil_status" required class="form-control">
-                                        <option value="" selected>Select Civil Status</option>
+                                        <option value="" selected>Select Marital Status</option>
                                         <option value="Single">Single</option>
                                         <option value="Married">Married</option>
                                         <option value="Widowed">Widowed</option>
@@ -1012,15 +1012,15 @@
 
         function checkedit_Civilstatus() {
             var edit_civil_status = $('#edit_civil_status').val()
-            // show error if civil status is empty
+            // show error if marital status is empty
             if (!edit_civil_status || edit_civil_status.trim() === '') {
-                $('#edit_civil_status-error').text('Please select civil status').css('color', 'red');
+                $('#edit_civil_status-error').text('Please select marital status').css('color', 'red');
                 $('#edit_civil_status').addClass('is-invalid');
                 checkIfAllFieldsValid();
                 return;
             }
             
-            // Perform additional validation for civil status if needed
+            // Perform additional validation for marital status if needed
             $('#edit_civil_status-error').empty();
             $('#edit_civil_status').removeClass('is-invalid');
             checkIfAllFieldsValid();

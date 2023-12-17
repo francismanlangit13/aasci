@@ -31,7 +31,7 @@
                             <th>Full Name</th>
                             <th>Gender</th>
                             <th>Birthday</th>
-                            <th>Civil Status</th>
+                            <th>Marital Status</th>
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Role</th>
@@ -164,7 +164,7 @@
                             </div>
 
                             <div class="col-md-4 mb-3">
-                                <label for="view_civil_status">Civil Status</label>
+                                <label for="view_civil_status">Marital Status</label>
                                 <input disabled type="text" id="view_civil_status" class="form-control">
                             </div>
 

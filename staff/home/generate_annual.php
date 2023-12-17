@@ -100,6 +100,10 @@
                             </div>
                             <div class="row mt-2">
                                 <div class='col-md-2'>
+                                    <input class="form-check-input" type="checkbox" value="Purok" id="Purok" name="Purok">
+                                    <label class="form-check-label" for="Purok">Purok</label>
+                                </div>
+                                <div class='col-md-2'>
                                     <input class="form-check-input" type="checkbox" value="ID" id="ID" name="ID">
                                     <label class="form-check-label" for="ID">ID Number</label>
                                 </div>
@@ -225,6 +229,9 @@
                         <tr class="bg-success text-light bg-success-print">
                             <th>No.</th>
                             <th>Full Name</th>
+                            <?php if(isset($_POST['Purok'])) { ?>
+                                <th>Purok</th>
+                            <?php } ?>
                             <th>Barangay</th>
                             <?php if(isset($_POST['ID'])) { ?>
                                 <th>ID Number</th>
@@ -265,6 +272,9 @@
                                     echo '<tr>';
                                     echo '<td class="text-center">' . $row['user_id'] . '</td>';
                                     echo '<td class=""><p class="m-0">' . $row['fname'] . ' ' . $row['mname'] . ' ' . $row['lname'] . ' ' . $row['suffix'] . '</p></td>';
+                                    if(isset($_POST['Purok'])) { 
+                                        echo '<td class=""><p class="m-0">' . $row['purok'] . '</p></td>';
+                                    }
                                     if(isset($_POST['Barangay'])) { 
                                         echo '<td class=""><p class="m-0">' . $row['barangay'] . '</p></td>';
                                     }

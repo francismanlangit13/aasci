@@ -38,6 +38,8 @@
                             <th>Gender</th>
                             <th>Birthday</th>
                             <th>Age</th>
+                            <th>Marital status</th>
+                            <th>Purok</th>
                             <th>Barangay</th>
                             <th>Date Issued</th>
                             <th>Soc Pen</th>
@@ -81,6 +83,8 @@
                                     { data: 'gender', className: 'text-center' },
                                     { data: 'newbirthday', className: 'text-center' },
                                     { data: 'age', className: 'text-center' },
+                                    { data: 'civil_status', className: 'text-center' },
+                                    { data: 'purok', className: 'text-center' },
                                     { data: 'barangay', className: 'text-center' },
                                     { data: 'newdateissued', className: 'text-center' },
                                     { data: 'soc_pen', className: 'text-center' },
@@ -113,7 +117,7 @@
                                         render: function(data, type, row, meta) {
                                             return '<div class="row d-flex" style="justify-content:space-evenly;">'+
                                             '<button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#btn_view_client" data-view_id="' + data.user_id + '" data-view_id_number="' + data.id_number + '" data-view_profile="' + data.profile + '" data-view_psa="' + data.psa + '" onclick="viewModal(this)" title="View"><i class="fa fa-eye"></i></button>'+
-                                            '<button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#btn_edit_client" data-edit_client_id="' + data.user_id + '" data-edit_id_number="' + data.id_number + '" data-edit_fname="' + data.fname + '" data-edit_mname="' + data.mname + '" data-edit_lname="' + data.lname + '" data-edit_suffix="' + data.suffix + '" data-edit_gender="' + data.gender + '" data-edit_birthday="' + data.birthday + '" data-edit_barangay="' + data.barangay + '" data-edit_date_issued="' + data.dateissued + '" data-edit_rrn="' + data.rrn + '" data-edit_soc_pen="' + data.soc_pen + '" data-edit_gsis="' + data.gsis + '" data-edit_sss="' + data.sss + '" data-edit_pvao="' + data.pvao + '" data-edit_sup_with="' + data.sup_with + '" data-edit_4ps="' + data.fourps + '" data-edit_nhts="' + data.nhts + '" data-edit_id_file="' + data.id_file + '" data-edit_status="' + data.user_status_id + '" data-edit_deceased="' + data.deceased + '" data-edit_transfer="' + data.transfer + '" data-edit_profile="' + data.profile + '" data-edit_psa="' + data.psa + '" onclick="editModal(this)" title="Edit"><i class="fa fa-edit"></i></button>'+
+                                            '<button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#btn_edit_client" data-edit_client_id="' + data.user_id + '" data-edit_id_number="' + data.id_number + '" data-edit_fname="' + data.fname + '" data-edit_mname="' + data.mname + '" data-edit_lname="' + data.lname + '" data-edit_suffix="' + data.suffix + '" data-edit_gender="' + data.gender + '" data-edit_birthday="' + data.birthday + '" data-edit_civil_status="' + data.civil_status + '" data-edit_purok="' + data.purok + '" data-edit_barangay="' + data.barangay + '" data-edit_date_issued="' + data.dateissued + '" data-edit_rrn="' + data.rrn + '" data-edit_soc_pen="' + data.soc_pen + '" data-edit_gsis="' + data.gsis + '" data-edit_sss="' + data.sss + '" data-edit_pvao="' + data.pvao + '" data-edit_sup_with="' + data.sup_with + '" data-edit_4ps="' + data.fourps + '" data-edit_nhts="' + data.nhts + '" data-edit_id_file="' + data.id_file + '" data-edit_status="' + data.user_status_id + '" data-edit_deceased="' + data.deceased + '" data-edit_transfer="' + data.transfer + '" data-edit_profile="' + data.profile + '" data-edit_psa="' + data.psa + '" onclick="editModal(this)" title="Edit"><i class="fa fa-edit"></i></button>'+
                                             '<button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#btn_delete_client" data-delete_client_id="' + data.user_id + '" data-delete_fname="' + data.fname + '" data-delete_mname="' + data.mname + '" data-delete_lname="' + data.lname + '" data-delete_suffix="' + data.suffix + '" onclick="deleteModal(this)" title="Delete"><i class="fa fa-trash"></i></button>'+
                                             '</div>';
                                         },
@@ -191,13 +195,13 @@
                                     <div id="add_suffix-error"></div>
                                 </div>
 
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="add_id_number" class="required">ID Number</label>
                                     <input required placeholder="Enter ID Number" type="number" id="add_id_number" name="add_id_number" class="form-control">
                                     <div id="add_id_number-error"></div>
                                 </div>
 
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="add_gender" class="required">Gender</label>
                                     <select id="add_gender" name="add_gender" required class="form-control">
                                         <option value="" selected>Select Gender</option>
@@ -207,13 +211,31 @@
                                     <div id="add_gender-error"></div>
                                 </div>
 
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="add_birthday" class="required">Birthday</label>
                                     <input required class="form-control" id="add_birthday" name="add_birthday" pattern="\d{2} \d{2} \d{4}" placeholder="MM/DD/YYYY" type="date"/>
                                     <div id="add_birthday-error"></div>
                                 </div>
 
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
+                                    <label for="add_civil_status" class="required">Marital Status</label>
+                                    <select id="add_civil_status" name="add_civil_status" required class="form-control">
+                                        <option value="" selected>Select Marital Status</option>
+                                        <option value="Single">Single</option>
+                                        <option value="Married">Married</option>
+                                        <option value="Widowed">Widowed</option>
+                                        <option value="Separated">Separated</option>
+                                    </select>
+                                    <div id="add_civil_status-error"></div>
+                                </div>
+
+                                <div class="col-md-3 mb-3">
+                                    <label for="add_purok" class="required">Purok</label>
+                                    <input type="number" class="form-control" placeholder="Enter Purok" id="add_purok" name="add_purok" required>
+                                    <div id="add_purok-error"></div>
+                                </div>
+
+                                <div class="col-md-3 mb-3">
                                     <label for="add_barangay" class="required">Barangay</label>
                                     <select id="add_barangay" name="add_barangay" required class="form-control">
                                         <option value="" selected>Select Barangay</option>
@@ -259,13 +281,13 @@
                                     <div id="add_barangay-error"></div>
                                 </div>
 
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="add_date_issued" class="required">Date Issued</label>
                                     <input required type="date" id="add_date_issued" name="add_date_issued" class="form-control">
                                     <div id="add_date_issued-error"></div>
                                 </div>
                             
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="add_rrn" class="required">RRN</label>
                                     <input required placeholder="Enter RRN" type="text" id="add_rrn" name="add_rrn" pattern="[0-9]*" maxlength="11" class="form-control">
                                     <div id="add_rrn-error"></div>
@@ -380,6 +402,10 @@
         $('#add_gender-error').empty();
         $('#add_birthday').removeClass('is-invalid');
         $('#add_birthday-error').empty();
+        $('#add_civil_status').removeClass('is-invalid');
+        $('#add_civil_status-error').empty();
+        $('#add_purok').removeClass('is-invalid');
+        $('#add_purok-error').empty();
         $('#add_barangay').removeClass('is-invalid');
         $('#add_barangay-error').empty();
         $('#add_date_issued').removeClass('is-invalid');
@@ -414,6 +440,8 @@
         var debouncedCheckadd_Id = _.debounce(checkadd_Id, 500);
         var debouncedCheckadd_Gender = _.debounce(checkadd_Gender, 500);
         var debouncedCheckadd_Birthday = _.debounce(checkadd_Birthday, 500);
+        var debouncedCheckadd_Civilstatus = _.debounce(checkadd_Civilstatus, 500);
+        var debouncedCheckadd_Purok = _.debounce(checkadd_Purok, 500);
         var debouncedCheckadd_Barangay = _.debounce(checkadd_Barangay, 500);
         var debouncedCheckadd_Date_issued = _.debounce(checkadd_Date_issued, 500);
         var debouncedCheckadd_RRN = _.debounce(checkadd_RRN, 500);
@@ -433,6 +461,8 @@
         $('#add_id_number').on('input', debouncedCheckadd_Id);
         $('#add_gender').on('input', debouncedCheckadd_Gender);
         $('#add_birthday').on('input', debouncedCheckadd_Birthday);
+        $('#add_civil_status').on('input', debouncedCheckadd_Civilstatus);
+        $('#add_purok').on('input', debouncedCheckadd_Purok);
         $('#add_barangay').on('input', debouncedCheckadd_Barangay);
         $('#add_date_issued').on('input', debouncedCheckadd_Date_issued);
         $('#add_rrn').on('input', debouncedCheckadd_RRN);
@@ -460,6 +490,8 @@
         $('#add_id_number').on('blur', debouncedCheckadd_Id);
         $('#add_gender').on('blur', debouncedCheckadd_Gender);
         $('#add_birthday').on('blur', debouncedCheckadd_Birthday);
+        $('#add_civil_status').on('blur', debouncedCheckadd_Civilstatus);
+        $('#add_purok').on('blur', debouncedCheckadd_Purok);
         $('#add_barangay').on('blur', debouncedCheckadd_Barangay);
         $('#add_date_issued').on('blur', debouncedCheckadd_Date_issued);
         $('#add_rrn').on('blur', debouncedCheckadd_RRN);
@@ -482,7 +514,7 @@
 
         function checkIfAllFieldsValid() {
             // check if all input fields are valid and enable submit button if so
-            if ($('#add_fname-error').is(':empty') && $('#add_lname-error').is(':empty') && $('#add_suffix-error').is(':empty') && $('#add_id_number-error').is(':empty') && $('#add_gender-error').is(':empty') && $('#add_birthday-error').is(':empty') && $('#add_barangay-error').is(':empty') && $('#add_date_issued-error').is(':empty') && $('#add_rrn-error').is(':empty') && $('#add_soc_pen-error').is(':empty') && $('#add_gsis-error').is(':empty') && $('#add_sss-error').is(':empty') && $('#add_pvao-error').is(':empty') && $('#add_sup_with-error').is(':empty') && $('#add_4ps-error').is(':empty') && $('#add_nhts-error').is(':empty') && $('#add_id_file-error').is(':empty')) {
+            if ($('#add_fname-error').is(':empty') && $('#add_lname-error').is(':empty') && $('#add_suffix-error').is(':empty') && $('#add_id_number-error').is(':empty') && $('#add_gender-error').is(':empty') && $('#add_birthday-error').is(':empty') && $('#add_civil_status-error').is(':empty') && $('#add_purok-error').is(':empty') && $('#add_barangay-error').is(':empty') && $('#add_date_issued-error').is(':empty') && $('#add_rrn-error').is(':empty') && $('#add_soc_pen-error').is(':empty') && $('#add_gsis-error').is(':empty') && $('#add_sss-error').is(':empty') && $('#add_pvao-error').is(':empty') && $('#add_sup_with-error').is(':empty') && $('#add_4ps-error').is(':empty') && $('#add_nhts-error').is(':empty') && $('#add_id_file-error').is(':empty')) {
                 $('#add_client').prop('disabled', false);
             } else {
                 $('#add_client').prop('disabled', true);
@@ -583,6 +615,38 @@
             // Perform additional validation for birthday if needed
             $('#add_birthday-error').empty();
             $('#add_birthday').removeClass('is-invalid');
+            checkIfAllFieldsValid();
+        }
+
+        function checkadd_Civilstatus() {
+            var add_civil_status = $('#add_civil_status').val()
+            // show error if marital status is empty
+            if (!add_civil_status || add_civil_status.trim() === '') {
+                $('#add_civil_status-error').text('Please select marital status').css('color', 'red');
+                $('#add_civil_status').addClass('is-invalid');
+                checkIfAllFieldsValid();
+                return;
+            }
+            
+            // Perform additional validation for marital status if needed
+            $('#add_civil_status-error').empty();
+            $('#add_civil_status').removeClass('is-invalid');
+            checkIfAllFieldsValid();
+        }
+
+        function checkadd_Purok() {
+            var add_purok = $('#add_purok').val().trim();
+            // show error if purok is empty
+            if (add_purok === '') {
+                $('#add_purok-error').text('Please input purok').css('color', 'red');
+                $('#add_purok').addClass('is-invalid');
+                checkIfAllFieldsValid();
+                return;
+            }
+
+            // Perform additional validation for purok if needed
+            $('#add_purok-error').empty();
+            $('#add_purok').removeClass('is-invalid');
             checkIfAllFieldsValid();
         }
 
@@ -902,13 +966,13 @@
                                     <div id="edit_suffix-error"></div>
                                 </div>
 
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="edit_id_number" class="required">ID Number</label>
                                     <input required placeholder="Enter ID Number" type="text" id="edit_id_number" name="edit_id_number" class="form-control">
                                     <div id="edit_id_number-error"></div>
                                 </div>
 
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="edit_gender" class="required">Gender</label>
                                     <select id="edit_gender" name="edit_gender" required class="form-control">
                                         <option value="" selected>Select Gender</option>
@@ -918,13 +982,31 @@
                                     <div id="edit_gender-error"></div>
                                 </div>
 
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="edit_birthday" class="required">Birthday</label>
                                     <input required class="form-control" id="edit_birthday" name="edit_birthday" pattern="\d{2} \d{2} \d{4}" placeholder="MM/DD/YYYY" type="date"/>
                                     <div id="edit_birthday-error"></div>
                                 </div>
 
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
+                                    <label for="edit_civil_status" class="required">Marital Status</label>
+                                    <select id="edit_civil_status" name="edit_civil_status" required class="form-control">
+                                        <option value="" selected>Select Marital Status</option>
+                                        <option value="Single">Single</option>
+                                        <option value="Married">Married</option>
+                                        <option value="Widowed">Widowed</option>
+                                        <option value="Separated">Separated</option>
+                                    </select>
+                                    <div id="edit_civil_status-error"></div>
+                                </div>
+
+                                <div class="col-md-3 mb-3">
+                                    <label for="edit_purok" class="required">Purok</label>
+                                    <input type="number" placeholder="Enter Purok" id="edit_purok" name="edit_purok" class="form-control" required>
+                                    <div id="edit_purok-error"></div>
+                                </div> 
+
+                                <div class="col-md-3 mb-3">
                                     <label for="edit_barangay" class="required">Barangay</label>
                                     <select id="edit_barangay" name="edit_barangay" required class="form-control">
                                         <option value="" selected>Select Barangay</option>
@@ -970,13 +1052,13 @@
                                     <div id="edit_barangay-error"></div>
                                 </div>
 
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="edit_date_issued" class="required">Date Issued</label>
                                     <input required type="date" id="edit_date_issued" name="edit_date_issued" class="form-control">
                                     <div id="edit_date_issued-error"></div>
                                 </div>
                             
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="edit_rrn" class="required">RRN</label>
                                     <input required placeholder="Enter RRN" type="text" id="edit_rrn" name="edit_rrn" pattern="[0-9]*" maxlength="11" class="form-control">
                                     <div id="edit_rrn-error"></div>
@@ -1120,6 +1202,8 @@
         document.getElementById("edit_id_number").value = button.getAttribute("data-edit_id_number");
         document.getElementById("edit_gender").value = button.getAttribute("data-edit_gender");
         document.getElementById("edit_birthday").value = button.getAttribute("data-edit_birthday");
+        document.getElementById("edit_civil_status").value = button.getAttribute("data-edit_civil_status");
+        document.getElementById("edit_purok").value = button.getAttribute("data-edit_purok");
         document.getElementById("edit_barangay").value = button.getAttribute("data-edit_barangay");
         document.getElementById("edit_date_issued").value = button.getAttribute("data-edit_date_issued");
         document.getElementById("edit_rrn").value = button.getAttribute("data-edit_rrn");
@@ -1187,6 +1271,10 @@
         $('#edit_gender-error').empty();
         $('#edit_birthday').removeClass('is-invalid');
         $('#edit_birthday-error').empty();
+        $('#edit_civil_status').removeClass('is-invalid');
+        $('#edit_civil_status-error').empty();
+        $('#edit_purok').removeClass('is-invalid');
+        $('#edit_purok-error').empty();
         $('#edit_barangay').removeClass('is-invalid');
         $('#edit_barangay-error').empty();
         $('#edit_date_issued').removeClass('is-invalid');
@@ -1223,6 +1311,8 @@
         var debouncedCheckedit_Id = _.debounce(checkedit_Id, 500);
         var debouncedCheckedit_Gender = _.debounce(checkedit_Gender, 500);
         var debouncedCheckedit_Birthday = _.debounce(checkedit_Birthday, 500);
+        var debouncedCheckedit_Civilstatus = _.debounce(checkedit_Civilstatus, 500);
+        var debouncedCheckedit_Purok = _.debounce(checkedit_Purok, 500);
         var debouncedCheckedit_Barangay = _.debounce(checkedit_Barangay, 500);
         var debouncedCheckedit_Date_issued = _.debounce(checkedit_Date_issued, 500);
         var debouncedCheckedit_RRN = _.debounce(checkedit_RRN, 500);
@@ -1243,6 +1333,8 @@
         $('#edit_id_number').on('input', debouncedCheckedit_Id);
         $('#edit_gender').on('input', debouncedCheckedit_Gender);
         $('#edit_birthday').on('input', debouncedCheckedit_Birthday);
+        $('#edit_civil_status').on('input', debouncedCheckedit_Civilstatus);
+        $('#edit_purok').on('input', debouncedCheckedit_Purok);
         $('#edit_barangay').on('input', debouncedCheckedit_Barangay);
         $('#edit_date_issued').on('input', debouncedCheckedit_Date_issued);
         $('#edit_rrn').on('input', debouncedCheckedit_RRN);
@@ -1271,6 +1363,8 @@
         $('#edit_id_number').on('blur', debouncedCheckedit_Id);
         $('#edit_gender').on('blur', debouncedCheckedit_Gender);
         $('#edit_birthday').on('blur', debouncedCheckedit_Birthday);
+        $('#edit_civil_status').on('blur', debouncedCheckedit_Civilstatus);
+        $('#edit_purok').on('blur', debouncedCheckedit_Purok);
         $('#edit_barangay').on('blur', debouncedCheckedit_Barangay);
         $('#edit_date_issued').on('blur', debouncedCheckedit_Date_issued);
         $('#edit_rrn').on('blur', debouncedCheckedit_RRN);
@@ -1294,7 +1388,7 @@
 
         function checkIfAllFieldsValid() {
             // check if all input fields are valid and enable submit button if so
-            if ($('#edit_fname-error').is(':empty') && $('#edit_lname-error').is(':empty') && $('#edit_suffix-error').is(':empty') && $('#edit_id_number-error').is(':empty') && $('#edit_gender-error').is(':empty') && $('#edit_birthday-error').is(':empty') && $('#edit_barangay-error').is(':empty') && $('#edit_date_issued-error').is(':empty') && $('#edit_rrn-error').is(':empty') && $('#edit_soc_pen-error').is(':empty') && $('#edit_gsis-error').is(':empty') && $('#edit_sss-error').is(':empty') && $('#edit_pvao-error').is(':empty') && $('#edit_sup_with-error').is(':empty') && $('#edit_4ps-error').is(':empty') && $('#edit_nhts-error').is(':empty') && $('#edit_id_file-error').is(':empty') && $('#edit_status-error').is(':empty')) {
+            if ($('#edit_fname-error').is(':empty') && $('#edit_lname-error').is(':empty') && $('#edit_suffix-error').is(':empty') && $('#edit_id_number-error').is(':empty') && $('#edit_gender-error').is(':empty') && $('#edit_birthday-error').is(':empty') && $('#edit_civil_status-error').is(':empty') && $('#edit_purok-error').is(':empty') && $('#edit_barangay-error').is(':empty') && $('#edit_date_issued-error').is(':empty') && $('#edit_rrn-error').is(':empty') && $('#edit_soc_pen-error').is(':empty') && $('#edit_gsis-error').is(':empty') && $('#edit_sss-error').is(':empty') && $('#edit_pvao-error').is(':empty') && $('#edit_sup_with-error').is(':empty') && $('#edit_4ps-error').is(':empty') && $('#edit_nhts-error').is(':empty') && $('#edit_id_file-error').is(':empty') && $('#edit_status-error').is(':empty')) {
                 $('#edit_client').prop('disabled', false);
             } else {
                 $('#edit_client').prop('disabled', true);
@@ -1395,6 +1489,38 @@
             // Perform additional validation for birthday if needed
             $('#edit_birthday-error').empty();
             $('#edit_birthday').removeClass('is-invalid');
+            checkIfAllFieldsValid();
+        }
+
+        function checkedit_Civilstatus() {
+            var edit_civil_status = $('#edit_civil_status').val()
+            // show error if marital status is empty
+            if (!edit_civil_status || edit_civil_status.trim() === '') {
+                $('#edit_civil_status-error').text('Please select marital status').css('color', 'red');
+                $('#edit_civil_status').addClass('is-invalid');
+                checkIfAllFieldsValid();
+                return;
+            }
+            
+            // Perform additional validation for marital status if needed
+            $('#edit_civil_status-error').empty();
+            $('#edit_civil_status').removeClass('is-invalid');
+            checkIfAllFieldsValid();
+        }
+
+        function checkedit_Purok() {
+            var edit_purok = $('#edit_purok').val().trim();
+            // show error if purok is empty
+            if (edit_purok === '') {
+                $('#edit_purok-error').text('Please input purok').css('color', 'red');
+                $('#edit_purok').addClass('is-invalid');
+                checkIfAllFieldsValid();
+                return;
+            }
+
+            // Perform additional validation for purok if needed
+            $('#edit_purok-error').empty();
+            $('#edit_purok').removeClass('is-invalid');
             checkIfAllFieldsValid();
         }
 

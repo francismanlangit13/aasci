@@ -210,88 +210,6 @@
       );
       echo json_encode($response);
    }
-   // -------------------------------- Add User -------------------------------- //
-   if (isset($_POST["add_user"])){
-      // Validate and sanitize user inputs
-      $fname = mysqli_real_escape_string($con, $_POST['add_fname']);
-      $mname = mysqli_real_escape_string($con, $_POST['add_mname']);
-      $lname = mysqli_real_escape_string($con, $_POST['add_lname']);
-      $suffix = mysqli_real_escape_string($con, $_POST['add_suffix']);
-      $gender = mysqli_real_escape_string($con, $_POST['add_gender']);
-      $birthday = mysqli_real_escape_string($con, $_POST['add_birthday']);
-      $civilstatus = mysqli_real_escape_string($con, $_POST['add_civil_status']);
-      $email = mysqli_real_escape_string($con, $_POST['add_email']);
-      $phone = mysqli_real_escape_string($con, $_POST['add_phone']);
-      $user_type = mysqli_real_escape_string($con, $_POST['add_role']);
-      // Generate a random password
-      $new_password = substr(md5(microtime()), rand(0, 26), 9);
-      $password = md5($new_password);
-      $user_status = '1';
-      $query = "INSERT INTO `user`(`fname`, `mname`, `lname`, `suffix`, `gender`, `birthday`, `civil_status`, `email`, `phone`, `password`, `account_privacy`, `data_sharing`, `second_auth`, `user_type_id`, `user_status_id`) VALUES ('$fname','$mname','$lname','$suffix','$gender','$birthday','$civilstatus','$email','$phone','$password','0','0','0','$user_type','$user_status')";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run){
-         $name = htmlentities($system['name']);
-         $subject = htmlentities('Email and Password Credentials - '. $system['name']);
-         $message = nl2br("Dear $fname \r\n \r\n Welcome to ".$system['name']."! \r\n \r\n This is your account information \r\n Email: $email \r\n Password: $new_password \r\n \r\n Please change your password immediately. \r\n \r\n Thanks, \r\n ".$system['name']);
-         //PHP Mailer Gmail
-         $mail = new PHPMailer();
-         $mail->IsSMTP();
-         $mail->SMTPAuth = true;
-         $mail->SMTPSecure = 'TLS/STARTTLS';
-         $mail->Host = 'smtp.gmail.com'; // Enter your host here
-         $mail->Port = '587';
-         $mail->IsHTML();
-         $mail->Username = emailuser; // Enter your email here
-         $mail->Password = emailpass; //Enter your passwrod here
-         $mail->setFrom($email, $name);
-         $mail->addAddress($email);
-         $mail->Subject = $subject;
-         $mail->Body = $message;
-         $mail->send();
-         $output = array('status' => "User added successfully check email inbox or spam folder", 'alert' => "success");
-      } else{
-         $output = array('status' => "User was not added", 'alert' => "error");
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Edit User -------------------------------- //
-   if (isset($_POST["edit_user"])){
-      // Validate and sanitize user inputs
-      $id = mysqli_real_escape_string($con, $_POST['edit_user_id']);
-      $fname = mysqli_real_escape_string($con, $_POST['edit_fname']);
-      $mname = mysqli_real_escape_string($con, $_POST['edit_mname']);
-      $lname = mysqli_real_escape_string($con, $_POST['edit_lname']);
-      $suffix = mysqli_real_escape_string($con, $_POST['edit_suffix']);
-      $gender = mysqli_real_escape_string($con, $_POST['edit_gender']);
-      $birthday = mysqli_real_escape_string($con, $_POST['edit_birthday']);
-      $civilstatus = mysqli_real_escape_string($con, $_POST['edit_civil_status']);
-      $email = mysqli_real_escape_string($con, $_POST['edit_email']);
-      $phone = mysqli_real_escape_string($con, $_POST['edit_phone']);
-      $user_type = mysqli_real_escape_string($con, $_POST['edit_role']);
-      $user_status = mysqli_real_escape_string($con, $_POST['edit_status']);
-      $query = "UPDATE `user` SET `fname` = '$fname', `mname` = '$mname', `lname` = '$lname', `suffix` = '$suffix', `gender` = '$gender', `birthday` = '$birthday', `civil_status` = '$civilstatus', `email` = '$email', `phone` = '$phone', `user_type_id` = '$user_type', `user_status_id` = '$user_status' WHERE `user_id` = '$id'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run){
-         $output = array('status' => "User updated successfully", 'alert' => "success");
-      } else{
-         $output = array('status' => "User was not updated", 'alert' => "error");
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Delete User -------------------------------- //
-   if (isset($_POST["delete_user"])){
-      // Validate and sanitize user inputs
-      $id = mysqli_real_escape_string($con, $_POST['delete_user_id']);
-      $user_status = '3';
-      $query = "UPDATE `user` SET `user_status_id` = '$user_status' WHERE `user_id` = '$id'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run){
-         $output = array('status' => "User deleted successfully", 'alert' => "success");
-      } else{
-         $output = array('status' => "User was not deleted", 'alert' => "error");
-      }
-      echo json_encode($output);
-   }
    // -------------------------------- Validation -------------------------------- //
    if (isset($_POST["validation"])){
       // Prepare the SQL statement with placeholders for the email and phone parameters
@@ -554,6 +472,8 @@
             gender LIKE :gender OR
             DATE_FORMAT(birthday, '%m-%d-%Y') LIKE :newbirthday OR
             TIMESTAMPDIFF(YEAR, birthday, CURDATE()) = :age OR
+            civil_status LIKE :civil_status OR
+            purok LIKE :purok OR
             barangay LIKE :barangay OR
             DATE_FORMAT(date_issued, '%m-%d-%Y') LIKE :newdateissued OR
             soc_pen LIKE :soc_pen OR
@@ -576,6 +496,8 @@
             'gender' => "%$searchValue%",
             'newbirthday' => "%$searchValue%",
             'age' => $searchValue, // Search for the exact age value
+            'civil_status' => "%$searchValue%",
+            'purok' => "%$searchValue%",
             'barangay' => "%$searchValue%",
             'newdateissued' => "%$searchValue%",
             'soc_pen' => "%$searchValue%",
@@ -646,6 +568,8 @@
               "birthday" => $row['birthday'],
               "newbirthday" => $row['newbirthday'],
               "age" => $row['age'],
+              "civil_status" => $row['civil_status'],
+              "purok" => $row['purok'],
               "barangay" => $row['barangay'],
               "dateissued" => $row['date_issued'],
               "newdateissued" => $row['newdateissued'],
@@ -677,33 +601,6 @@
       
       echo json_encode($response);
    }
-   // -------------------------------- Restore Archive Client -------------------------------- //
-   if (isset($_POST["restore_client"])){
-      // Validate and sanitize user inputs
-      $id = mysqli_real_escape_string($con, $_POST['restore_client_id']);
-      $user_status = '1';
-      $query = "UPDATE `user` SET `user_status_id` = '$user_status' WHERE `user_id` = '$id'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run){
-         $output = array('status' => "Senior restore successfully", 'alert' => "success");
-      } else{
-         $output = array('status' => "Senior was not restore", 'alert' => "error");
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Delete Archive Client -------------------------------- //
-   if (isset($_POST["delete_client_archive"])){
-      // Validate and sanitize user inputs
-      $id = mysqli_real_escape_string($con, $_POST['delete_client_id']);
-      $query = "DELETE FROM `user` WHERE `user_id` = '$id'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run){
-         $output = array('status' => "Senior deleted successfully", 'alert' => "success");
-      } else{
-         $output = array('status' => "Senior was not deleted", 'alert' => "error");
-      }
-      echo json_encode($output);
-   }
    // -------------------------------- DataTable Client -------------------------------- //
    if (isset($_POST["client_list"])) {
       // Reading values
@@ -725,6 +622,8 @@
             gender LIKE :gender OR
             DATE_FORMAT(birthday, '%m-%d-%Y') LIKE :newbirthday OR
             TIMESTAMPDIFF(YEAR, birthday, CURDATE()) = :age OR
+            civil_status LIKE :civil_status OR
+            purok LIKE :purok OR
             barangay LIKE :barangay OR
             DATE_FORMAT(date_issued, '%m-%d-%Y') LIKE :newdateissued OR
             soc_pen LIKE :soc_pen OR
@@ -748,6 +647,8 @@
             'gender' => "%$searchValue%",
             'newbirthday' => "%$searchValue%",
             'age' => $searchValue, // Search for the exact age value
+            'civil_status' => $searchValue,
+            'purok' => "%$searchValue%",
             'barangay' => "%$searchValue%",
             'newdateissued' => "%$searchValue%",
             'soc_pen' => "%$searchValue%",
@@ -819,6 +720,8 @@
               "birthday" => $row['birthday'],
               "newbirthday" => $row['newbirthday'],
               "age" => $row['age'],
+              "civil_status" => $row['civil_status'],
+              "purok" => $row['purok'],
               "barangay" => $row['barangay'],
               "dateissued" => $row['date_issued'],
               "newdateissued" => $row['newdateissued'],
@@ -851,647 +754,6 @@
       
       echo json_encode($response);
    }
-   // -------------------------------- Add Client -------------------------------- //
-   if (isset($_POST["add_client"])) {
-      function compressImage($source, $destination, $quality) {
-         // Get image info
-         $imgInfo = getimagesize($source);
-         $mime = $imgInfo['mime'];
-         // Create a new image from the file
-         switch ($mime) {
-               case 'image/jpeg':
-                  $image = imagecreatefromjpeg($source);
-                  break;
-               case 'image/png':
-                  $image = imagecreatefrompng($source);
-                  break;
-               case 'image/gif':
-                  $image = imagecreatefromgif($source);
-                  break;
-               default:
-                  $image = imagecreatefromjpeg($source);
-         }
-         // Check and apply image orientation
-         $exif = @exif_read_data($source);
-         if ($exif && isset($exif['Orientation'])) {
-               $orientation = $exif['Orientation'];
-               if ($orientation == 3) {
-                  $image = imagerotate($image, 180, 0);
-               } elseif ($orientation == 6) {
-                  $image = imagerotate($image, -90, 0);
-               } elseif ($orientation == 8) {
-                  $image = imagerotate($image, 90, 0);
-               }
-         }
-         // Save the image with compression quality
-         imagejpeg($image, $destination, $quality);
-         // Return the compressed image's destination
-         return $destination;
-      }
-
-      // Validate and sanitize client inputs
-      $fname = mysqli_real_escape_string($con, $_POST['add_fname']);
-      $mname = mysqli_real_escape_string($con, $_POST['add_mname']);
-      $lname = mysqli_real_escape_string($con, $_POST['add_lname']);
-      $suffix = mysqli_real_escape_string($con, $_POST['add_suffix']);
-      $id_number = mysqli_real_escape_string($con, $_POST['add_id_number']);
-      $gender = mysqli_real_escape_string($con, $_POST['add_gender']);
-      $birthday = mysqli_real_escape_string($con, $_POST['add_birthday']);
-      $barangay = mysqli_real_escape_string($con, $_POST['add_barangay']);
-      $date_issued = mysqli_real_escape_string($con, $_POST['add_date_issued']);
-      $rrn = mysqli_real_escape_string($con, $_POST['add_rrn']);
-      $soc_pen = mysqli_real_escape_string($con, $_POST['add_soc_pen']);
-      $gsis = mysqli_real_escape_string($con, $_POST['add_gsis']);
-      $sss = mysqli_real_escape_string($con, $_POST['add_sss']);
-      $pvao = mysqli_real_escape_string($con, $_POST['add_pvao']);
-      $sup_with = mysqli_real_escape_string($con, $_POST['add_sup_with']);
-      $fourps = mysqli_real_escape_string($con, $_POST['add_4ps']);
-      $nhts = mysqli_real_escape_string($con, $_POST['add_nhts']);
-      $id_file = mysqli_real_escape_string($con, $_POST['add_id_file']);
-      $user_status = '1';
-      $user_type = '3';
-      $is_decease = 'No';
-      $is_transfer = 'No';
-      $fileImage = $_FILES['image1'];
-      $fileImage1 = $_FILES['image2'];
-      $customFileName = 'user_' . date('Ymd_His'); // replace with your desired file name
-      $customFileName1 = 'psa_' . date('Ymd_His');
-      $ext = pathinfo($fileImage['name'], PATHINFO_EXTENSION); // get the file extension
-      $ext1 = pathinfo($fileImage1['name'], PATHINFO_EXTENSION);
-      $fileName = $customFileName . '.' . $ext; // append the extension to the custom file name
-      $fileName1 = $customFileName1 . '.' . $ext1;
-      $fileTmpname = $fileImage['tmp_name'];
-      $fileTmpname1 = $fileImage1['tmp_name'];
-      $fileSize = $fileImage['size'];
-      $fileSize1 = $fileImage1['size'];
-      $fileError = $fileImage['error'];
-      $fileError1 = $fileImage1['error'];
-      $fileExt = explode('.', $fileName);
-      $fileExt1 = explode('.', $fileName1);
-      $fileActExt = strtolower(end($fileExt));
-      $fileActExt1 = strtolower(end($fileExt1));
-      $allowed = array('jpg', 'jpeg', 'png');
-      if (in_array($fileActExt, $allowed) && in_array($fileActExt1, $allowed)) {
-         if ($fileError === 0 && $fileError1 === 0) {
-               if ($fileSize < 5242880 && $fileSize1 < 5242880) { // 5MB Limit
-                  $uploadDir = '../../assets/files/clients/';
-                  $uploadDir1 = '../../assets/files/documents/';
-                  $targetFile = $uploadDir . $fileName;
-                  $targetFile1 = $uploadDir1 . $fileName1;
-                  if ($fileSize > 1048576 && $fileSize1 > 1048576) { // more than 1 MB
-                     // Compress the uploaded images with a quality of 25
-                     $compressedImage = compressImage($fileTmpname, $targetFile, 25);
-                     $compressedImage1 = compressImage($fileTmpname1, $targetFile1, 25);
-                  } else {
-                     // Compress the uploaded images with a quality of 35
-                     $compressedImage = compressImage($fileTmpname, $targetFile, 35);
-                     $compressedImage1 = compressImage($fileTmpname1, $targetFile1, 35);
-                  }
-                  if ($compressedImage && $compressedImage1) {
-                     $query = "INSERT INTO `user`(`id_number`, `fname`, `mname`, `lname`, `suffix`, `gender`, `birthday`, `profile`, `psa`, `date_issued`, `soc_pen`, `gsis`, `sss`, `pvao`, `sup_with`, `fourps`, `nhts`, `id_file`, `barangay`, `rrn`, `user_type_id`, `user_status_id`) VALUES ('$id_number','$fname','$mname','$lname','$suffix','$gender','$birthday','$fileName','$fileName1','$date_issued','$soc_pen','$gsis','$sss','$pvao','$sup_with','$fourps','$nhts','$id_file','$barangay','$rrn','$user_type','$user_status')";
-                     $query_run = mysqli_query($con, $query);
-                     if ($query_run) {
-                           $output = array('status' => "Senior citizen added successfully", 'alert' => "success");
-                     } else {
-                           $output = array('status' => "Senior citizen was not added", 'alert' => "error");
-                     }
-                  }
-               } else {
-                  $output = array('status' => 'File is too large, must be 5MB or below', 'alert' => 'warning');
-               }
-         } else {
-               $output = array('status' => 'File error', 'alert' => 'error');
-         }
-      } else {
-         $output = array('status' => 'Invalid file type', 'alert' => 'error');
-      }
-      echo json_encode($output);
-   }
-
-   // -------------------------------- Edit Client -------------------------------- //
-   if (isset($_POST["edit_client"])){
-      function compressImage($source, $destination, $quality){
-         // Get image info
-         $imgInfo = getimagesize($source);
-         $mime = $imgInfo['mime'];
-         // Create a new image from file
-         switch ($mime) {
-            case 'image/jpeg':
-               $image = imagecreatefromjpeg($source);
-               break;
-            case 'image/png':
-               $image = imagecreatefrompng($source);
-               break;
-            case 'image/gif':
-               $image = imagecreatefromgif($source);
-               break;
-            default:
-               $image = imagecreatefromjpeg($source);
-         }
-         // Check and apply image orientation
-         $exif = @exif_read_data($source);
-         if ($exif && isset($exif['Orientation'])) {
-            $orientation = $exif['Orientation'];
-            if ($orientation == 3) {
-               $image = imagerotate($image, 180, 0);
-            } elseif ($orientation == 6) {
-               $image = imagerotate($image, -90, 0);
-            } elseif ($orientation == 8) {
-               $image = imagerotate($image, 90, 0);
-            }
-         }
-         // Save image with compression quality
-         imagejpeg($image, $destination, $quality);
-         // Return compressed image
-         return $destination;
-      }
-      
-      // Validate and sanitize client inputs
-      $id = mysqli_real_escape_string($con, $_POST['edit_client_id']);
-      $fname = mysqli_real_escape_string($con, $_POST['edit_fname']);
-      $mname = mysqli_real_escape_string($con, $_POST['edit_mname']);
-      $lname = mysqli_real_escape_string($con, $_POST['edit_lname']);
-      $suffix = mysqli_real_escape_string($con, $_POST['edit_suffix']);
-      $id_number = mysqli_real_escape_string($con, $_POST['edit_id_number']);
-      $gender = mysqli_real_escape_string($con, $_POST['edit_gender']);
-      $birthday = mysqli_real_escape_string($con, $_POST['edit_birthday']);
-      $barangay = mysqli_real_escape_string($con, $_POST['edit_barangay']);
-      $date_issued = mysqli_real_escape_string($con, $_POST['edit_date_issued']);
-      $rrn = mysqli_real_escape_string($con, $_POST['edit_rrn']);
-      $soc_pen = mysqli_real_escape_string($con, $_POST['edit_soc_pen']);
-      $gsis = mysqli_real_escape_string($con, $_POST['edit_gsis']);
-      $sss = mysqli_real_escape_string($con, $_POST['edit_sss']);
-      $pvao = mysqli_real_escape_string($con, $_POST['edit_pvao']);
-      $sup_with = mysqli_real_escape_string($con, $_POST['edit_sup_with']);
-      $fourps = mysqli_real_escape_string($con, $_POST['edit_4ps']);
-      $nhts = mysqli_real_escape_string($con, $_POST['edit_nhts']);
-      $id_file = mysqli_real_escape_string($con, $_POST['edit_id_file']);
-      $user_status = mysqli_real_escape_string($con, $_POST['edit_status']);
-      $is_deceased = mysqli_real_escape_string($con, $_POST['edit_deceased']);
-      if($is_deceased == 'Yes'){
-         $is_deceased_date = date;
-      } else {
-         $is_deceased_date = null;
-      }
-      $is_transfer = mysqli_real_escape_string($con, $_POST['edit_transfer']);
-      if($is_transfer == 'Yes'){
-         $is_transfer_date = date;
-      } else {
-         $is_transfer_date = null;
-      }
-      if (isset($_FILES['image5']) && is_uploaded_file($_FILES['image5']['tmp_name']) && $_FILES['image5']['error'] === UPLOAD_ERR_OK) {
-         $fileImage5 = $_FILES['image5'];
-         $OLDfileImage5 = $_POST['oldimage5'];
-         $customFileName5 = 'user_' . date('Ymd_His'); // replace with your desired file name
-         $ext5 = pathinfo($fileImage5['name'], PATHINFO_EXTENSION); // get the file extension
-         $fileName5 = $customFileName5 . '.' . $ext5; // append the extension to the custom file name
-         $fileTmpname5 = $fileImage5['tmp_name'];
-         $fileSize5 = $fileImage5['size'];
-         $fileError5 = $fileImage5['error'];
-         $fileExt5 = explode('.', $fileName5);
-         $fileActExt5 = strtolower(end($fileExt5));
-         $allowed5 = array('jpg', 'jpeg', 'png');
-         if (in_array($fileActExt5, $allowed5)) {
-            if ($fileError5 === 0) {
-               if ($fileSize5 < 5242880) { // 5MB Limit
-                  $uploadDir5 = '../../assets/files/clients/';
-                  $targetFile5 = $uploadDir5 . $fileName5;
-                  if ($OLDfileImage5 != null ){
-                     unlink($uploadDir5 . $OLDfileImage5);
-                  }
-                  if ($fileSize5 > 1048576) { // more than 1 MB
-                     // Compress the uploaded image with a quality of 25
-                     $compressedImage5 = compressImage($fileTmpname5, $targetFile5, 25);
-                  } else {
-                     // Compress the uploaded image with a quality of 35
-                     $compressedImage5 = compressImage($fileTmpname5, $targetFile5, 35);
-                  }
-                  if ($compressedImage5) {
-                     $query = "UPDATE `user` SET `profile`='$fileName5' WHERE `user_id`='$id'";
-                     $query_run = mysqli_query($con, $query);
-                  }
-               } else {
-                  $output = array('status' => 'File is too large, must be 5MB or below', 'alert' => 'warning');
-               }
-            } else {
-               $output = array('status' => 'File error', 'alert' => 'error');
-            }
-         } else {
-            $output = array('status' => 'Invalid file type', 'alert' => 'error');
-         }
-      }
-      if (isset($_FILES['image6']) && is_uploaded_file($_FILES['image6']['tmp_name']) && $_FILES['image6']['error'] === UPLOAD_ERR_OK) {
-         $fileImage6 = $_FILES['image6'];
-         $OLDfileImage6 = $_POST['oldimage6'];
-         $customFileName6 = 'psa_' . date('Ymd_His'); // replace with your desired file name
-         $ext6 = pathinfo($fileImage6['name'], PATHINFO_EXTENSION); // get the file extension
-         $fileName6 = $customFileName6 . '.' . $ext6; // append the extension to the custom file name
-         $fileTmpname6 = $fileImage6['tmp_name'];
-         $fileSize6 = $fileImage6['size'];
-         $fileError6 = $fileImage6['error'];
-         $fileExt6 = explode('.', $fileName6);
-         $fileActExt6 = strtolower(end($fileExt6));
-         $allowed6 = array('jpg', 'jpeg', 'png');
-         if (in_array($fileActExt6, $allowed6)) {
-            if ($fileError6 === 0) {
-               if ($fileSize6 < 5242880) { // 5MB Limit
-                  $uploadDir6 = '../../assets/files/documents/';
-                  $targetFile6 = $uploadDir6 . $fileName6;
-                  if ($OLDfileImage6 != null ){
-                     unlink($uploadDir6 . $OLDfileImage6);
-                  }
-                  if ($fileSize6 > 1048576) { // more than 1 MB
-                     // Compress the uploaded image with a quality of 25
-                     $compressedImage6 = compressImage($fileTmpname6, $targetFile6, 25);
-                  } else {
-                     // Compress the uploaded image with a quality of 35
-                     $compressedImage6 = compressImage($fileTmpname6, $targetFile6, 35);
-                  }
-                  if ($compressedImage6) {
-                     $query = "UPDATE `user` SET `psa`='$fileName6' WHERE `user_id`='$id'";
-                     $query_run = mysqli_query($con, $query);
-                  }
-               } else {
-                  $output = array('status' => 'File is too large, must be 5MB or below', 'alert' => 'warning');
-               }
-            } else {
-               $output = array('status' => 'File error', 'alert' => 'error');
-            }
-         } else {
-            $output = array('status' => 'Invalid file type', 'alert' => 'error');
-         }
-      }
-      $query = "UPDATE `user` SET `id_number` = '$id_number', `fname` = '$fname', `mname` = '$mname', `lname` = '$lname', `suffix` = '$suffix', `gender` = '$gender', `birthday` = '$birthday', `date_issued` = '$date_issued', `soc_pen` = '$soc_pen', `gsis` = '$gsis', `sss` = '$sss', `pvao` = '$pvao', `sup_with` = '$sup_with', `fourps` = '$fourps', `nhts` = '$nhts', `id_file` = '$id_file', `barangay` = '$barangay', `rrn` = '$rrn', `user_status_id` = '$user_status', `is_deceased` = '$is_deceased', `deceased_date` = '$is_deceased_date', `is_transfer` = '$is_transfer', `transfer_date` = '$is_transfer_date' WHERE `user_id` = '$id'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run){
-         $output = array('status' => "Senior citizen updated successfully", 'alert' => "success");
-      } else{
-         $output = array('status' => "Senior citizen was not updated", 'alert' => "error");
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Delete Client -------------------------------- //
-   if (isset($_POST["delete_client"])){
-      // Validate and sanitize client inputs
-      $id = mysqli_real_escape_string($con, $_POST['delete_client_id']);
-      $user_status = '3';
-      $query = "UPDATE `user` SET `user_status_id` = '$user_status' WHERE `user_id` = '$id'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run){
-         $output = array('status' => "Senior citizen deleted successfully", 'alert' => "success");
-      } else{
-         $output = array('status' => "Senior citizen was not deleted", 'alert' => "error");
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Update System Info -------------------------------- //
-   if (isset($_POST["update_system_info"])) {
-      // Assuming you have an associative array with keys and values
-      $updates = [
-         'name' => $_POST['system_name'],
-         'shortname' => $_POST['system_short_name'],
-         'description' => $_POST['system_description'],
-         'keywords' => $_POST['system_keywords'],
-         'author' => $_POST['system_author']
-      ];
-      $success = true;
-      // Assuming $this->conn is a valid MySQLi connection
-      foreach ($updates as $key => $value) {
-         $query = "UPDATE `system_setting` SET `meta_value`='$value' WHERE `meta`='$key'";
-         $query_run = mysqli_query($con, $query);
-         if (!$query_run) {
-            // If the update for any field fails, set $success to false
-            $success = false;
-            break; // Exit the loop
-         }
-      }
-      if ($success) {
-         $output = array('status' => 'System information updated successfully', 'alert' => 'success', 'inform' => 'Yes');
-      } else {
-         $output = array('status' => 'System information were not updated', 'alert' => 'error');
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Update System Info Privacy -------------------------------- //
-   if (isset($_POST["update_system_info_privacy"])) {
-      // Assuming you have an associative array with keys and values
-      $updates = [
-         'privacy' => $_POST['system_privacy']
-      ];
-      $success = true;
-      // Assuming $this->conn is a valid MySQLi connection
-      foreach ($updates as $key => $value) {
-         $query = "UPDATE `system_setting` SET `meta_value`='$value' WHERE `meta`='$key'";
-         $query_run = mysqli_query($con, $query);
-         if (!$query_run) {
-            // If the update for any field fails, set $success to false
-            $success = false;
-            break; // Exit the loop
-         }
-      }
-      if ($success) {
-         $output = array('status' => 'Privacy information updated successfully', 'alert' => 'success', 'inform' => 'Yes');
-      } else {
-         $output = array('status' => 'Privacy information were not updated', 'alert' => 'error');
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Update System Info Terms -------------------------------- //
-   if (isset($_POST["update_system_info_terms"])) {
-      // Assuming you have an associative array with keys and values
-      $updates = [
-         'terms' => $_POST['system_terms']
-      ];
-      $success = true;
-      // Assuming $this->conn is a valid MySQLi connection
-      foreach ($updates as $key => $value) {
-         $query = "UPDATE `system_setting` SET `meta_value`='$value' WHERE `meta`='$key'";
-         $query_run = mysqli_query($con, $query);
-         if (!$query_run) {
-            // If the update for any field fails, set $success to false
-            $success = false;
-            break; // Exit the loop
-         }
-      }
-      if ($success) {
-         $output = array('status' => 'Terms information updated successfully', 'alert' => 'success', 'inform' => 'Yes');
-      } else {
-         $output = array('status' => 'Terms information were not updated', 'alert' => 'error');
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Update System Info ACT -------------------------------- //
-   if (isset($_POST["update_system_info_act"])) {
-      // Assuming you have an associative array with keys and values
-      $updates = ['sysacttitle' => $_POST['system_title'], 'sysact' => $_POST['system_act']];
-      $success = true;
-      // Assuming $con is your MySQLi connection
-      foreach ($updates as $key => $value) {
-         $query = "UPDATE `system_setting` SET `meta_value`=? WHERE `meta`=?";
-         $stmt = mysqli_prepare($con, $query);
-         if ($stmt) {
-            mysqli_stmt_bind_param($stmt, 'ss', $value, $key);
-            $query_run = mysqli_stmt_execute($stmt);
-            if (!$query_run) {
-               // If the update for any field fails, set $success to false
-               $success = false;
-               break; // Exit the loop
-            }
-            mysqli_stmt_close($stmt);
-         } else {
-            // Handle the case where the prepared statement fails
-            $success = false;
-            break; // Exit the loop
-         }
-      }
-      if ($success) {
-         $output = array('status' => 'Repubic Act information updated successfully', 'alert' => 'success', 'inform' => 'Yes');
-      } else {
-         $output = array('status' => 'Repubic Act information were not updated', 'alert' => 'error');
-      }
-      echo json_encode($output);
-  }  
-   // -------------------------------- Facebook switch -------------------------------- //
-   if (isset($_POST['switch_facebook'])) {
-      $switchState = intval($_POST['switch_facebook']); // Convert to integer (1 or 0)
-      $query = "UPDATE `system_setting` SET `meta_switch`='$switchState' WHERE `meta`='facebook'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run && $switchState == '1') {
-         $output = array('status' => 'Facebook turn on', 'alert' => 'success', 'switch' => '1');
-      } elseif ($query_run && $switchState == '0') {
-         $output = array('status' => 'Facebook turn off', 'alert' => 'success', 'switch' => '0');
-      } else {
-         $output = array('status' => 'There is problem switching facebook', 'alert' => 'error');
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Facebook forms -------------------------------- //
-   if (isset($_POST['update_system_facebook'])) {
-      $form = $_POST['system_facebook'];
-      $query = "UPDATE `system_setting` SET `meta_value`='$form' WHERE `meta`='facebook'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run) {
-         $output = array('status' => 'Facebook updated successfully', 'alert' => 'success');
-      } else {
-         $output = array('status' => 'There is problem updated facebook', 'alert' => 'error');
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Instagram switch -------------------------------- //
-   if (isset($_POST['switch_instagram'])) {
-      $switchState = intval($_POST['switch_instagram']); // Convert to integer (1 or 0)
-      $query = "UPDATE `system_setting` SET `meta_switch`='$switchState' WHERE `meta`='instagram'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run && $switchState == '1') {
-         $output = array('status' => 'Instagram turn on', 'alert' => 'success', 'switch' => '1');
-      } elseif ($query_run && $switchState == '0') {
-         $output = array('status' => 'Instagram turn off', 'alert' => 'success', 'switch' => '0');
-      } else {
-         $output = array('status' => 'There is problem switching instagram', 'alert' => 'error');
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Instagram forms -------------------------------- //
-   if (isset($_POST['update_system_instagram'])) {
-      $form = $_POST['system_instagram'];
-      $query = "UPDATE `system_setting` SET `meta_value`='$form' WHERE `meta`='instagram'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run) {
-         $output = array('status' => 'Instagram updated successfully', 'alert' => 'success');
-      } else {
-         $output = array('status' => 'There is problem updated instagram', 'alert' => 'error');
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Twitter switch -------------------------------- //
-   if (isset($_POST['switch_twitter'])) {
-      $switchState = intval($_POST['switch_twitter']); // Convert to integer (1 or 0)
-      $query = "UPDATE `system_setting` SET `meta_switch`='$switchState' WHERE `meta`='twitter'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run && $switchState == '1') {
-         $output = array('status' => 'Twitter turn on', 'alert' => 'success', 'switch' => '1');
-      } elseif ($query_run && $switchState == '0') {
-         $output = array('status' => 'Twitter turn off', 'alert' => 'success', 'switch' => '0');
-      } else {
-         $output = array('status' => 'There is problem switching twitter', 'alert' => 'error');
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Twitter forms -------------------------------- //
-   if (isset($_POST['update_system_twitter'])) {
-      $form = $_POST['system_twitter'];
-      $query = "UPDATE `system_setting` SET `meta_value`='$form' WHERE `meta`='twitter'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run) {
-         $output = array('status' => 'Twitter updated successfully', 'alert' => 'success');
-      } else {
-         $output = array('status' => 'There is problem updated twitter', 'alert' => 'error');
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Tumblr switch -------------------------------- //
-   if (isset($_POST['switch_tumblr'])) {
-      $switchState = intval($_POST['switch_tumblr']); // Convert to integer (1 or 0)
-      $query = "UPDATE `system_setting` SET `meta_switch`='$switchState' WHERE `meta`='tumblr'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run && $switchState == '1') {
-         $output = array('status' => 'Tumblr turn on', 'alert' => 'success', 'switch' => '1');
-      } elseif ($query_run && $switchState == '0') {
-         $output = array('status' => 'Tumblr turn off', 'alert' => 'success', 'switch' => '0');
-      } else {
-         $output = array('status' => 'There is problem switching tumblr', 'alert' => 'error');
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Tumblr forms -------------------------------- //
-   if (isset($_POST['update_system_tumblr'])) {
-      $form = $_POST['system_tumblr'];
-      $query = "UPDATE `system_setting` SET `meta_value`='$form' WHERE `meta`='tumblr'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run) {
-         $output = array('status' => 'Tumblr updated successfully', 'alert' => 'success');
-      } else {
-         $output = array('status' => 'There is problem updated tumblr', 'alert' => 'error');
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Email switch -------------------------------- //
-   if (isset($_POST['switch_email'])) {
-      $switchState = intval($_POST['switch_email']); // Convert to integer (1 or 0)
-      $query = "UPDATE `system_setting` SET `meta_switch`='$switchState' WHERE `meta`='email'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run && $switchState == '1') {
-         $output = array('status' => 'Email turn on', 'alert' => 'success', 'switch' => '1');
-      } elseif ($query_run && $switchState == '0') {
-         $output = array('status' => 'Email turn off', 'alert' => 'success', 'switch' => '0');
-      } else {
-         $output = array('status' => 'There is problem switching email', 'alert' => 'error');
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Email forms -------------------------------- //
-   if (isset($_POST['update_system_email'])) {
-      $form = $_POST['system_email'];
-      $query = "UPDATE `system_setting` SET `meta_value`='$form' WHERE `meta`='email'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run) {
-         $output = array('status' => 'Email updated successfully', 'alert' => 'success');
-      } else {
-         $output = array('status' => 'There is problem updated email', 'alert' => 'error');
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Phone switch -------------------------------- //
-   if (isset($_POST['switch_phone'])) {
-      $switchState = intval($_POST['switch_phone']); // Convert to integer (1 or 0)
-      $query = "UPDATE `system_setting` SET `meta_switch`='$switchState' WHERE `meta`='number'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run && $switchState == '1') {
-         $output = array('status' => 'Phone turn on', 'alert' => 'success', 'switch' => '1');
-      } elseif ($query_run && $switchState == '0') {
-         $output = array('status' => 'Phone turn off', 'alert' => 'success', 'switch' => '0');
-      } else {
-         $output = array('status' => 'There is problem switching number', 'alert' => 'error');
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Phone forms -------------------------------- //
-   if (isset($_POST['update_system_phone'])) {
-      $form = $_POST['system_number'];
-      $query = "UPDATE `system_setting` SET `meta_value`='$form' WHERE `meta`='number'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run) {
-         $output = array('status' => 'Phone updated successfully', 'alert' => 'success');
-      } else {
-         $output = array('status' => 'There is problem updated phone', 'alert' => 'error');
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Update System Icon -------------------------------- //
-   if (isset($_POST["update_sysicon"])) {
-      function compressImage($source, $destination, $quality){
-         // Get image info
-         $imgInfo = getimagesize($source);
-         $mime = $imgInfo['mime'];
-         // Create a new image from file
-         switch ($mime) {
-            case 'image/jpeg':
-               $image = imagecreatefromjpeg($source);
-               break;
-            case 'image/png':
-               $image = imagecreatefrompng($source);
-               break;
-            case 'image/gif':
-               $image = imagecreatefromgif($source);
-               break;
-            default:
-               $image = imagecreatefromjpeg($source);
-         }
-         // Check and apply image orientation
-         $exif = @exif_read_data($source);
-         if ($exif && isset($exif['Orientation'])) {
-            $orientation = $exif['Orientation'];
-            if ($orientation == 3) {
-               $image = imagerotate($image, 180, 0);
-            } elseif ($orientation == 6) {
-               $image = imagerotate($image, -90, 0);
-            } elseif ($orientation == 8) {
-               $image = imagerotate($image, 90, 0);
-            }
-         }
-         // Save image with compression quality
-         imagejpeg($image, $destination, $quality);
-         // Return compressed image
-         return $destination;
-      }
-      if (isset($_FILES['image1']) && is_uploaded_file($_FILES['image1']['tmp_name']) && $_FILES['image1']['error'] === UPLOAD_ERR_OK) {
-         $fileImage = $_FILES['image1'];
-         $OLDfileImage = $_POST['oldICONimage'];
-         $customFileName = 'sysicon_' . date('Ymd_His'); // replace with your desired file name
-         $ext = pathinfo($fileImage['name'], PATHINFO_EXTENSION); // get the file extension
-         $fileName = $customFileName . '.' . $ext; // append the extension to the custom file name
-         $fileTmpname = $fileImage['tmp_name'];
-         $fileSize = $fileImage['size'];
-         $fileError = $fileImage['error'];
-         $fileExt = explode('.', $fileName);
-         $fileActExt = strtolower(end($fileExt));
-         $allowed = array('jpg', 'jpeg', 'png');
-         if (in_array($fileActExt, $allowed)) {
-            if ($fileError === 0) {
-               if ($fileSize < 5242880) { // 5MB Limit
-                  $uploadDir = '../../assets/files/system/';
-                  $targetFile = $uploadDir . $fileName;
-                  if ($OLDfileImage != null ){
-                     unlink($uploadDir . $OLDfileImage);
-                  }
-                  if ($fileSize > 1048576) { // more than 1 MB
-                     // Compress the uploaded image with a quality of 25
-                     $compressedImage = compressImage($fileTmpname, $targetFile, 25);
-                  } else {
-                     // Compress the uploaded image with a quality of 35
-                     $compressedImage = compressImage($fileTmpname, $targetFile, 35);
-                  }
-                  if ($compressedImage) {
-                     $query = "UPDATE `system_setting` SET `meta_value`='$fileName' WHERE `meta`='icon'";
-                     $query_run = mysqli_query($con, $query);
-                     if ($query_run) {
-                        $output = array('status' => 'System icon updated successfully', 'alert' => 'success');
-                     } else {
-                        $output = array('status' => 'System icon was not updated', 'alert' => 'error');
-                     }
-                  }
-               } else {
-                  $output = array('status' => 'File is too large, must be 5MB or below', 'alert' => 'warning');
-               }
-            } else {
-               $output = array('status' => 'File error', 'alert' => 'error');
-            }
-         } else {
-            $output = array('status' => 'Invalid file type', 'alert' => 'error');
-         }
-         echo json_encode($output);
-      }
-   }
    // -------------------------------- Get Icon Picture -------------------------------- //
    if (isset($_POST["get_sysicon"])) {
       // Prepare and execute the SQL query
@@ -1508,91 +770,6 @@
       header('Content-Type: application/json');
       echo json_encode($output);
   }
-  // -------------------------------- Update System Logo -------------------------------- //
-   if (isset($_POST["update_syslogo"])) {
-      function compressImage($source, $destination, $quality){
-         // Get image info
-         $imgInfo = getimagesize($source);
-         $mime = $imgInfo['mime'];
-         // Create a new image from file
-         switch ($mime) {
-            case 'image/jpeg':
-               $image = imagecreatefromjpeg($source);
-               break;
-            case 'image/png':
-               $image = imagecreatefrompng($source);
-               break;
-            case 'image/gif':
-               $image = imagecreatefromgif($source);
-               break;
-            default:
-               $image = imagecreatefromjpeg($source);
-         }
-         // Check and apply image orientation
-         $exif = @exif_read_data($source);
-         if ($exif && isset($exif['Orientation'])) {
-            $orientation = $exif['Orientation'];
-            if ($orientation == 3) {
-               $image = imagerotate($image, 180, 0);
-            } elseif ($orientation == 6) {
-               $image = imagerotate($image, -90, 0);
-            } elseif ($orientation == 8) {
-               $image = imagerotate($image, 90, 0);
-            }
-         }
-         // Save image with compression quality
-         imagejpeg($image, $destination, $quality);
-         // Return compressed image
-         return $destination;
-      }
-      if (isset($_FILES['image2']) && is_uploaded_file($_FILES['image2']['tmp_name']) && $_FILES['image2']['error'] === UPLOAD_ERR_OK) {
-         $fileImage = $_FILES['image2'];
-         $OLDfileImage = $_POST['oldLOGOimage'];
-         $customFileName = 'syslogo_' . date('Ymd_His'); // replace with your desired file name
-         $ext = pathinfo($fileImage['name'], PATHINFO_EXTENSION); // get the file extension
-         $fileName = $customFileName . '.' . $ext; // append the extension to the custom file name
-         $fileTmpname = $fileImage['tmp_name'];
-         $fileSize = $fileImage['size'];
-         $fileError = $fileImage['error'];
-         $fileExt = explode('.', $fileName);
-         $fileActExt = strtolower(end($fileExt));
-         $allowed = array('jpg', 'jpeg', 'png');
-         if (in_array($fileActExt, $allowed)) {
-            if ($fileError === 0) {
-               if ($fileSize < 5242880) { // 5MB Limit
-                  $uploadDir = '../../assets/files/system/';
-                  $targetFile = $uploadDir . $fileName;
-                  if ($OLDfileImage != null ){
-                     unlink($uploadDir . $OLDfileImage);
-                  }
-                  if ($fileSize > 1048576) { // more than 1 MB
-                     // Compress the uploaded image with a quality of 25
-                     $compressedImage = compressImage($fileTmpname, $targetFile, 25);
-                  } else {
-                     // Compress the uploaded image with a quality of 35
-                     $compressedImage = compressImage($fileTmpname, $targetFile, 35);
-                  }
-                  if ($compressedImage) {
-                     $query = "UPDATE `system_setting` SET `meta_value`='$fileName' WHERE `meta`='logo'";
-                     $query_run = mysqli_query($con, $query);
-                     if ($query_run) {
-                        $output = array('status' => 'System logo updated successfully', 'alert' => 'success');
-                     } else {
-                        $output = array('status' => 'System logo was not updated', 'alert' => 'error');
-                     }
-                  }
-               } else {
-                  $output = array('status' => 'File is too large, must be 5MB or below', 'alert' => 'warning');
-               }
-            } else {
-               $output = array('status' => 'File error', 'alert' => 'error');
-            }
-         } else {
-            $output = array('status' => 'Invalid file type', 'alert' => 'error');
-         }
-         echo json_encode($output);
-      }
-   }
   // -------------------------------- Get Logo Picture -------------------------------- //
   if (isset($_POST["get_syslogo"])) {
       // Prepare and execute the SQL query
@@ -1706,7 +883,7 @@
       $file = fopen('php://output', 'w');
 
       // Set the column headers
-      fputcsv($file, array('No', 'ID Number', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Age', 'Date Issued', 'Soc-Pen', 'GSIS', 'SSS', 'PVAO', 'SUP-WITH', '4Ps', 'NHTS', 'ID-File', 'Barangay', 'RRN', 'Is Deceased', 'Deceased Date', 'Is Transfer', 'Transfer Date'));
+      fputcsv($file, array('No.', 'ID Number', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Age', 'Marital Status', 'Date Issued', 'Soc-Pen', 'GSIS', 'SSS', 'PVAO', 'SUP-WITH', '4Ps', 'NHTS', 'ID-File', 'Purok', 'Barangay', 'RRN', 'Is Deceased', 'Deceased Date', 'Is Transfer', 'Transfer Date'));
 
       // Add the data to the file
       while ($data = mysqli_fetch_assoc($result)){
@@ -1720,6 +897,7 @@
               $data['gender'],
               $data['birthday'],
               $data['age'],
+              $data['civil_status'],
               $data['date_issued'],
               $data['soc_pen'],
               $data['gsis'],
@@ -1729,6 +907,7 @@
               $data['fourps'],
               $data['nhts'],
               $data['id_file'],
+              $data['purok'],
               $data['barangay'],
               $data['rrn'],
               $data['is_deceased'],
@@ -1759,35 +938,37 @@
       $file = fopen('php://output', 'w');
 
       // Set the column headers
-      fputcsv($file, array('No.', 'ID Number', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Age', 'Date Issued', 'Soc-Pen', 'GSIS', 'SSS', 'PVAO', 'SUP-WITH', '4Ps', 'NHTS', 'ID-File', 'Barangay', 'RRN', 'Is Deceased', 'Deceased Date', 'Is Transfer', 'Transfer Date'));
+      fputcsv($file, array('No.', 'ID Number', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Age', 'Marital Status', 'Date Issued', 'Soc-Pen', 'GSIS', 'SSS', 'PVAO', 'SUP-WITH', '4Ps', 'NHTS', 'ID-File', 'Purok', 'Barangay', 'RRN', 'Is Deceased', 'Deceased Date', 'Is Transfer', 'Transfer Date'));
 
       // Add the data to the file
       while ($data = mysqli_fetch_assoc($result)){
-          fputcsv($file, array(
-              $data['user_id'],
-              $data['id_number'],
-              $data['fname'],
-              $data['mname'],
-              $data['lname'],
-              $data['suffix'],
-              $data['gender'],
-              $data['birthday'],
-              $data['age'],
-              $data['date_issued'],
-              $data['soc_pen'],
-              $data['gsis'],
-              $data['sss'],
-              $data['pvao'],
-              $data['sup_with'],
-              $data['fourps'],
-              $data['nhts'],
-              $data['id_file'],
-              $data['barangay'],
-              $data['rrn'],
-              $data['is_deceased'],
-              $data['deceased_date'],
-              $data['is_transfer'],
-              $data['transfer_date']
+         fputcsv($file, array(
+            $data['user_id'],
+            $data['id_number'],
+            $data['fname'],
+            $data['mname'],
+            $data['lname'],
+            $data['suffix'],
+            $data['gender'],
+            $data['birthday'],
+            $data['age'],
+            $data['civil_status'],
+            $data['date_issued'],
+            $data['soc_pen'],
+            $data['gsis'],
+            $data['sss'],
+            $data['pvao'],
+            $data['sup_with'],
+            $data['fourps'],
+            $data['nhts'],
+            $data['id_file'],
+            $data['purok'],
+            $data['barangay'],
+            $data['rrn'],
+            $data['is_deceased'],
+            $data['deceased_date'],
+            $data['is_transfer'],
+            $data['transfer_date']
           ));
       }        
 
@@ -1875,51 +1056,6 @@
       );
       echo json_encode($response);
    }
-   // -------------------------------- Add Announcement -------------------------------- //
-   if (isset($_POST["add_ann"])){
-      // Validate and sanitize announcement inputs
-      $title = mysqli_real_escape_string($con, $_POST['add_title']);
-      $description = mysqli_real_escape_string($con, $_POST['add_description']);
-      $status = mysqli_real_escape_string($con, $_POST['add_status']);
-      $ann_date = date;
-      $query = "INSERT INTO `announcement`(`ann_title`, `ann_description`, `ann_status`, `ann_date`) VALUES ('$title','$description','$status','$ann_date')";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run){
-         $output = array('status' => "Announcement added successfully", 'alert' => "success");
-      } else{
-         $output = array('status' => "Announcement was not added", 'alert' => "error");
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Edit Announcement -------------------------------- //
-   if (isset($_POST["edit_ann"])){
-      // Validate and sanitize announcement inputs
-      $id = mysqli_real_escape_string($con, $_POST['edit_ann_id']);
-      $title = mysqli_real_escape_string($con, $_POST['edit_title']);
-      $description = mysqli_real_escape_string($con, $_POST['edit_description']);
-      $status = mysqli_real_escape_string($con, $_POST['edit_status']);
-      $query = "UPDATE `announcement` SET `ann_title` = '$title', `ann_description` = '$description', `ann_status` = '$status' WHERE `ann_id` = '$id'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run){
-         $output = array('status' => "Announcement updated successfully", 'alert' => "success");
-      } else{
-         $output = array('status' => "Announcement was not updated", 'alert' => "error");
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Delete Announcement -------------------------------- //
-   if (isset($_POST["delete_ann"])){
-      // Validate and sanitize announcement inputs
-      $id = mysqli_real_escape_string($con, $_POST['delete_ann_id']);
-      $query = "DELETE FROM `announcement` WHERE `user_id` = '$id'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run){
-         $output = array('status' => "Announcement deleted successfully", 'alert' => "success");
-      } else{
-         $output = array('status' => "Announcement was not deleted", 'alert' => "error");
-      }
-      echo json_encode($output);
-   }
    // -------------------------------- DataTable Annual Dues -------------------------------- //
    if (isset($_POST["dues_list"])){
       // Reading value
@@ -1996,51 +1132,5 @@
          "aaData" => $data
       );
       echo json_encode($response);
-   }
-   // -------------------------------- Add Payment -------------------------------- //
-   if (isset($_POST["add_dues"])){
-      // Validate and sanitize announcement inputs
-      $userid = mysqli_real_escape_string($con, $_POST['add_senior']);
-      $amount = mysqli_real_escape_string($con, $_POST['add_amount']);
-      $year = mysqli_real_escape_string($con, $_POST['add_year']);
-      $date_paid = mysqli_real_escape_string($con, $_POST['add_paid']);
-      $query = "INSERT INTO `annual_dues`(`user_id`, `amount`, `year`, `date_paid`) VALUES ('$userid','$amount','$year','$date_paid')";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run){
-         $output = array('status' => "Payment added successfully", 'alert' => "success");
-      } else{
-         $output = array('status' => "Payment was not added", 'alert' => "error");
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Edit Payment -------------------------------- //
-   if (isset($_POST["edit_dues"])){
-      // Validate and sanitize announcement inputs
-      $id = mysqli_real_escape_string($con, $_POST['edit_dues_id']);
-      $userid = mysqli_real_escape_string($con, $_POST['edit_senior']);
-      $amount = mysqli_real_escape_string($con, $_POST['edit_amount']);
-      $year = mysqli_real_escape_string($con, $_POST['edit_year']);
-      $date_paid = mysqli_real_escape_string($con, $_POST['edit_paid']);
-      $query = "UPDATE `annual_dues` SET `user_id` = '$userid', `amount` = '$amount', `year` = '$year', `date_paid` = '$date_paid' WHERE `dues_id` = '$id'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run){
-         $output = array('status' => "Payment updated successfully", 'alert' => "success");
-      } else{
-         $output = array('status' => "Payment was not updated", 'alert' => "error");
-      }
-      echo json_encode($output);
-   }
-   // -------------------------------- Delete Payment -------------------------------- //
-   if (isset($_POST["delete_dues"])){
-      // Validate and sanitize announcement inputs
-      $id = mysqli_real_escape_string($con, $_POST['delete_dues_id']);
-      $query = "DELETE FROM `annual_dues` WHERE `dues_id` = '$id'";
-      $query_run = mysqli_query($con, $query);
-      if ($query_run){
-         $output = array('status' => "Payment deleted successfully", 'alert' => "success");
-      } else{
-         $output = array('status' => "Payment was not deleted", 'alert' => "error");
-      }
-      echo json_encode($output);
    }
 ?>

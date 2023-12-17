@@ -554,6 +554,8 @@
             gender LIKE :gender OR
             DATE_FORMAT(birthday, '%m-%d-%Y') LIKE :newbirthday OR
             TIMESTAMPDIFF(YEAR, birthday, CURDATE()) = :age OR
+            civil_status LIKE :civil_status OR
+            purok LIKE :purok OR
             barangay LIKE :barangay OR
             DATE_FORMAT(date_issued, '%m-%d-%Y') LIKE :newdateissued OR
             soc_pen LIKE :soc_pen OR
@@ -576,6 +578,8 @@
             'gender' => "%$searchValue%",
             'newbirthday' => "%$searchValue%",
             'age' => $searchValue, // Search for the exact age value
+            'civil_status' => "%$searchValue%",
+            'purok' => "%$searchValue%",
             'barangay' => "%$searchValue%",
             'newdateissued' => "%$searchValue%",
             'soc_pen' => "%$searchValue%",
@@ -646,6 +650,8 @@
               "birthday" => $row['birthday'],
               "newbirthday" => $row['newbirthday'],
               "age" => $row['age'],
+              "civil_status" => $row['civil_status'],
+              "purok" => $row['purok'],
               "barangay" => $row['barangay'],
               "dateissued" => $row['date_issued'],
               "newdateissued" => $row['newdateissued'],
@@ -725,6 +731,8 @@
             gender LIKE :gender OR
             DATE_FORMAT(birthday, '%m-%d-%Y') LIKE :newbirthday OR
             TIMESTAMPDIFF(YEAR, birthday, CURDATE()) = :age OR
+            civil_status LIKE :civil_status OR
+            purok LIKE :purok OR
             barangay LIKE :barangay OR
             DATE_FORMAT(date_issued, '%m-%d-%Y') LIKE :newdateissued OR
             soc_pen LIKE :soc_pen OR
@@ -748,6 +756,8 @@
             'gender' => "%$searchValue%",
             'newbirthday' => "%$searchValue%",
             'age' => $searchValue, // Search for the exact age value
+            'civil_status' => $searchValue,
+            'purok' => "%$searchValue%",
             'barangay' => "%$searchValue%",
             'newdateissued' => "%$searchValue%",
             'soc_pen' => "%$searchValue%",
@@ -819,6 +829,8 @@
               "birthday" => $row['birthday'],
               "newbirthday" => $row['newbirthday'],
               "age" => $row['age'],
+              "civil_status" => $row['civil_status'],
+              "purok" => $row['purok'],
               "barangay" => $row['barangay'],
               "dateissued" => $row['date_issued'],
               "newdateissued" => $row['newdateissued'],
@@ -897,6 +909,8 @@
       $id_number = mysqli_real_escape_string($con, $_POST['add_id_number']);
       $gender = mysqli_real_escape_string($con, $_POST['add_gender']);
       $birthday = mysqli_real_escape_string($con, $_POST['add_birthday']);
+      $civil_status = mysqli_real_escape_string($con, $_POST['add_civil_status']);
+      $purok = mysqli_real_escape_string($con, $_POST['add_purok']);
       $barangay = mysqli_real_escape_string($con, $_POST['add_barangay']);
       $date_issued = mysqli_real_escape_string($con, $_POST['add_date_issued']);
       $rrn = mysqli_real_escape_string($con, $_POST['add_rrn']);
@@ -910,7 +924,7 @@
       $id_file = mysqli_real_escape_string($con, $_POST['add_id_file']);
       $user_status = '1';
       $user_type = '3';
-      $is_decease = 'No';
+      $is_deceased = 'No';
       $is_transfer = 'No';
       $fileImage = $_FILES['image1'];
       $fileImage1 = $_FILES['image2'];
@@ -948,7 +962,7 @@
                      $compressedImage1 = compressImage($fileTmpname1, $targetFile1, 35);
                   }
                   if ($compressedImage && $compressedImage1) {
-                     $query = "INSERT INTO `user`(`id_number`, `fname`, `mname`, `lname`, `suffix`, `gender`, `birthday`, `profile`, `psa`, `date_issued`, `soc_pen`, `gsis`, `sss`, `pvao`, `sup_with`, `fourps`, `nhts`, `id_file`, `barangay`, `rrn`, `user_type_id`, `user_status_id`) VALUES ('$id_number','$fname','$mname','$lname','$suffix','$gender','$birthday','$fileName','$fileName1','$date_issued','$soc_pen','$gsis','$sss','$pvao','$sup_with','$fourps','$nhts','$id_file','$barangay','$rrn','$user_type','$user_status')";
+                     $query = "INSERT INTO `user`(`id_number`, `fname`, `mname`, `lname`, `suffix`, `gender`, `birthday`, `civil_status`, `profile`, `psa`, `date_issued`, `soc_pen`, `gsis`, `sss`, `pvao`, `sup_with`, `fourps`, `nhts`, `id_file`, `purok`, `barangay`, `rrn`, `is_deceased`, `is_transfer`, `user_type_id`, `user_status_id`) VALUES ('$id_number','$fname','$mname','$lname','$suffix','$gender','$birthday','$civil_status','$fileName','$fileName1','$date_issued','$soc_pen','$gsis','$sss','$pvao','$sup_with','$fourps','$nhts','$id_file','$purok','$barangay','$rrn','$is_deceased','$is_transfer','$user_type','$user_status')";
                      $query_run = mysqli_query($con, $query);
                      if ($query_run) {
                            $output = array('status' => "Senior citizen added successfully", 'alert' => "success");
@@ -1015,6 +1029,8 @@
       $id_number = mysqli_real_escape_string($con, $_POST['edit_id_number']);
       $gender = mysqli_real_escape_string($con, $_POST['edit_gender']);
       $birthday = mysqli_real_escape_string($con, $_POST['edit_birthday']);
+      $civil_status = mysqli_real_escape_string($con, $_POST['edit_civil_status']);
+      $purok = mysqli_real_escape_string($con, $_POST['edit_purok']);
       $barangay = mysqli_real_escape_string($con, $_POST['edit_barangay']);
       $date_issued = mysqli_real_escape_string($con, $_POST['edit_date_issued']);
       $rrn = mysqli_real_escape_string($con, $_POST['edit_rrn']);
@@ -1121,7 +1137,7 @@
             $output = array('status' => 'Invalid file type', 'alert' => 'error');
          }
       }
-      $query = "UPDATE `user` SET `id_number` = '$id_number', `fname` = '$fname', `mname` = '$mname', `lname` = '$lname', `suffix` = '$suffix', `gender` = '$gender', `birthday` = '$birthday', `date_issued` = '$date_issued', `soc_pen` = '$soc_pen', `gsis` = '$gsis', `sss` = '$sss', `pvao` = '$pvao', `sup_with` = '$sup_with', `fourps` = '$fourps', `nhts` = '$nhts', `id_file` = '$id_file', `barangay` = '$barangay', `rrn` = '$rrn', `user_status_id` = '$user_status', `is_deceased` = '$is_deceased', `deceased_date` = '$is_deceased_date', `is_transfer` = '$is_transfer', `transfer_date` = '$is_transfer_date' WHERE `user_id` = '$id'";
+      $query = "UPDATE `user` SET `id_number` = '$id_number', `fname` = '$fname', `mname` = '$mname', `lname` = '$lname', `suffix` = '$suffix', `gender` = '$gender', `birthday` = '$birthday', `civil_status` = '$civil_status', `date_issued` = '$date_issued', `soc_pen` = '$soc_pen', `gsis` = '$gsis', `sss` = '$sss', `pvao` = '$pvao', `sup_with` = '$sup_with', `fourps` = '$fourps', `nhts` = '$nhts', `id_file` = '$id_file', `purok` = '$purok', `barangay` = '$barangay', `rrn` = '$rrn', `user_status_id` = '$user_status', `is_deceased` = '$is_deceased', `deceased_date` = '$is_deceased_date', `is_transfer` = '$is_transfer', `transfer_date` = '$is_transfer_date' WHERE `user_id` = '$id'";
       $query_run = mysqli_query($con, $query);
       if ($query_run){
          $output = array('status' => "Senior citizen updated successfully", 'alert' => "success");
@@ -1706,7 +1722,7 @@
       $file = fopen('php://output', 'w');
 
       // Set the column headers
-      fputcsv($file, array('No.', 'ID Number', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Age', 'Date Issued', 'Soc-Pen', 'GSIS', 'SSS', 'PVAO', 'SUP-WITH', '4Ps', 'NHTS', 'ID-File', 'Barangay', 'RRN', 'Is Deceased', 'Deceased Date', 'Is Transfer', 'Transfer Date'));
+      fputcsv($file, array('No.', 'ID Number', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Age', 'Marital Status', 'Date Issued', 'Soc-Pen', 'GSIS', 'SSS', 'PVAO', 'SUP-WITH', '4Ps', 'NHTS', 'ID-File', 'Purok', 'Barangay', 'RRN', 'Is Deceased', 'Deceased Date', 'Is Transfer', 'Transfer Date'));
 
       // Add the data to the file
       while ($data = mysqli_fetch_assoc($result)){
@@ -1720,6 +1736,7 @@
               $data['gender'],
               $data['birthday'],
               $data['age'],
+              $data['civil_status'],
               $data['date_issued'],
               $data['soc_pen'],
               $data['gsis'],
@@ -1729,6 +1746,7 @@
               $data['fourps'],
               $data['nhts'],
               $data['id_file'],
+              $data['purok'],
               $data['barangay'],
               $data['rrn'],
               $data['is_deceased'],
@@ -1759,35 +1777,37 @@
       $file = fopen('php://output', 'w');
 
       // Set the column headers
-      fputcsv($file, array('No.', 'ID Number', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Age', 'Date Issued', 'Soc-Pen', 'GSIS', 'SSS', 'PVAO', 'SUP-WITH', '4Ps', 'NHTS', 'ID-File', 'Barangay', 'RRN', 'Is Deceased', 'Deceased Date', 'Is Transfer', 'Transfer Date'));
+      fputcsv($file, array('No.', 'ID Number', 'First Name', 'Middle Name', 'Last Name', 'Suffix', 'Gender', 'Birthday', 'Age', 'Marital Status', 'Date Issued', 'Soc-Pen', 'GSIS', 'SSS', 'PVAO', 'SUP-WITH', '4Ps', 'NHTS', 'ID-File', 'Purok', 'Barangay', 'RRN', 'Is Deceased', 'Deceased Date', 'Is Transfer', 'Transfer Date'));
 
       // Add the data to the file
       while ($data = mysqli_fetch_assoc($result)){
-          fputcsv($file, array(
-              $data['user_id'],
-              $data['id_number'],
-              $data['fname'],
-              $data['mname'],
-              $data['lname'],
-              $data['suffix'],
-              $data['gender'],
-              $data['birthday'],
-              $data['age'],
-              $data['date_issued'],
-              $data['soc_pen'],
-              $data['gsis'],
-              $data['sss'],
-              $data['pvao'],
-              $data['sup_with'],
-              $data['fourps'],
-              $data['nhts'],
-              $data['id_file'],
-              $data['barangay'],
-              $data['rrn'],
-              $data['is_deceased'],
-              $data['deceased_date'],
-              $data['is_transfer'],
-              $data['transfer_date']
+         fputcsv($file, array(
+            $data['user_id'],
+            $data['id_number'],
+            $data['fname'],
+            $data['mname'],
+            $data['lname'],
+            $data['suffix'],
+            $data['gender'],
+            $data['birthday'],
+            $data['age'],
+            $data['civil_status'],
+            $data['date_issued'],
+            $data['soc_pen'],
+            $data['gsis'],
+            $data['sss'],
+            $data['pvao'],
+            $data['sup_with'],
+            $data['fourps'],
+            $data['nhts'],
+            $data['id_file'],
+            $data['purok'],
+            $data['barangay'],
+            $data['rrn'],
+            $data['is_deceased'],
+            $data['deceased_date'],
+            $data['is_transfer'],
+            $data['transfer_date']
           ));
       }        
 
