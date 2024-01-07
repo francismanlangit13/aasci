@@ -143,6 +143,10 @@
                                     <input class="form-check-input" type="checkbox" value="2023" id="2023" name="2023">
                                     <label class="form-check-label" for="2023">2023</label>
                                 </div>
+                                <div class='col-md-2'>
+                                    <input class="form-check-input" type="checkbox" value="2024" id="2024" name="2024">
+                                    <label class="form-check-label" for="2024">2024</label>
+                                </div>
                             </div>
                             <div class="form-group col-md-6 mt-2">
                                 <button class="btn btn-primary btn-flat btn-sm" name="submit-btn" id="submit-btn"><i class="fa fa-filter"></i> Filter</button>
@@ -177,7 +181,7 @@
                         SET @sql = NULL;
                         SELECT GROUP_CONCAT(DISTINCT 'MAX(CASE WHEN year = \"', year, '\" THEN amount END) AS `', year, '`') INTO @columns
                         FROM annual_dues;
-                        SET @sql = CONCAT('SELECT user.*, CASE WHEN deceased_date IS NOT NULL THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age, ', @columns, '
+                        SET @sql = CONCAT('SELECT user.*, CASE WHEN is_deceased = ''Yes'' THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age, ', @columns, '
                             FROM 
                                 user
                             INNER JOIN 
@@ -200,15 +204,15 @@
                     $result = $con->store_result();
                 } else{
                     $query = "
-                        SET @sql = NULL;
-                        SELECT GROUP_CONCAT(DISTINCT 'MAX(CASE WHEN year = \"', year, '\" THEN amount END) AS `', year, '`') INTO @columns
-                        FROM annual_dues;
-                        SET @sql = CONCAT('SELECT user.*, CASE WHEN deceased_date IS NOT NULL THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age, ', @columns, ' FROM user
+                    SET @sql = NULL;
+                    SELECT GROUP_CONCAT(DISTINCT 'MAX(CASE WHEN year = \"', year, '\" THEN amount END) AS `', year, '`') INTO @columns
+                    FROM annual_dues;
+                    SET @sql = CONCAT('SELECT user.*, CASE WHEN is_deceased = ''Yes'' THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age, ', @columns, ' FROM user
                         INNER JOIN annual_dues ON annual_dues.user_id = user.user_id
                         GROUP BY user.id_number');
-                        PREPARE stmt FROM @sql;
-                        EXECUTE stmt;
-                        DEALLOCATE PREPARE stmt;
+                    PREPARE stmt FROM @sql;
+                    EXECUTE stmt;
+                    DEALLOCATE PREPARE stmt;
                     ";
 
                     // Execute the SQL query
@@ -263,6 +267,9 @@
                             <?php if(isset($_POST['2023'])) { ?>
                                 <th>2023</th>
                             <?php } ?>
+                            <?php if(isset($_POST['2024'])) { ?>
+                                <th>2024</th>
+                            <?php } ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -307,6 +314,9 @@
                                     }
                                     if(isset($_POST['2023'])) { 
                                         echo '<td class=""><p class="m-0">' . (isset($row['2023']) ? $row['2023'] : "") . '</p></td>';
+                                    }
+                                    if(isset($_POST['2024'])) { 
+                                        echo '<td class=""><p class="m-0">' . (isset($row['2024']) ? $row['2024'] : "") . '</p></td>';
                                     }
                                     echo '</tr>';
                                 }
