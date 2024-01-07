@@ -5,7 +5,7 @@
     if (isset($_POST['id'])) {
         $id = $_POST['id'];
         // Query the database
-        $query = "SELECT *, CASE WHEN deceased_date IS NOT NULL AND is_deceased = 'Yes' THEN DATE_FORMAT(deceased_date, '%m-%d-%Y') ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM `user` INNER JOIN `user_status` ON `user`.`user_status_id` = `user_status`.`user_status_id` WHERE `user_id`='$id'";
+        $query = "SELECT *, CASE WHEN is_deceased = 'Yes' THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM `user` INNER JOIN `user_status` ON `user`.`user_status_id` = `user_status`.`user_status_id` WHERE `user_id`='$id'";
         $result = $con->query($query);
         if ($result === false) {
             die("Query failed: " . $con->error);

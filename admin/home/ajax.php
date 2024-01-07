@@ -615,9 +615,7 @@
                CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname,
                DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday,
                DATE_FORMAT(date_issued, '%m-%d-%Y') as newdateissued,
-               CASE WHEN deceased_date IS NOT NULL AND is_deceased = 'Yes'
-                     THEN DATE_FORMAT(deceased_date, '%m-%d-%Y')
-                     ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age,
+               CASE WHEN is_deceased = 'Yes' THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age,
                DATE_FORMAT(deceased_date, '%m-%d-%Y') as new_deceased_date,
                DATE_FORMAT(transfer_date, '%m-%d-%Y') as new_transfer_date
          FROM user
@@ -794,9 +792,7 @@
                CONCAT(fname, ' ', mname, ' ', lname, ' ', suffix) AS fullname,
                DATE_FORMAT(birthday, '%m-%d-%Y') as newbirthday,
                DATE_FORMAT(date_issued, '%m-%d-%Y') as newdateissued,
-               CASE WHEN deceased_date IS NOT NULL AND is_deceased = 'Yes'
-                     THEN DATE_FORMAT(deceased_date, '%m-%d-%Y')
-                     ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age,
+               CASE WHEN is_deceased = 'Yes' THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age,
                DATE_FORMAT(deceased_date, '%m-%d-%Y') as new_deceased_date,
                DATE_FORMAT(transfer_date, '%m-%d-%Y') as new_transfer_date
          FROM user
@@ -1709,7 +1705,7 @@
    }
    // -------------------------------- Export Senior CSV -------------------------------- //
    if (isset($_POST["btn_export_senior"])) {
-      $sql = "SELECT *, CASE WHEN deceased_date IS NOT NULL AND is_deceased = 'Yes' THEN DATE_FORMAT(deceased_date, '%m-%d-%Y') ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM `user` WHERE `user_type_id` = '3' AND `user_status_id` != '3'";
+      $sql = "SELECT *, CASE WHEN is_deceased = 'Yes' THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM `user` WHERE `user_type_id` = '3' AND `user_status_id` != '3'";
       $result = mysqli_query($con, $sql);
 
       // Set the filename and mime type
@@ -1764,7 +1760,7 @@
    }
    // -------------------------------- Export Archive Senior CSV -------------------------------- //
    if (isset($_POST["btn_export_senior_archive"])) {
-      $sql = "SELECT *, CASE WHEN deceased_date IS NOT NULL AND is_deceased = 'Yes' THEN DATE_FORMAT(deceased_date, '%m-%d-%Y') ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM `user` WHERE `user_type_id` = '3' AND `user_status_id` = '3'";
+      $sql = "SELECT *, CASE WHEN is_deceased = 'Yes' THEN TIMESTAMPDIFF(YEAR, birthday, deceased_date) ELSE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) END AS age FROM `user` WHERE `user_type_id` = '3' AND `user_status_id` = '3'";
       $result = mysqli_query($con, $sql);
 
       // Set the filename and mime type
