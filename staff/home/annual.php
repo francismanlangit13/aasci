@@ -71,8 +71,8 @@
                                     { data: 'dues_id', className: 'text-center' },
                                     { data: 'id_number', className: 'text-center' },
                                     { data: 'fullname', className: 'text-center', },
-                                    { data: 'barangay', className: 'text-center' },
                                     { data: 'gender', className: 'text-center' },
+                                    { data: 'barangay', className: 'text-center' },
                                     { data: 'amount', className: 'text-center' },
                                     { data: 'year', className: 'text-center' },
                                     { data: 'new_date_paid', className: 'text-center' }
