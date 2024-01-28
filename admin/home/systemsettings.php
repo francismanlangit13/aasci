@@ -306,7 +306,7 @@
                                 <div class="row gx-3 mb-3">
                                     <!-- Form Group (System Privacy)-->
                                     <div class="col-md-12 mb-3">
-                                        <textarea class="form-control" id="system_privacy" name="system_privacy" type="text" rows="20" placeholder="Enter system privacy policy" required><?= $system['privacy'] ?></textarea>
+                                        <textarea class="form-control" id="summernote-privacy" name="system_privacy" type="text" rows="20" placeholder="Enter system privacy policy" required><?= $system['privacy'] ?></textarea>
                                         <div id="system_privacy-error"></div>
                                     </div>
                                 </div>
@@ -326,7 +326,7 @@
                                 <div class="row gx-3 mb-3">
                                     <!-- Form Group (System Terms)-->
                                     <div class="col-md-12 mb-3">
-                                        <textarea class="form-control" id="system_terms" name="system_terms" type="text" rows="20" placeholder="Enter system terms and condition" required><?= $system['terms'] ?></textarea>
+                                        <textarea class="form-control" id="summernote-terms" name="system_terms" type="text" rows="20" placeholder="Enter system terms and condition" required><?= $system['terms'] ?></textarea>
                                         <div id="system_terms-error"></div>
                                     </div>
                                 </div>
@@ -1059,6 +1059,34 @@
 <script>
     $(document).ready(function() {
         $('#summernote').summernote({
+            placeholder: 'Hello stand alone ui',
+            tabsize: 2,
+            height: 500,
+            toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+        $('#summernote-privacy').summernote({
+            placeholder: 'Hello stand alone ui',
+            tabsize: 2,
+            height: 500,
+            toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+        $('#summernote-terms').summernote({
             placeholder: 'Hello stand alone ui',
             tabsize: 2,
             height: 500,
