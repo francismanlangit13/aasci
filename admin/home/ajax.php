@@ -1188,50 +1188,92 @@
    if (isset($_POST["update_system_info_privacy"])) {
       // Assuming you have an associative array with keys and values
       $updates = [
-         'privacy' => $_POST['system_privacy']
+          'privacy' => $_POST['system_privacy']
       ];
       $success = true;
-      // Assuming $this->conn is a valid MySQLi connection
-      foreach ($updates as $key => $value) {
-         $query = "UPDATE `system_setting` SET `meta_value`='$value' WHERE `meta`='$key'";
-         $query_run = mysqli_query($con, $query);
-         if (!$query_run) {
-            // If the update for any field fails, set $success to false
-            $success = false;
-            break; // Exit the loop
+  
+      // Assuming $con is a valid MySQLi connection
+      $query = "UPDATE `system_setting` SET `meta_value`=? WHERE `meta`=?";
+      
+      // Prepare the statement
+      $stmt = mysqli_prepare($con, $query);
+  
+      if ($stmt) {
+         // Bind parameters
+         mysqli_stmt_bind_param($stmt, 'ss', $meta_value, $meta_key);
+
+         foreach ($updates as $meta_key => $meta_value) {
+            // Execute the statement for each update
+            $query_run = mysqli_stmt_execute($stmt);
+
+            if (!$query_run) {
+               // If the update for any field fails, set $success to false
+               $success = false;
+               break; // Exit the loop
+            }
          }
-      }
-      if ($success) {
-         $output = array('status' => 'Privacy information updated successfully', 'alert' => 'success', 'inform' => 'Yes');
+
+         // Close the statement
+         mysqli_stmt_close($stmt);
+
+         if ($success) {
+            $output = array('status' => 'Privacy information updated successfully', 'alert' => 'success', 'inform' => 'Yes');
+         } else {
+            $output = array('status' => 'Privacy information were not updated', 'alert' => 'error');
+         }
+
+         echo json_encode($output);
       } else {
-         $output = array('status' => 'Privacy information were not updated', 'alert' => 'error');
+         // Handle statement preparation error
+         $output = array('status' => 'Error preparing statement', 'alert' => 'error');
+         echo json_encode($output);
       }
-      echo json_encode($output);
    }
    // -------------------------------- Update System Info Terms -------------------------------- //
    if (isset($_POST["update_system_info_terms"])) {
       // Assuming you have an associative array with keys and values
       $updates = [
-         'terms' => $_POST['system_terms']
+          'terms' => $_POST['system_terms']
       ];
       $success = true;
-      // Assuming $this->conn is a valid MySQLi connection
-      foreach ($updates as $key => $value) {
-         $query = "UPDATE `system_setting` SET `meta_value`='$value' WHERE `meta`='$key'";
-         $query_run = mysqli_query($con, $query);
-         if (!$query_run) {
-            // If the update for any field fails, set $success to false
-            $success = false;
-            break; // Exit the loop
+  
+      // Assuming $con is a valid MySQLi connection
+      $query = "UPDATE `system_setting` SET `meta_value`=? WHERE `meta`=?";
+      
+      // Prepare the statement
+      $stmt = mysqli_prepare($con, $query);
+  
+      if ($stmt) {
+         // Bind parameters
+         mysqli_stmt_bind_param($stmt, 'ss', $meta_value, $meta_key);
+
+         foreach ($updates as $meta_key => $meta_value) {
+            // Execute the statement for each update
+            $query_run = mysqli_stmt_execute($stmt);
+
+            if (!$query_run) {
+               // If the update for any field fails, set $success to false
+               $success = false;
+               break; // Exit the loop
+            }
          }
-      }
-      if ($success) {
-         $output = array('status' => 'Terms information updated successfully', 'alert' => 'success', 'inform' => 'Yes');
+
+         // Close the statement
+         mysqli_stmt_close($stmt);
+
+         if ($success) {
+            $output = array('status' => 'Terms information updated successfully', 'alert' => 'success', 'inform' => 'Yes');
+         } else {
+            $output = array('status' => 'Terms information were not updated', 'alert' => 'error');
+         }
+
+         echo json_encode($output);
       } else {
-         $output = array('status' => 'Terms information were not updated', 'alert' => 'error');
+         // Handle statement preparation error
+         $output = array('status' => 'Error preparing statement', 'alert' => 'error');
+         echo json_encode($output);
       }
-      echo json_encode($output);
-   }
+   }  
    // -------------------------------- Update System Info ACT -------------------------------- //
    if (isset($_POST["update_system_info_act"])) {
       // Assuming you have an associative array with keys and values
