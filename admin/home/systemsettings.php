@@ -117,7 +117,7 @@
                                 <!-- Form Group (System Description)-->
                                 <div class="col-md-12 mb-3">
                                     <label class="small mb-1 required" for="system_description">System Description</label>
-                                    <input class="form-control" id="system_description" name="system_description" type="text" placeholder="Enter system description" value="<?=$system['description'];?>" required/>
+                                    <textarea class="form-control" id="system_description" name="system_description" type="text" rows="4" placeholder="Enter system description" required><?=$system['description'];?></textarea>
                                     <div id="system_description-error"></div>
                                 </div>
                                 <!-- Form Group (System Keywords)-->
