@@ -20,6 +20,11 @@
                         <i class="fa fa-rss"></i> Add Announcement
                     </span>
                 </button>
+                <button class="btn btn-primary btn-icon-split btn-sm float-end ml-1" id="resetColReorderBtn" style="margin-right: 7px">
+                    <span class="icon text-white">    
+                        <i class="fa fa-columns"></i>  Reset Column
+                    </span>
+                </button>
             </div>
             <div class="card-body">
                 <table id="dataTable" class="display cell-border stripe table table-bordered dataTable no-footer" style="width:99% !important">
@@ -37,19 +42,21 @@
                     <script type="text/javascript">
                         $(document).ready(function() {
                             var dataTable = $('#dataTable').DataTable({
-                                'processing': true,
-                                'serverSide': true,
-                                'serverMethod': 'post',
-                                'ajax': {
-                                    'url':'ajax.php',
-                                    'data': function (data) {
+                                colReorder: true, // Enable column dragging
+                                stateSave: true, // Enable state saving
+                                processing: true,
+                                serverSide: true,
+                                serverMethod: 'post',
+                                ajax: {
+                                    url:'ajax.php',
+                                    data: function (data) {
                                         data.ann_list = "1"; // Include the parameter in the AJAX request
                                     }
                                 },
-                                'scrollX': true,
-                                'searchDelay': 86400000, // Disable Search or deley search 24hours
-                                'scrollCollapse': true, // Allow vertical scrollbar when necessary
-                                'columns': [
+                                scrollX: true,
+                                searchDelay: 86400000, // Disable Search or deley search 24hours
+                                scrollCollapse: true, // Allow vertical scrollbar when necessary
+                                columns: [
                                     { data: 'ann_id', className: 'text-center' },
                                     { data: 'ann_title', className: 'text-center', },
                                     { data: 'ann_description', className: 'text-center' },
@@ -78,6 +85,14 @@
                                     dataTable.search(searchTerm).draw();
                                 }, 1500); // Set the delay to 1.5 seconds (1500 milliseconds)
                             });
+
+                            // Function to reset column dragging
+                            function resetColReorder() {
+                                dataTable.colReorder.reset(); // Reset column dragging
+                            }
+
+                            // Bind click event to the reset button
+                            $('#resetColReorderBtn').on('click', resetColReorder);
                         });
                     </script>
                 </table>

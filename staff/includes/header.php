@@ -19,6 +19,7 @@
         <link href="<?php echo base_url ?>assets/css/styles.css" rel="stylesheet" />
         <!-- DataTables CSS -->
         <link href="<?php echo base_url ?>assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+        <link href="<?php echo base_url ?>assets/vendor/datatables/colReorder.dataTables.min.css" rel="stylesheet">
         <script type="text/javascript" src="<?php echo base_url ?>assets/js/jquery-3.6.0.js"></script>
         <!-- Icons -->
         <script data-search-pseudo-elements defer src="<?php echo base_url ?>assets/vendor/font-awesome/js/all.min.js" crossorigin="anonymous"></script>

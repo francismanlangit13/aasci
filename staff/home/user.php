@@ -15,6 +15,11 @@
         </nav>
         <div class="card mb-4">
             <div class="card-header text-white bg-teal">Users Table
+                <button class="btn btn-primary btn-icon-split btn-sm float-end ml-1" id="resetColReorderBtn" style="margin-right: 7px">
+                    <span class="icon text-white">    
+                        <i class="fa fa-columns"></i>  Reset Column
+                    </span>
+                </button>
                 <form action="ajax.php" method="post" name="export_excel" enctype="multipart/form-data" class="form-horizontal">
                     <button class="btn btn-primary btn-icon-split btn-sm float-end" style="margin-right: 0.5rem; margin-top: -1.5rem" name="btn_export_users"> 
                         <span class="icon text-white">
@@ -44,19 +49,21 @@
                     <script type="text/javascript">
                         $(document).ready(function() {
                             var dataTable = $('#dataTable').DataTable({
-                                'processing': true,
-                                'serverSide': true,
-                                'serverMethod': 'post',
-                                'ajax': {
-                                    'url':'ajax.php',
-                                    'data': function (data) {
+                                colReorder: true, // Enable column dragging
+                                stateSave: true, // Enable state saving
+                                processing: true,
+                                serverSide: true,
+                                serverMethod: 'post',
+                                ajax: {
+                                    url:'ajax.php',
+                                    data: function (data) {
                                         data.user_list = "1"; // Include the parameter in the AJAX request
                                     }
                                 },
-                                'scrollX': true,
-                                'searchDelay': 86400000, // Disable Search or deley search 24hours
-                                'scrollCollapse': true, // Allow vertical scrollbar when necessary
-                                'columns': [
+                                scrollX: true,
+                                searchDelay: 86400000, // Disable Search or deley search 24hours
+                                scrollCollapse: true, // Allow vertical scrollbar when necessary
+                                columns: [
                                     { data: 'user_id', className: 'text-center' },
                                     { data: 'fullname', className: 'text-center', },
                                     { data: 'gender', className: 'text-center' },
@@ -110,6 +117,14 @@
                                     dataTable.search(searchTerm).draw();
                                 }, 1500); // Set the delay to 1.5 seconds (1500 milliseconds)
                             });
+
+                            // Function to reset column dragging
+                            function resetColReorder() {
+                                dataTable.colReorder.reset(); // Reset column dragging
+                            }
+
+                            // Bind click event to the reset button
+                            $('#resetColReorderBtn').on('click', resetColReorder);
                         });
                     </script>
                 </table>

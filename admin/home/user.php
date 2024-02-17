@@ -3,6 +3,14 @@
     <!-- Website Title -->
     <title><?= $system['shortname'] ?> | Users</title>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <style>
+        /* Hide the default arrow */
+        .select-hide{
+            -webkit-appearance: none; /* Safari and Chrome */
+            -moz-appearance: none; /* Firefox */
+            appearance: none; /* Remove default arrow */
+        }
+    </style>
 </head>
 <main>
     <!-- Main page content-->
@@ -18,6 +26,11 @@
                 <button class="btn btn-primary btn-icon-split btn-sm float-end" data-bs-toggle="modal" data-bs-target="#btn_add_user"> 
                     <span class="icon text-white">
                         <i class="fas fa-user-plus"></i> Add User
+                    </span>
+                </button>
+                <button class="btn btn-primary btn-icon-split btn-sm float-end ml-1" id="resetColReorderBtn" style="margin-right: 7px">
+                    <span class="icon text-white">    
+                        <i class="fa fa-columns"></i>  Reset Column
                     </span>
                 </button>
                 <form action="ajax.php" method="post" name="export_excel" enctype="multipart/form-data" class="form-horizontal">
@@ -49,19 +62,21 @@
                     <script type="text/javascript">
                         $(document).ready(function() {
                             var dataTable = $('#dataTable').DataTable({
-                                'processing': true,
-                                'serverSide': true,
-                                'serverMethod': 'post',
-                                'ajax': {
-                                    'url':'ajax.php',
-                                    'data': function (data) {
+                                colReorder: true, // Enable column dragging
+                                stateSave: true, // Enable state saving
+                                processing: true,
+                                serverSide: true,
+                                serverMethod: 'post',
+                                ajax: {
+                                    url:'ajax.php',
+                                    data: function (data) {
                                         data.user_list = "1"; // Include the parameter in the AJAX request
                                     }
                                 },
-                                'scrollX': true,
-                                'searchDelay': 86400000, // Disable Search or deley search 24hours
-                                'scrollCollapse': true, // Allow vertical scrollbar when necessary
-                                'columns': [
+                                scrollX: true,
+                                searchDelay: 86400000, // Disable Search or deley search 24hours
+                                scrollCollapse: true, // Allow vertical scrollbar when necessary
+                                columns: [
                                     { data: 'user_id', className: 'text-center' },
                                     { data: 'fullname', className: 'text-center', },
                                     { data: 'gender', className: 'text-center' },
@@ -117,6 +132,14 @@
                                     dataTable.search(searchTerm).draw();
                                 }, 1500); // Set the delay to 1.5 seconds (1500 milliseconds)
                             });
+
+                            // Function to reset column dragging
+                            function resetColReorder() {
+                                dataTable.colReorder.reset(); // Reset column dragging
+                            }
+
+                            // Bind click event to the reset button
+                            $('#resetColReorderBtn').on('click', resetColReorder);
                         });
                     </script>
                 </table>
@@ -574,12 +597,20 @@
 
                             <div class="col-md-4 mb-3">
                                 <label for="view_role">Role</label>
-                                <input disabled type="text" class="form-control" id="view_role">
+                                <select id="view_role" class="form-control select-hide" disabled>
+                                    <option value="" selected>Select Role</option>
+                                    <option value="1">Admin</option>
+                                    <option value="2">Staff</option>
+                                </select>
                             </div>
 
                             <div class="col-md-4 mb-3">
                                 <label for="view_status">Status</label>
-                                <input disabled type="text" class="form-control" id="view_status">
+                                <select id="view_status" class="form-control select-hide" disabled>
+                                    <option value="" selected>Select Role</option>
+                                    <option value="1">Active</option>
+                                    <option value="2">Inactive</option>
+                                </select>
                             </div>
                         </div>
                     </div>
