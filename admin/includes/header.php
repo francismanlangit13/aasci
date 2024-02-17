@@ -22,7 +22,7 @@
         <link href="<?php echo base_url ?>assets/vendor/datatables/colReorder.dataTables.min.css" rel="stylesheet">
         <script type="text/javascript" src="<?php echo base_url ?>assets/js/jquery-3.6.0.js"></script>
         <!-- Icons -->
-        <script data-search-pseudo-elements defer src="<?php echo base_url ?>assets/vendor/font-awesome/js/all.min.js" crossorigin="anonymous"></script>
+        <script src="<?php echo base_url ?>assets/vendor/font-awesome/js/all.min.js" crossorigin="anonymous"></script>
         <script src="<?php echo base_url ?>assets/vendor/feather-icons/feather.min.js" crossorigin="anonymous"></script>
         <!-- Loader CSS -->
         <link href="<?php echo base_url ?>assets/css/loader.css" rel="stylesheet">
