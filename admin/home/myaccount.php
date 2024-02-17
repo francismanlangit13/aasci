@@ -50,6 +50,7 @@
         <nav class="nav nav-borders">
             <a href="javascript:void(0)" class="nav-link selected-tab active ms-0" data-target="profile-tab">Profile</a>
             <a href="javascript:void(0)" class="nav-link selected-tab" data-target="security-tab">Security</a>
+            <a href="javascript:void(0)" class="nav-link selected-tab" data-target="logs-tab">Activity Logs</a>
         </nav>
         <hr class="mt-0 mb-4" />
         <div id="profile-tab" class="row myaccount-tab">
@@ -253,6 +254,80 @@
                         <p>Deleting your account is a permanent action and cannot be undone. If you are sure you want to delete your account, select the button below.</p>
                         <button class="btn btn-danger-soft text-danger" type="button" data-bs-toggle="modal" data-bs-target="#Delete_Account">I understand, delete my account</button>
                     </div>
+                </div>
+            </div>
+        </div>
+        <!-- Password and Security -->
+        <div id="logs-tab" class="row myaccount-tab d-none">
+            <div class="card-header text-white bg-teal mb-n1">Activity Logs
+                <div class="form-check form-switch d-inline-block">
+                    <input class="form-check-input" id="switch_activity" onchange="ActivitytoggleEventLog()" type="checkbox" <?php if ($user['is_user_log'] == '1') { echo 'checked'; } ?> />
+                    <label class="form-check-label" for="switch_activity"></label>
+                </div>
+                <button class="btn btn-primary btn-icon-split btn-sm float-end ml-1" id="resetColReorderBtn">
+                    <span class="icon text-white">    
+                        <i class="fa fa-columns"></i>  Reset Column
+                    </span>
+                </button>
+            </div>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <table id="dataTable" class="display cell-border stripe table table-bordered dataTable no-footer" style="width:99% !important">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Log Type</th>
+                                <th>Log</th>
+                                <th>Log Date</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <!-- Ajax Tables -->
+                        <script type="text/javascript">
+                            $(document).ready(function() {
+                                var dataTable = $('#dataTable').DataTable({
+                                    colReorder: true, // Enable column dragging
+                                    stateSave: true, // Enable state saving
+                                    processing: true,
+                                    serverSide: true,
+                                    serverMethod: 'post',
+                                    ajax: {
+                                        url:'ajax.php',
+                                        data: function (data) {
+                                            data.user_log_list = "1"; // Include the parameter in the AJAX request
+                                        }
+                                    },
+                                    scrollX: true,
+                                    searchDelay: 86400000, // Disable Search or deley search 24hours
+                                    scrollCollapse: true, // Allow vertical scrollbar when necessary
+                                    columns: [
+                                        { data: 'log_id', className: 'text-center' },
+                                        { data: 'log_title', className: 'text-left' },
+                                        { data: 'log_status', className: 'text-left', },
+                                        { data: 'new_log_date', className: 'text-center' }
+                                    ]
+                                });
+                                // After typing on search will do searching data.
+                                var searchTimer;
+                                var searchInput = $('#dataTable_filter input');
+                                searchInput.on('keyup', function () {
+                                    clearTimeout(searchTimer);
+                                    searchTimer = setTimeout(function () {
+                                        var searchTerm = searchInput.val();
+                                        dataTable.search(searchTerm).draw();
+                                    }, 1500); // Set the delay to 1.5 seconds (1500 milliseconds)
+                                });
+
+                                // Function to reset column dragging
+                                function resetColReorder() {
+                                    dataTable.colReorder.reset(); // Reset column dragging
+                                }
+
+                                // Bind click event to the reset button
+                                $('#resetColReorderBtn').on('click', resetColReorder);
+                            });
+                        </script>
+                    </table>
                 </div>
             </div>
         </div>
@@ -876,5 +951,48 @@
     });
 </script>
 
+<!-- Social Switch -->
+<script type="text/javascript">
+    function ActivitytoggleEventLog() {
+        const switchActivity = document.getElementById("switch_activity").checked ? "1" : "0";
+        const xhrAjax = new XMLHttpRequest();
+        xhrAjax.open("POST", "ajax.php", true);
+        xhrAjax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhrAjax.onreadystatechange = function () {
+            if (xhrAjax.readyState === 4 && xhrAjax.status === 200) {
+                const response = JSON.parse(xhrAjax.responseText);
+                swal({
+                    title: "Notice",
+                    text: response.status,
+                    icon: response.alert,
+                    button: false,
+                    timer: 2000
+                }).then(function() {
+                    var dataTable = $('#dataTable').DataTable();
+                    dataTable.draw(); // Redraw the DataTable
+                });
+            }
+        };
+        xhrAjax.send(`switch_activity=${switchActivity}`);
+    }
+</script>
 
+<script>
+    $(document).ready(function(){
+        // Initialize DataTable
+        var dataTable = $('#dataTable').DataTable();
+
+        // Attach click event handler to elements with class 'selected-tab'
+        $('.selected-tab').click(function(){
+            // Get the value of 'data-target' attribute
+            var target = $(this).data('target');
+            
+            // Check if target is 'logs-tab'
+            if(target === 'logs-tab') {
+                // Run your script to redraw the DataTable
+                dataTable.draw();
+            }
+        });
+    });
+</script>
 <?php include ('../includes/footer.php'); ?>

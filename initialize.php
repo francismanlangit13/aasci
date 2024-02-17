@@ -1,6 +1,7 @@
 <?php
     if (session_status() !== PHP_SESSION_ACTIVE) {
         session_start();
+        $ip = $_SERVER['REMOTE_ADDR'];
     }
 
     // Sets default timezome to +8 GMT

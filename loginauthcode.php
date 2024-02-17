@@ -6,8 +6,13 @@
     include ("./assets/vendor/PHPMailer/class.smtp.php");
 
     if(isset($_POST['verify_btn'])){
+        $temp_email = mysqli_real_escape_string($con, $_POST['temp_email']);
         $code = mysqli_real_escape_string($con, $_POST['verify_code']);
         $date = date;
+
+        $verify_query_run = mysqli_query($con, "SELECT user_id FROM user WHERE email = '$temp_email'");
+        $get_user_id = mysqli_fetch_assoc($verify_query_run);
+        $user_id = $get_user_id['user_id'];
 
         $verify_query = "SELECT * FROM `twostepauth` INNER JOIN `user` ON `twostepauth`.`user_id` = `user`.`user_id` WHERE `code` = '$code' AND `validity` > NOW() AND `user_status_id` = '1' LIMIT 1;";
         $verify_query_run = mysqli_query($con, $verify_query);
@@ -34,18 +39,20 @@
                 unset($_SESSION['is_second_auth']);
                 $_SESSION['status'] = "Welcome $full_name!";
                 $_SESSION['status_code'] = "success";
-                $output = array('alert' => "success", 'type' => "admin");
+                $output = array('alert' => "success", 'type' => "admin", 'status' => "Login success");
             }
             elseif( $_SESSION['auth_role'] == '2'){
                 unset($_SESSION['is_second_auth']);
                 $_SESSION['status'] = "Welcome $full_name!";
                 $_SESSION['status_code'] = "success";
-                $output = array('alert' => "success", 'type' => "staff");
+                $output = array('alert' => "success", 'type' => "staff", 'status' => "Login success");
             }
         }
         else {
             $output = array('status' => "Invalid OTP Code or expired", 'alert' => "error");
         }
+        $log_message = $output['status'];
+        mysqli_query($con, "INSERT INTO `user_logs` (`user_id`, `log_title`, `log_status`, `log_date`) VALUES ('$user_id','Login','$log_message IP: $ip','$date')");
         echo json_encode($output);
     }
     // -------------------------------- Resend OTP -------------------------------- //

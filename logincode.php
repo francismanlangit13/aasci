@@ -6,6 +6,7 @@
     include ("./assets/vendor/PHPMailer/class.smtp.php");
 
     if(isset($_POST['login_btn'])){
+        $curr_date = date;
         $email_phone = mysqli_real_escape_string($con, $_POST['email_phone']);
         $password = mysqli_real_escape_string($con, $_POST['password']);
         $hashed_password = md5($password);
@@ -50,7 +51,7 @@
 
                     $_SESSION['auth_user'] = ['user_email' =>$user_email, 'user_name' =>$full_name,];
                     $_SESSION['is_second_auth'] = 'Yes';
-                    $output = array('alert' => "success", 'is_secondauth' => "Yes");
+                    $output = array('alert' => "success", 'is_secondauth' => "Yes", 'status' => "Send OTP two-step authentication");
                 } else{
                     $output = array('status' => "Something went wrong", 'alert' => "error");
                 }
@@ -67,18 +68,20 @@
                 if( $_SESSION['auth_role'] == '1'){
                     $_SESSION['status'] = "Welcome $full_name!";
                     $_SESSION['status_code'] = "success";
-                    $output = array('alert' => "success", 'is_secondauth' => "No", 'type' => "admin");
+                    $output = array('alert' => "success", 'is_secondauth' => "No", 'type' => "admin", 'status' => "Login success");
                 }
                 elseif( $_SESSION['auth_role'] == '2'){
                     $_SESSION['status'] = "Welcome $full_name!";
                     $_SESSION['status_code'] = "success";
-                    $output = array('alert' => "success", 'is_secondauth' => "No", 'type' => "staff");
+                    $output = array('alert' => "success", 'is_secondauth' => "No", 'type' => "staff", 'status' => "Login success");
                 }
             }
         }
         else {
             $output = array('status' => "Invalid Email or Password", 'alert' => "error");
         }
+        $log_message = $output['status'];
+        mysqli_query($con, "INSERT INTO `user_logs` (`user_id`, `log_title`, `log_status`, `log_date`) VALUES ('$user_id','Login','$log_message IP: $ip','$curr_date')");
         echo json_encode($output);
     } else {
         $_SESSION['status'] = "You are not allowed to access this site";

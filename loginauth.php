@@ -70,6 +70,7 @@
                                                 $user_email = $_SESSION['auth_user']['user_email'];
                                                 $username = $_SESSION['auth_user']['user_name'];
                                             ?>
+                                            <input type="hidden" class="form-control form-control-user" name="temp_email" id="temp_email" value="<?=$user_email?>">
                                             <div class="form-group">
                                                 <label for="user_email" for="user_email">Your Email</label>
                                                 <input type="text" class="form-control form-control-user" id="user_email" value="<?=htmlspecialchars($user_email);?>" disabled>

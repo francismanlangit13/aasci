@@ -308,6 +308,8 @@
          } else {
             $output = array('status' => 'Invalid file type', 'alert' => 'error');
          }
+         $log_message = $output['status'];
+         mysqli_query($con, "INSERT INTO `user_logs` (`user_id`, `log_title`, `log_status`, `log_date`) VALUES ('$user_id','Update profile','$log_message','$curr_date')");
          echo json_encode($output);
       }
    }
@@ -346,6 +348,8 @@
       } else {
          $output = array('status' => 'Accounts details was not updated', 'alert' => 'error');
       }
+      $log_message = $output['status'];
+         mysqli_query($con, "INSERT INTO `user_logs` (`user_id`, `log_title`, `log_status`, `log_date`) VALUES ('$user_id','Update account','$log_message','$curr_date')");
       echo json_encode($output);
    }
    // -------------------------------- Change Password -------------------------------- //
@@ -374,6 +378,8 @@
             $output = array('status' => 'Incorrect current password', 'alert' => 'warning');
          }
       }
+      $log_message = $output['status'];
+         mysqli_query($con, "INSERT INTO `user_logs` (`user_id`, `log_title`, `log_status`, `log_date`) VALUES ('$user_id','Update password','$log_message','$curr_date')");
       echo json_encode($output);
    }
    // -------------------------------- Two Step Authenticaiton -------------------------------- //
@@ -399,6 +405,8 @@
       } else{
          $output = array('status' => 'Two-Factor Authentication is block', 'alert' => 'warning');
       }
+      $log_message = $output['status'];
+         mysqli_query($con, "INSERT INTO `user_logs` (`user_id`, `log_title`, `log_status`, `log_date`) VALUES ('$user_id','Update two-step authentication','$log_message','$curr_date')");
       echo json_encode($output);
    }
    // -------------------------------- Security Preferences -------------------------------- //
@@ -420,6 +428,8 @@
       } else {
          $output = array('status' => 'Security preferences was not updated', 'alert' => 'error');
       }
+      $log_message = $output['status'];
+         mysqli_query($con, "INSERT INTO `user_logs` (`user_id`, `log_title`, `log_status`, `log_date`) VALUES ('$user_id','Update security preferences','$log_message','$curr_date')");
       echo json_encode($output);
    }
    // -------------------------------- Delete Permanent Account -------------------------------- //
@@ -449,6 +459,8 @@
             $output = array('status' => 'Incorrect current password', 'alert' => 'warning');
          }
       }
+      $log_message = $output['status'];
+         mysqli_query($con, "INSERT INTO `user_logs` (`user_id`, `log_title`, `log_status`, `log_date`) VALUES ('$user_id','Delete permanent account','$log_message','$curr_date')");
       echo json_encode($output);
    }
    // -------------------------------- DataTable Archive Client -------------------------------- //
@@ -1128,5 +1140,82 @@
          "aaData" => $data
       );
       echo json_encode($response);
+   }
+   // -------------------------------- DataTable User Logs -------------------------------- //
+   if (isset($_POST["user_log_list"])){
+      // Reading value
+      $draw = $_POST['draw'];
+      $row = $_POST['start'];
+      $rowperpage = $_POST['length']; // Rows display per page
+      $columnIndex = $_POST['order'][0]['column']; // Column index
+      $columnName = $_POST['columns'][$columnIndex]['data']; // Column name
+      $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
+      $searchValue = $_POST['search']['value']; // Search value
+      $searchArray = array();
+      // Search
+      $searchQuery = " ";
+      if($searchValue != ''){
+         $searchQuery = " AND (log_id LIKE :log_id OR 
+            log_title LIKE :log_title OR
+            log_status LIKE :log_status OR
+            DATE_FORMAT(log_date, '%m-%d-%Y') LIKE :new_log_date OR) ";
+         $searchArray = array( 
+            'log_id'=>"%$searchValue%",
+            'log_title'=>"%$searchValue%",
+            'log_status'=>"%$searchValue%",
+            'new_log_date'=>"%$searchValue%"
+         );
+      }
+      // Total number of records without filtering
+      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM user_logs INNER JOIN user ON user.user_id = user_logs.user_id WHERE user_logs.user_id = '$user_id' AND is_user_log = '1'");
+      $stmt->execute();
+      $records = $stmt->fetch();
+      $totalRecords = $records['allcount'];
+      // Total number of records with filtering
+      $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM user_logs INNER JOIN user ON user.user_id = user_logs.user_id WHERE user_logs.user_id = '$user_id' AND is_user_log = '1'".$searchQuery);
+      $stmt->execute($searchArray);
+      $records = $stmt->fetch();
+      $totalRecordwithFilter = $records['allcount'];
+      // Fetch records
+      $stmt = $conn->prepare("SELECT *, DATE_FORMAT(log_date, '%m-%d-%Y') as new_log_date FROM user_logs INNER JOIN user ON user.user_id = user_logs.user_id WHERE user_logs.user_id = '$user_id' AND is_user_log = '1'".$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
+      // Bind values
+      foreach ($searchArray as $key=>$search){
+         $stmt->bindValue(':'.$key, $search,PDO::PARAM_STR);
+      }
+      $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
+      $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
+      $stmt->execute();
+      $empRecords = $stmt->fetchAll();
+      $data = array();
+      foreach ($empRecords as $row){
+         $data[] = array(
+            "log_id"=>$row["log_id"],
+            "log_title"=>$row['log_title'],
+            "log_title"=>$row['log_title'],
+            "new_log_date"=>$row['new_log_date']
+         );
+      }
+      // Response
+      $response = array(
+         "draw" => intval($draw),
+         "iTotalRecords" => $totalRecords,
+         "iTotalDisplayRecords" => $totalRecordwithFilter,
+         "aaData" => $data
+      );
+      echo json_encode($response);
+   }
+   // -------------------------------- User Log switch -------------------------------- //
+   if (isset($_POST['switch_activity'])) {
+      $switchState = intval($_POST['switch_activity']); // Convert to integer (1 or 0)
+      $query = "UPDATE `user` SET `is_user_log`='$switchState' WHERE `user_id`='$user_id'";
+      $query_run = mysqli_query($con, $query);
+      if ($query_run && $switchState == '1') {
+         $output = array('status' => 'Activity log turn on', 'alert' => 'success', 'switch' => '1');
+      } elseif ($query_run && $switchState == '0') {
+         $output = array('status' => 'Activity log turn off', 'alert' => 'success', 'switch' => '0');
+      } else {
+         $output = array('status' => 'There is problem switching activity log', 'alert' => 'error');
+      }
+      echo json_encode($output);
    }
 ?>
