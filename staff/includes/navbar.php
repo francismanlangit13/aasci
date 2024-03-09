@@ -188,24 +188,39 @@
 ?>
 
 <script>
-    setInterval(function(){
-       var xhr = new XMLHttpRequest();
-       xhr.onreadystatechange = function() {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-             var currentTime = new Date(xhr.responseText);
-             var currentHours = currentTime.getHours();
-             var currentMinutes = currentTime.getMinutes();
-             var currentSeconds = currentTime.getSeconds();
-             currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
-             currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
-             var timeOfDay = (currentHours < 12) ? "AM" : "PM";
-             currentHours = (currentHours > 12) ? currentHours - 12 : currentHours;
-             currentHours = (currentHours == 0) ? 12 : currentHours;
-             var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
-             document.getElementById("timer").innerHTML = currentTimeString;
-          }
-       };
-       xhr.open("GET", "../includes/server_time.php", true); // Change "server_time.php" to the actual path of your PHP file
-       xhr.send();
-    }, 1000);
+    // Fetch server time when the page loads
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var currentTime = new Date(xhr.responseText);
+            displayTime(currentTime); // Display initial time
+            // Start updating time every second after the initial fetch
+            setInterval(updateTime, 1000);
+        }
+    };
+    xhr.open("GET", "../includes/server_time.php", true);
+    xhr.send();
+
+    // Function to update time every second
+    function updateTime() {
+        var currentTime = new Date(document.getElementById("timer").getAttribute("data-current-time"));
+        currentTime.setSeconds(currentTime.getSeconds() + 1); // Increment seconds by 1
+        displayTime(currentTime);
+    }
+
+    // Function to display time
+    function displayTime(currentTime) {
+        var currentHours = currentTime.getHours();
+        var currentMinutes = currentTime.getMinutes();
+        var currentSeconds = currentTime.getSeconds();
+        currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
+        currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+        var timeOfDay = (currentHours < 12) ? "AM" : "PM";
+        currentHours = (currentHours > 12) ? currentHours - 12 : currentHours;
+        currentHours = (currentHours == 0) ? 12 : currentHours;
+        var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
+        document.getElementById("timer").innerHTML = currentTimeString;
+        // Update data attribute with current time for future reference
+        document.getElementById("timer").setAttribute("data-current-time", currentTime);
+    }
 </script>

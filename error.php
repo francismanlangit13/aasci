@@ -60,6 +60,7 @@
         <div id="loading">
             <img id="loading-image" src="<?php echo base_url ?>assets/files/system/loading.gif" alt="Loading" />
         </div>
+        <div id="connectionAlert" class="alert"></div>
         <!-- Page Wrapper -->
         <div id="wrapper" class="d-flex justify-content-center position-fixed w-100 h-100 align-items-center">
 
@@ -104,6 +105,8 @@
         <script src="<?php echo base_url ?>assets/js/loader.js"></script>
         <!-- Restrictions forms -->
         <script src="<?php echo base_url ?>assets/js/disable-key.js"></script>
+        <!-- Serverstatus JS -->
+        <script src="<?php echo base_url ?>assets/js/serverstatus.js"></script>
 
     </body>
 

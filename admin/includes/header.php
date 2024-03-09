@@ -28,6 +28,8 @@
         <link href="<?php echo base_url ?>assets/css/loader.css" rel="stylesheet">
         <!-- Custom CSS -->
         <link href="<?php echo base_url ?>assets/css/custom.css" rel="stylesheet">
+        <!-- Cookie CSS -->
+        <link href="<?php echo base_url ?>assets/css/cookie.css" rel="stylesheet">
         <!-- GlightBox -->
         <link href="<?php echo base_url ?>assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     </head>
@@ -36,6 +38,7 @@
         <div class="noprint-scroll" id="loading">
             <img id="loading-image" src="<?php echo base_url ?>assets/files/system/loading.gif" alt="Loading" />
         </div>
+        <div id="connectionAlert" class="alert"></div>
         <?php 
             include ('navbar.php'); 
             include ('sidebar.php');

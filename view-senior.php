@@ -14,10 +14,14 @@
         <!-- Remove Banner -->
         <script src="<?php echo base_url ?>assets/js/fwhabannerfix.js"></script>
         <!-- Icons -->
-        <script data-search-pseudo-elements defer src="<?php echo base_url ?>assets/vendor/font-awesome/js/all.min.js" crossorigin="anonymous"></script>
+        <script src="<?php echo base_url ?>assets/vendor/font-awesome/js/all.min.js" crossorigin="anonymous"></script>
         <script src="<?php echo base_url ?>assets/vendor/feather-icons/feather.min.js" crossorigin="anonymous"></script>
+        <!-- Custom CSS -->
+        <link href="<?php echo base_url ?>assets/css/custom.css" rel="stylesheet">
         <!-- Loader CSS -->
         <link href="<?php echo base_url ?>assets/css/loader.css" rel="stylesheet">
+        <!-- Cookie CSS -->
+        <link href="<?php echo base_url ?>assets/css/cookie.css" rel="stylesheet">
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="<?php echo base_url ?>assets/css/styles.css" rel="stylesheet" />
         <!-- GlightBox -->
@@ -54,9 +58,17 @@
                 height: auto; /* Maintain the aspect ratio of the image */
                 display: block; /* Remove any default inline spacing */
             }
+            .alert {
+                position: fixed !important;
+            }
         </style>
     </head>
     <body>
+        <!-- Loading Screen -->
+        <div class="noprint-scroll" id="loading">
+            <img id="loading-image" src="<?php echo base_url ?>assets/files/system/loading.gif" alt="Loading" />
+        </div>
+        <div id="connectionAlert" class="alert"></div>
         <!-- Responsive navbar-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
@@ -238,6 +250,17 @@
                     </div>
                 </div>
             </div>
+            <!-- Cookie Consent -->
+            <div class="wrapper">
+                <img src="<?php echo base_url ?>assets/files/system/cookie.png" alt="">
+                <div class="content">
+                    <header>Cookies Consent</header>
+                    <p>Cookies help us deliver our services. By using our services, you agree to our use of cookies. <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#btn_cookie">Cookie Policy</a>. For information on how we protect your privacy, please read our <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#btn_privacy">Privacy Policy</a>.</p>
+                    <div class="buttons">
+                        <button class="item">I accept</button>
+                    </div>
+                </div>
+            </div>
         </main>
         <?php } } else { ?>
             <main>
@@ -263,6 +286,14 @@
         <script src="<?php echo base_url ?>assets/vendor/feather-icons/feather.min.js" crossorigin="anonymous"></script>
         <!-- Core theme JS-->
         <script src="<?php echo base_url ?>assets/js/scripts.js"></script>
+        <!-- Bootstrap JavaScript -->
+        <script src="<?php echo base_url ?>assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <!-- Loader JS File -->
+        <script src="<?php echo base_url ?>assets/js/loader.js"></script>
+        <!-- Serverstatus JS -->
+        <script src="<?php echo base_url ?>assets/js/serverstatus.js"></script>
+        <!-- Cookie Consent -->
+        <script src="<?php echo base_url ?>assets/js/cookie.js"></script>
         <!-- GlightBox -->
         <script src="<?php echo base_url ?>assets/vendor/glightbox/js/glightbox.js"></script>
         <script>
@@ -325,5 +356,48 @@
             });
             exampleApi.open(); */
         </script>
+
+        <!-- Modal for View Privacy -->
+        <div class="modal fade" id="btn_privacy" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="view_userLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg d-grid" role="document" style="justify-items: center;">
+                <div class="modal-content">
+                    <div class="modal-header card-header">
+                        <h6 class="modal-title"><?= $system['shortname'] ?> | Privacy Policy</h6>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div> 
+                    <div class="modal-body"> 
+                        <h6 style="text-align: justify; text-justify:inter-word"><?= $system['privacy'] ?></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal for View Terms -->
+        <div class="modal fade" id="btn_terms" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="view_userLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg d-grid" role="document" style="justify-items: center;">
+                <div class="modal-content">
+                    <div class="modal-header card-header">
+                        <h6 class="modal-title"><?= $system['shortname'] ?> | Terms & Conditions</h6>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div> 
+                    <div class="modal-body"> 
+                        <h6 style="text-align: justify; text-justify:inter-word"><?= $system['terms'] ?></h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal for View Cookie -->
+        <div class="modal fade" id="btn_cookie" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="view_userLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg d-grid" role="document" style="justify-items: center;">
+                <div class="modal-content">
+                    <div class="modal-header card-header">
+                        <h6 class="modal-title"><?= $system['shortname'] ?> | Use of Cookie</h6>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div> 
+                    <div class="modal-body"> 
+                        <h6 style="text-align: justify; text-justify:inter-word"><?= $system['cookie'] ?></h6>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

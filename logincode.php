@@ -13,6 +13,11 @@
         $login_query = "SELECT * FROM user WHERE (email = '$email_phone' || phone = '$email_phone') AND password = '$hashed_password' AND user_status_id = 1 LIMIT 1";
         $login_query_run = mysqli_query($con, $login_query);
 
+        $sql = $con->query("SELECT user_id FROM user WHERE (email = '$email_phone' || phone = '$email_phone')");
+        $get_id = mysqli_fetch_assoc($sql);
+        $user_id = $get_id['user_id'];
+
+
         if(mysqli_num_rows($login_query_run) > 0){
             foreach($login_query_run as $data){
                 $user_id = $data['user_id'];
@@ -76,12 +81,14 @@
                     $output = array('alert' => "success", 'is_secondauth' => "No", 'type' => "staff", 'status' => "Login success");
                 }
             }
-        }
-        else {
+        } else {
             $output = array('status' => "Invalid Email or Password", 'alert' => "error");
         }
-        $log_message = $output['status'];
-        mysqli_query($con, "INSERT INTO `user_logs` (`user_id`, `log_title`, `log_status`, `log_date`) VALUES ('$user_id','Login','$log_message IP: $ip','$curr_date')");
+        if(!empty($user_id)){
+            $log_message = $output['status'];
+            mysqli_query($con, "DELETE FROM `user_logs` WHERE `user_id` = '$user_id' AND `log_date` < now() - interval 30 DAY");
+            mysqli_query($con, "INSERT INTO `user_logs` (`user_id`, `log_title`, `log_status`, `log_date`) VALUES ('$user_id','Login','$log_message IP: $ip','$curr_date')");
+        }
         echo json_encode($output);
     } else {
         $_SESSION['status'] = "You are not allowed to access this site";

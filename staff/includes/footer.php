@@ -1,3 +1,14 @@
+                <!-- Cookie Consent -->
+                <div class="wrapper">
+                    <img src="<?php echo base_url ?>assets/files/system/cookie.png" alt="">
+                    <div class="content">
+                        <header>Cookies Consent</header>
+                        <p>Cookies help us deliver our services. By using our services, you agree to our use of cookies. <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#btn_cookie">Cookie Policy</a>. For information on how we protect your privacy, please read our <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#btn_privacy">Privacy Policy</a>.</p>
+                        <div class="buttons">
+                            <button class="item">I accept</button>
+                        </div>
+                    </div>
+                </div>
                 <footer class="footer-admin mt-auto footer-light noprint">
                     <div class="container-xl px-4">
                         <div class="row">
@@ -6,6 +17,8 @@
                                 <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#btn_privacy">Privacy Policy</a>
                                 &middot;
                                 <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#btn_terms">Terms &amp; Conditions</a>
+                                &middot;
+                                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#btn_cookie">Cookie Policy</a>
                             </div>
                         </div>
                     </div>
@@ -38,6 +51,20 @@
                         </div>
                     </div>
                 </div>
+                <!-- Modal for View Cookie -->
+                <div class="modal fade" id="btn_cookie" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="view_userLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg d-grid" role="document" style="justify-items: center;">
+                        <div class="modal-content">
+                            <div class="modal-header card-header">
+                                <h6 class="modal-title"><?= $system['shortname'] ?> | Use of Cookie</h6>
+                                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div> 
+                            <div class="modal-body"> 
+                                <h6 style="text-align: justify; text-justify:inter-word"><?= $system['cookie'] ?></h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- Sweetalert JavaScript -->
@@ -63,6 +90,10 @@
         <script src="<?php echo base_url ?>assets/js/litepicker.js"></script>
         <!-- Loader JS File -->
         <script src="<?php echo base_url ?>assets/js/loader.js"></script>
+        <!-- Serverstatus JS -->
+        <script src="<?php echo base_url ?>assets/js/serverstatus.js"></script>
+        <!-- Cookie Consent -->
+        <script src="<?php echo base_url ?>assets/js/cookie.js"></script>
         <!-- GlightBox -->
         <script src="<?php echo base_url ?>assets/vendor/glightbox/js/glightbox.js"></script>
         <script>
