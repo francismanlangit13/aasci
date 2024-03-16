@@ -1084,8 +1084,8 @@
             gender LIKE :gender OR
             barangay LIKE :barangay OR
             amount LIKE :amount OR
-            `year` LIKE :`year` OR
-            DATE_FORMAT(date_paid, '%m-%d-%Y') LIKE :new_date_paid OR) ";
+            `year` LIKE :year OR
+            DATE_FORMAT(date_paid, '%m-%d-%Y') LIKE :new_date_paid) ";
          $searchArray = array( 
             'dues_id'=>"%$searchValue%",
             'id_number'=>"%$searchValue%",
